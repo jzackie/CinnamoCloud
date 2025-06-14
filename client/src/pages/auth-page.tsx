@@ -290,7 +290,7 @@ export default function AuthPage() {
                     onClick={() => setShowResetModal(true)}
                     className="text-cinnamoroll-600 dark:text-kuromi-400 hover:underline"
                   >
-                    Forgot your password?
+                    {t("forgot_password")}
                   </Button>
                 </div>
               </TabsContent>
@@ -430,7 +430,7 @@ export default function AuthPage() {
             variant="outline"
             className="mt-4 sm:mt-8 border-white/80 dark:border-kuromi-300/50 text-white hover:bg-white/20 dark:hover:bg-kuromi-300/20 bg-black/20 dark:bg-kuromi-900/30 backdrop-blur-sm shadow-lg text-sm sm:text-base px-3 sm:px-4 py-2"
           >
-            Switch to {theme === "light" ? "Kuromi" : "Cinnamoroll"} Theme
+            {theme === "light" ? t("switch_to_dark") : t("switch_to_light")}
           </Button>
         </div>
       </div>
@@ -441,13 +441,13 @@ export default function AuthPage() {
           <DialogHeader>
             <DialogTitle className="font-nunito font-bold text-lg flex items-center space-x-2">
               <Key className="w-5 h-5 text-kawaii-pink dark:text-kuromi-400" />
-              <span>Reset Password with Key</span>
+              <span>{t("reset_password_modal_title")}</span>
             </DialogTitle>
           </DialogHeader>
           
           <form onSubmit={resetForm.handleSubmit(onResetPassword)} className="space-y-4">
             <div>
-              <Label htmlFor="resetKeyFile">Upload Reset Key File</Label>
+              <Label htmlFor="resetKeyFile">{t("upload_reset_key")}</Label>
               <div className="mt-2">
                 <Input
                   type="file"
@@ -459,7 +459,7 @@ export default function AuthPage() {
             </div>
 
             <div>
-              <Label htmlFor="resetKey">Or Enter Reset Key Manually</Label>
+              <Label htmlFor="resetKey">{t("select_reset_file")}</Label>
               <Input
                 id="resetKey"
                 {...resetForm.register("resetKey")}
