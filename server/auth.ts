@@ -59,9 +59,35 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/register", async (req, res, next) => {
+    // Validate required fields
+    if (!req.body.username || !req.body.email || !req.body.password || !req.body.displayName) {
+      return res.status(400).send("All fields are required");
+    }
+
+    // Check username length
+    if (req.body.username.length < 3) {
+      return res.status(400).send("Username must be at least 3 characters");
+    }
+
+    // Check password length
+    if (req.body.password.length < 6) {
+      return res.status(400).send("Password must be at least 6 characters");
+    }
+
+    // Check email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(req.body.email)) {
+      return res.status(400).send("Invalid email format");
+    }
+
     const existingUser = await storage.getUserByUsername(req.body.username);
     if (existingUser) {
       return res.status(400).send("Username already exists");
+    }
+
+    const existingEmail = await storage.getUserByEmail(req.body.email);
+    if (existingEmail) {
+      return res.status(400).send("Email already exists");
     }
 
     const user = await storage.createUser({
