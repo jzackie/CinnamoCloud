@@ -11,7 +11,7 @@ import imageCompression from "browser-image-compression";
 interface UploadModalProps {
   open: boolean;
   onClose: () => void;
-  folderId?: number;
+  folderId?: number | null;
 }
 
 export function UploadModal({ open, onClose, folderId }: UploadModalProps) {

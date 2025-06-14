@@ -198,8 +198,15 @@ export default function HomePage() {
           <nav className="space-y-2">
             <Button
               variant="ghost"
-              className="w-full justify-start p-3 text-cinnamoroll-600 dark:text-kuromi-400 bg-cinnamoroll-50 dark:bg-kuromi-900/50 rounded-xl"
-              onClick={() => setLocation('/')}
+              className={`w-full justify-start p-3 rounded-xl transition-all ${
+                currentCategory === 'all' && !currentFolderId
+                  ? 'text-cinnamoroll-600 dark:text-kuromi-400 bg-cinnamoroll-50 dark:bg-kuromi-900/50'
+                  : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
+              }`}
+              onClick={() => {
+                setCurrentCategory('all');
+                setCurrentFolderId(null);
+              }}
             >
               <Home className="w-4 h-4 mr-3" />
               <span className="font-nunito font-medium">My Drive</span>
