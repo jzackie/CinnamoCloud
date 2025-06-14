@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ interface UploadModalProps {
 export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<{[key: string]: number}>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -46,32 +47,63 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
     return file;
   };
 
-  const uploadMutation = useMutation({
-    mutationFn: async (files: File[]) => {
-      const uploadPromises = files.map(async (file) => {
-        // Compress file if needed
-        const processedFile = await compressFile(file);
-        
-        const formData = new FormData();
-        formData.append('file', processedFile);
-        if (folderId) {
-          formData.append('folderId', folderId.toString());
+  // Optimized upload with progress tracking for large files
+  const uploadFileWithProgress = useCallback(async (file: File) => {
+    const processedFile = await compressFile(file);
+    
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const formData = new FormData();
+      formData.append('file', processedFile);
+      if (folderId) {
+        formData.append('folderId', folderId.toString());
+      }
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = (event.loaded / event.total) * 100;
+          setUploadProgress(prev => ({
+            ...prev,
+            [file.name]: percentComplete
+          }));
         }
-
-        const response = await fetch('/api/files', {
-          method: 'POST',
-          body: formData,
-          credentials: 'include',
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to upload ${file.name}`);
-        }
-
-        return response.json();
       });
 
-      return Promise.all(uploadPromises);
+      xhr.addEventListener('load', () => {
+        if (xhr.status === 200) {
+          setUploadProgress(prev => ({
+            ...prev,
+            [file.name]: 100
+          }));
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(new Error(`Failed to upload ${file.name}`));
+        }
+      });
+
+      xhr.addEventListener('error', () => {
+        reject(new Error(`Failed to upload ${file.name}`));
+      });
+
+      xhr.open('POST', '/api/files');
+      xhr.withCredentials = true;
+      xhr.send(formData);
+    });
+  }, [folderId]);
+
+  const uploadMutation = useMutation({
+    mutationFn: async (files: File[]) => {
+      // Reset progress
+      setUploadProgress({});
+      
+      // Upload files sequentially for better performance with large files
+      const results = [];
+      for (const file of files) {
+        const result = await uploadFileWithProgress(file);
+        results.push(result);
+      }
+      return results;
     },
     onSuccess: () => {
       // Invalidate all file queries to ensure files appear in current folder
@@ -136,7 +168,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg w-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-md">
+      <DialogContent className="max-w-lg w-[95vw] sm:w-full mx-4 max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-800/95 backdrop-blur-md">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="font-nunito font-bold text-lg">
@@ -200,7 +232,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                 {selectedFiles.map((file, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-2 bg-cinnamoroll-50 dark:bg-kuromi-900/50 rounded-lg"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-2 bg-cinnamoroll-50 dark:bg-kuromi-900/50 rounded-lg space-y-2 sm:space-y-0"
                   >
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
@@ -209,6 +241,20 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                       <p className="text-xs text-gray-500">
                         {formatFileSize(file.size)}
                       </p>
+                      {/* Progress bar for uploads */}
+                      {uploadProgress[file.name] !== undefined && (
+                        <div className="mt-1">
+                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                            <div 
+                              className="bg-gradient-to-r from-kawaii-pink to-kawaii-purple h-1.5 rounded-full transition-all duration-300"
+                              style={{ width: `${uploadProgress[file.name]}%` }}
+                            ></div>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {Math.round(uploadProgress[file.name])}% uploaded
+                          </p>
+                        </div>
+                      )}
                     </div>
                     <Button
                       size="sm"
@@ -223,21 +269,23 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                   </div>
                 ))}
               </div>
-              <div className="flex justify-end pt-2">
+              <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2">
                 <Button
                   onClick={handleUpload}
                   disabled={uploadMutation.isPending}
-                  className="gradient-cinnamoroll dark:gradient-kuromi font-nunito font-medium"
+                  className="w-full sm:w-auto gradient-cinnamoroll dark:gradient-kuromi font-nunito font-medium"
                 >
                   {uploadMutation.isPending ? (
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center justify-center space-x-2">
                       <CinnamorollSpinner />
-                      <span>Uploading kawaii files...</span>
+                      <span className="hidden sm:inline">Uploading kawaii files...</span>
+                      <span className="sm:hidden">Uploading...</span>
                     </div>
                   ) : (
                     <>
                       <Upload className="w-4 h-4 mr-2" />
-                      Upload Files
+                      <span className="hidden sm:inline">Upload Files</span>
+                      <span className="sm:hidden">Upload</span>
                     </>
                   )}
                 </Button>
