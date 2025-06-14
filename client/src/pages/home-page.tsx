@@ -78,6 +78,10 @@ export default function HomePage() {
     setCurrentFolderId(folder.id);
   };
 
+  const handleBackToParent = () => {
+    setCurrentFolderId(null);
+  };
+
   const createFolderMutation = useMutation({
     mutationFn: async (name: string) => {
       const res = await apiRequest("POST", "/api/folders", { name });
