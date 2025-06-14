@@ -60,7 +60,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const t = (key: string) => getTranslation(language, key);
+  const t = (key: string) => {
+    const translation = getTranslation(language, key);
+    console.log(`Translation: ${key} -> ${translation} (lang: ${language})`);
+    return translation;
+  };
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t, languages }}>

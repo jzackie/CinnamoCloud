@@ -229,7 +229,7 @@ export default function HomePage() {
               onClick={() => setLocation('/favorites')}
             >
               <Star className="w-4 h-4 mr-3" />
-              <span className="font-nunito font-medium">Favorites</span>
+              <span className="font-nunito font-medium">{t("favorites")}</span>
               <span className="ml-auto bg-kawaii-pink dark:bg-kuromi-500 text-white text-xs px-2 py-1 rounded-full">
                 {files.filter(f => f.isFavorite).length}
               </span>
@@ -241,7 +241,7 @@ export default function HomePage() {
               onClick={() => setLocation('/trash')}
             >
               <Trash2 className="w-4 h-4 mr-3" />
-              <span className="font-nunito font-medium">Trash</span>
+              <span className="font-nunito font-medium">{t("trash")}</span>
               <span className="ml-auto bg-red-400 text-white text-xs px-2 py-1 rounded-full">
                 {files.filter(f => f.isDeleted).length}
               </span>
@@ -262,7 +262,7 @@ export default function HomePage() {
                 onClick={() => setCurrentCategory('images')}
               >
                 <Image className="w-4 h-4 mr-3 text-green-500" />
-                <span className="font-nunito font-medium">Images</span>
+                <span className="font-nunito font-medium">{t("images")}</span>
                 <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
                   {files.filter(f => f.mimeType?.startsWith('image/')).length}
                 </span>
@@ -278,7 +278,7 @@ export default function HomePage() {
                 onClick={() => setCurrentCategory('videos')}
               >
                 <Video className="w-4 h-4 mr-3 text-red-500" />
-                <span className="font-nunito font-medium">Videos</span>
+                <span className="font-nunito font-medium">{t("videos")}</span>
                 <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
                   {files.filter(f => f.mimeType?.startsWith('video/')).length}
                 </span>
@@ -294,7 +294,7 @@ export default function HomePage() {
                 onClick={() => setCurrentCategory('pdfs')}
               >
                 <FileText className="w-4 h-4 mr-3 text-red-600" />
-                <span className="font-nunito font-medium">PDFs</span>
+                <span className="font-nunito font-medium">{t("pdfs")}</span>
                 <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
                   {files.filter(f => f.mimeType?.includes('pdf')).length}
                 </span>
@@ -310,7 +310,7 @@ export default function HomePage() {
                 onClick={() => setCurrentCategory('documents')}
               >
                 <FileIcon className="w-4 h-4 mr-3 text-blue-600" />
-                <span className="font-nunito font-medium">Documents</span>
+                <span className="font-nunito font-medium">{t("documents")}</span>
                 <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
                   {files.filter(f => f.mimeType?.includes('document') || f.mimeType?.includes('word')).length}
                 </span>
