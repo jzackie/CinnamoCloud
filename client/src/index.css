@@ -6,21 +6,21 @@
 
 :root {
   --background: hsl(207, 100%, 98%);
-  --foreground: hsl(240, 6%, 10%);
+  --foreground: hsl(240, 10%, 3.9%);
   --muted: hsl(207, 40%, 96%);
-  --muted-foreground: hsl(240, 4%, 46%);
+  --muted-foreground: hsl(240, 3.8%, 46.1%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(240, 6%, 10%);
+  --popover-foreground: hsl(240, 10%, 3.9%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(240, 6%, 10%);
+  --card-foreground: hsl(240, 10%, 3.9%);
   --border: hsl(207, 30%, 90%);
   --input: hsl(207, 30%, 90%);
   --primary: hsl(207, 90%, 54%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(207, 40%, 96%);
-  --secondary-foreground: hsl(240, 6%, 10%);
+  --secondary-foreground: hsl(240, 10%, 3.9%);
   --accent: hsl(207, 40%, 96%);
-  --accent-foreground: hsl(240, 6%, 10%);
+  --accent-foreground: hsl(240, 10%, 3.9%);
   --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 100%);
   --ring: hsl(207, 90%, 54%);

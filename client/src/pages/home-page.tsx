@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { 
   Search, 
   Grid3x3, 
@@ -37,9 +41,13 @@ export default function HomePage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [folderDialogOpen, setFolderDialogOpen] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+  const [currentCategory, setCurrentCategory] = useState<string>("all");
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
+  const { toast } = useToast();
 
   const { data: folders = [] } = useQuery<Folder[]>({
     queryKey: ["/api/folders"],
@@ -47,6 +55,47 @@ export default function HomePage() {
 
   const { data: files = [] } = useQuery<File[]>({
     queryKey: ["/api/files"],
+  });
+
+  const createFolderMutation = useMutation({
+    mutationFn: async (name: string) => {
+      const res = await apiRequest("POST", "/api/folders", { name });
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/folders"] });
+      setFolderDialogOpen(false);
+      setNewFolderName("");
+      toast({
+        title: "Folder created",
+        description: "Your new folder has been created successfully.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Filter files based on current category
+  const filteredFiles = files.filter(file => {
+    const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    if (currentCategory === "all") return matchesSearch;
+    if (currentCategory === "images") return matchesSearch && file.mimeType?.startsWith("image/");
+    if (currentCategory === "videos") return matchesSearch && file.mimeType?.startsWith("video/");
+    if (currentCategory === "pdfs") return matchesSearch && file.mimeType === "application/pdf";
+    if (currentCategory === "documents") return matchesSearch && (
+      file.mimeType?.includes("document") || 
+      file.mimeType?.includes("text") || 
+      file.mimeType?.includes("sheet") || 
+      file.mimeType?.includes("presentation")
+    );
+    
+    return matchesSearch;
   });
 
   const filteredItems = [...folders, ...files].filter(item => {
