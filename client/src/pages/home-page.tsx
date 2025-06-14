@@ -33,6 +33,7 @@ import { FilePreview } from "@/components/file-preview";
 import { UploadModal } from "@/components/upload-modal";
 import { ProfileMenu } from "@/components/profile-menu";
 import { useTheme } from "@/lib/theme-provider";
+import { useLanguage } from "@/lib/language-provider";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { File, Folder } from "@shared/schema";
@@ -48,6 +49,7 @@ export default function HomePage() {
   const [currentFolderId, setCurrentFolderId] = useState<number | null>(null);
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -191,7 +193,7 @@ export default function HomePage() {
             className="w-full mb-6 p-3 gradient-cinnamoroll dark:gradient-kuromi text-white rounded-2xl hover:shadow-lg transform hover:scale-105 transition-all duration-300 font-nunito font-semibold"
           >
             <Upload className="w-4 h-4 mr-2" />
-            Upload Kawaii Files
+            {t("upload_files")}
           </Button>
 
           {/* Navigation Menu */}
@@ -209,7 +211,7 @@ export default function HomePage() {
               }}
             >
               <Home className="w-4 h-4 mr-3" />
-              <span className="font-nunito font-medium">My Drive</span>
+              <span className="font-nunito font-medium">{t("my_drive")}</span>
             </Button>
             
             <Button

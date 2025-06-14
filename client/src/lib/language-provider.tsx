@@ -29,12 +29,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   const setLanguage = async (lang: Language) => {
+    // Update the language state immediately for instant UI feedback
     setLanguageState(lang);
     
     // Save language preference to user profile
     if (user) {
       try {
-        await fetch('/api/profile', {
+        const response = await fetch('/api/profile', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -42,8 +43,19 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
           credentials: 'include',
           body: JSON.stringify({ language: lang }),
         });
+        
+        if (!response.ok) {
+          throw new Error('Failed to save language preference');
+        }
+        
+        // Force a re-render by updating the state again after successful save
+        setLanguageState(lang);
       } catch (error) {
         console.warn('Failed to save language preference:', error);
+        // Revert to previous language if save failed
+        if (user?.language) {
+          setLanguageState(user.language as Language);
+        }
       }
     }
   };

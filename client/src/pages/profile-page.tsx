@@ -378,9 +378,12 @@ export default function ProfilePage() {
                     <Label htmlFor="language">Language</Label>
                     <Select
                       value={form.watch("language") || language}
-                      onValueChange={(value) => {
+                      onValueChange={async (value) => {
                         form.setValue("language", value);
-                        setLanguage(value as any);
+                        await setLanguage(value as any);
+                        // Trigger form submission to save the language preference
+                        const formData = form.getValues();
+                        updateProfileMutation.mutate({ ...formData, language: value });
                       }}
                     >
                       <SelectTrigger className="border-cinnamoroll-200 dark:border-kuromi-600">
