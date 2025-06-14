@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/use-auth";
-import { Loader2 } from "lucide-react";
+import { CinnamorollLoader } from "@/components/cinnamoroll-loader";
 import { Redirect, Route } from "wouter";
 
 export function ProtectedRoute({
@@ -14,8 +14,12 @@ export function ProtectedRoute({
   if (isLoading) {
     return (
       <Route path={path}>
-        <div className="flex items-center justify-center min-h-screen">
-          <Loader2 className="h-8 w-8 animate-spin text-border" />
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-cinnamoroll-50 to-kawaii-blue dark:from-kuromi-900 dark:to-kuromi-800">
+          <CinnamorollLoader 
+            size="lg" 
+            message="Authenticating your kawaii session..." 
+            variant="bounce" 
+          />
         </div>
       </Route>
     );
