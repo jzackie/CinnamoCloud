@@ -39,10 +39,10 @@ export default function AchievementsPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 lg:p-8 xl:p-10 2xl:p-12 max-w-screen-2xl">
         <div className="animate-pulse space-y-4">
           <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="h-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
             ))}

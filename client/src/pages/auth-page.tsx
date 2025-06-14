@@ -197,7 +197,7 @@ export default function AuthPage() {
   if (showResetKeyPage) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-kawaii-pink via-cinnamoroll-300 to-kawaii-blue dark:from-kuromi-900 dark:via-kuromi-800 dark:to-kuromi-700">
-        <Card className="w-full max-w-md mx-4 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
+        <Card className="w-full max-w-md lg:max-w-lg xl:max-w-xl mx-4 lg:mx-6 xl:mx-8 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
           <CardHeader className="text-center">
             <CardTitle className="font-nunito font-bold text-xl flex items-center justify-center space-x-2">
               <Key className="w-6 h-6 text-kawaii-pink dark:text-kuromi-400" />
@@ -317,8 +317,8 @@ export default function AuthPage() {
       </div>
 
       {/* Left Side - Auth Forms */}
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-        <Card className="w-full max-w-sm sm:max-w-md lg:w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8 xl:p-12">
+        <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
           <CardHeader className="text-center gradient-cinnamoroll dark:gradient-kuromi rounded-t-lg p-4 sm:p-6">
             <div className="cloud-shape cloud-shape-enhanced w-12 h-7 sm:w-16 sm:h-10 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-3 sm:mb-4 animate-float"></div>
             <CardTitle className="font-nunito font-bold text-xl sm:text-2xl text-white mb-2">

@@ -137,7 +137,7 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
   };
 
   const getFileIcon = (mimeType: string) => {
-    const iconClass = "w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20";
+    const iconClass = "w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24";
     if (mimeType.startsWith('image/')) return <FileImage className={iconClass} />;
     if (mimeType.startsWith('video/')) return <FileVideo className={iconClass} />;
     if (mimeType.includes('pdf')) return <FileText className={`${iconClass} text-red-500`} />;
@@ -176,8 +176,8 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleClick}
       >
-        <div className="p-3 flex items-center justify-between">
-          <div className="flex items-center space-x-3 flex-1 min-w-0">
+        <div className="p-3 lg:p-4 xl:p-5 flex items-center justify-between">
+          <div className="flex items-center space-x-3 lg:space-x-4 xl:space-x-5 flex-1 min-w-0">
             {type === "folder" ? (
               <Folder className="w-8 h-8 text-cinnamoroll-400 dark:text-kuromi-400 group-hover:text-kawaii-pink transition-colors flex-shrink-0" />
             ) : (
@@ -302,11 +302,11 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
     >
-      <div className="p-4">
+      <div className="p-3 sm:p-4 lg:p-5 xl:p-6">
         <div className="text-center mb-3">
           {type === "folder" ? (
             <div className="mb-3">
-              <Folder className="w-16 h-16 text-cinnamoroll-400 dark:text-kuromi-400 group-hover:text-kawaii-pink transition-colors mx-auto" />
+              <Folder className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24 text-cinnamoroll-400 dark:text-kuromi-400 group-hover:text-kawaii-pink transition-colors mx-auto" />
             </div>
           ) : (
             <div className="aspect-square bg-gradient-to-br from-kawaii-pink to-kawaii-purple dark:from-kuromi-600 dark:to-kawaii-purple p-4 flex items-center justify-center rounded-lg mb-3">
