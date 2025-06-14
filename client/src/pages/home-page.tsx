@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,7 @@ import { File, Folder } from "@shared/schema";
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -53,6 +54,15 @@ export default function HomePage() {
   const { t } = useLanguage();
   const { user } = useAuth();
   const { toast } = useToast();
+
+  // Debounced search for performance optimization
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const { data: folders = [], isLoading: foldersLoading } = useQuery<Folder[]>({
     queryKey: ["/api/folders", currentFolderId],
@@ -78,13 +88,14 @@ export default function HomePage() {
     }
   });
 
-  const handleFolderClick = (folder: Folder) => {
+  // Memoized callbacks for better performance
+  const handleFolderClick = useCallback((folder: Folder) => {
     setCurrentFolderId(folder.id);
-  };
+  }, []);
 
-  const handleBackToParent = () => {
+  const handleBackToParent = useCallback(() => {
     setCurrentFolderId(null);
-  };
+  }, []);
 
   const createFolderMutation = useMutation({
     mutationFn: async (name: string) => {
@@ -112,28 +123,33 @@ export default function HomePage() {
     },
   });
 
-  // Filter files based on current category
-  const filteredFiles = files.filter(file => {
-    const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    if (currentCategory === "all") return matchesSearch;
-    if (currentCategory === "images") return matchesSearch && file.mimeType?.startsWith("image/");
-    if (currentCategory === "videos") return matchesSearch && file.mimeType?.startsWith("video/");
-    if (currentCategory === "pdfs") return matchesSearch && file.mimeType === "application/pdf";
-    if (currentCategory === "documents") return matchesSearch && (
-      file.mimeType?.includes("document") || 
-      file.mimeType?.includes("text") || 
-      file.mimeType?.includes("sheet") || 
-      file.mimeType?.includes("presentation")
-    );
-    
-    return matchesSearch;
-  });
+  // Memoized filtered files for better performance
+  const filteredFiles = useMemo(() => {
+    return files.filter(file => {
+      const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      if (currentCategory === "all") return matchesSearch;
+      if (currentCategory === "images") return matchesSearch && file.mimeType?.startsWith("image/");
+      if (currentCategory === "videos") return matchesSearch && file.mimeType?.startsWith("video/");
+      if (currentCategory === "pdfs") return matchesSearch && file.mimeType === "application/pdf";
+      if (currentCategory === "documents") return matchesSearch && (
+        file.mimeType?.includes("document") || 
+        file.mimeType?.includes("text") || 
+        file.mimeType?.includes("sheet") || 
+        file.mimeType?.includes("presentation")
+      );
+      
+      return matchesSearch;
+    });
+  }, [files, searchQuery, currentCategory]);
 
-  const filteredItems = [...folders, ...files].filter(item => {
-    const name = "originalName" in item ? item.originalName : item.name;
-    return name.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  // Memoized filtered items for better performance
+  const filteredItems = useMemo(() => {
+    return [...folders, ...files].filter(item => {
+      const name = "originalName" in item ? item.originalName : item.name;
+      return name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  }, [folders, files, searchQuery]);
 
   return (
     <div className="min-h-screen">
