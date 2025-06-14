@@ -176,3 +176,23 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--primary) / 0.8);
 }
+
+/* Custom gradient classes with better text contrast */
+.gradient-cinnamoroll {
+  background: linear-gradient(135deg, var(--cinnamoroll-400), var(--kawaii-pink), var(--kawaii-purple));
+  color: white !important;
+}
+
+.gradient-kuromi {
+  background: linear-gradient(135deg, var(--kuromi-600), var(--kawaii-purple), var(--kuromi-500));
+  color: white !important;
+}
+
+/* Text visibility improvements for light theme */
+.text-light-enhanced {
+  color: hsl(222, 84%, 4.9%) !important;
+}
+
+.text-light-muted-enhanced {
+  color: hsl(215, 16%, 46.9%) !important;
+}
