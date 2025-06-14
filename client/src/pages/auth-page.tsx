@@ -626,65 +626,7 @@ export default function AuthPage() {
         </Dialog>
       )}
 
-      {/* New User Reset Key Modal */}
-      <Dialog open={showNewUserResetKey} onOpenChange={(open) => {
-        if (!open) {
-          setShowNewUserResetKey(false);
-          setLocation("/");
-        }
-      }}>
-        <DialogContent className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-nunito font-bold text-lg flex items-center space-x-2 text-center justify-center">
-              <Key className="w-5 h-5 text-kawaii-pink dark:text-kuromi-400" />
-              <span>{t("reset_key_download")}</span>
-            </DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-4">
-            <Alert className="border-cinnamoroll-200 dark:border-kuromi-600 bg-cinnamoroll-50 dark:bg-kuromi-900/50">
-              <AlertDescription className="text-sm text-gray-700 dark:text-gray-300">
-                <strong className="text-cinnamoroll-700 dark:text-kuromi-300">{t("backup_warning")}</strong>
-              </AlertDescription>
-            </Alert>
 
-            <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-              <Label className="text-sm font-medium text-gray-600 dark:text-gray-300">Reset Key:</Label>
-              <div className="mt-1 p-2 bg-white dark:bg-gray-800 border rounded text-xs font-mono break-all">
-                {newUserResetKey}
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Button
-                onClick={copyResetKey}
-                variant="outline"
-                className="flex-1 border-cinnamoroll-200 dark:border-kuromi-600 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50"
-              >
-                Copy Key
-              </Button>
-              <Button
-                onClick={() => downloadResetKey(newUserResetKey, newUsername)}
-                className="flex-1 bg-kawaii-pink hover:bg-kawaii-pink/90 text-white"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download File
-              </Button>
-            </div>
-
-            <Button
-              onClick={() => {
-                setShowNewUserResetKey(false);
-                setLocation("/");
-              }}
-              variant="outline"
-              className="w-full border-gray-300 dark:border-gray-600"
-            >
-              {t("close")}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
