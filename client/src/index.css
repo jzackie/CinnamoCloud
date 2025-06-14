@@ -8,7 +8,7 @@
   --background: hsl(207, 100%, 98%);
   --foreground: hsl(222, 84%, 4.9%);
   --muted: hsl(207, 40%, 96%);
-  --muted-foreground: hsl(215, 16%, 46.9%);
+  --muted-foreground: hsl(215, 16%, 30%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(222, 84%, 4.9%);
   --card: hsl(0, 0%, 100%);
@@ -46,7 +46,7 @@
   --background: hsl(240, 10%, 4%);
   --foreground: hsl(0, 0%, 95%);
   --muted: hsl(240, 3%, 11%);
-  --muted-foreground: hsl(240, 5%, 65%);
+  --muted-foreground: hsl(240, 5%, 80%);
   --popover: hsl(240, 10%, 4%);
   --popover-foreground: hsl(0, 0%, 95%);
   --card: hsl(240, 10%, 4%);

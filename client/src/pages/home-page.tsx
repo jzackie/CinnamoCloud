@@ -51,11 +51,27 @@ export default function HomePage() {
   const { toast } = useToast();
 
   const { data: folders = [] } = useQuery<Folder[]>({
-    queryKey: ["/api/folders", { parentId: currentFolderId }],
+    queryKey: ["/api/folders", currentFolderId],
+    queryFn: async () => {
+      const url = currentFolderId 
+        ? `/api/folders?parentId=${currentFolderId}`
+        : "/api/folders";
+      const response = await fetch(url, { credentials: 'include' });
+      if (!response.ok) throw new Error('Failed to fetch folders');
+      return response.json();
+    }
   });
 
   const { data: files = [] } = useQuery<File[]>({
-    queryKey: ["/api/files", { folderId: currentFolderId }],
+    queryKey: ["/api/files", currentFolderId],
+    queryFn: async () => {
+      const url = currentFolderId 
+        ? `/api/files?folderId=${currentFolderId}`
+        : "/api/files";
+      const response = await fetch(url, { credentials: 'include' });
+      if (!response.ok) throw new Error('Failed to fetch files');
+      return response.json();
+    }
   });
 
   const handleFolderClick = (folder: Folder) => {

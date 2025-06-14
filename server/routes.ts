@@ -121,6 +121,28 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  app.post("/api/profile/picture", requireAuth, upload.single('profilePicture'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No profile picture uploaded" });
+      }
+
+      const profilePictureUrl = `/uploads/${req.file.filename}`;
+      const updatedUser = await storage.updateUser(req.user!.id, { 
+        profilePicture: profilePictureUrl 
+      });
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const { password, currentResetKey, ...safeUser } = updatedUser;
+      res.json({ profilePicture: profilePictureUrl, user: safeUser });
+    } catch (error) {
+      res.status(400).json({ message: "Profile picture upload failed" });
+    }
+  });
+
   // Folder operations
   app.get("/api/folders", requireAuth, async (req, res) => {
     const parentId = req.query.parentId ? parseInt(req.query.parentId as string) : undefined;

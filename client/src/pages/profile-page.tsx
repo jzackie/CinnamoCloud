@@ -69,6 +69,7 @@ export default function ProfilePage() {
   const { language, setLanguage, t, languages: availableLanguages } = useLanguage();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("profile");
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
   const { data: profile } = useQuery<UserType>({
     queryKey: ["/api/profile"],
@@ -84,7 +85,7 @@ export default function ProfilePage() {
       queryClient.invalidateQueries({ queryKey: ["/api/profile"] });
       queryClient.invalidateQueries({ queryKey: ["/api/user"] });
       toast({
-        title: "Profile Updated! ✨",
+        title: "Profile Updated!",
         description: "Your kawaii profile has been saved successfully!",
       });
     },
@@ -96,6 +97,49 @@ export default function ProfilePage() {
       });
     },
   });
+
+  const uploadProfilePictureMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('profilePicture', file);
+      
+      const response = await fetch('/api/profile/picture', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to upload profile picture');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/profile"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      setProfilePicture(null);
+      toast({
+        title: "Profile Picture Updated!",
+        description: "Your new profile picture has been saved!",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Upload Failed",
+        description: error.message || "Failed to upload profile picture",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setProfilePicture(file);
+      uploadProfilePictureMutation.mutate(file);
+    }
+  };
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileFormSchema),
