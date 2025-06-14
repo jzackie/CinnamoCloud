@@ -508,6 +508,7 @@ export default function HomePage() {
       <UploadModal
         open={uploadModalOpen}
         onClose={() => setUploadModalOpen(false)}
+        folderId={currentFolderId}
       />
     </div>
   );
