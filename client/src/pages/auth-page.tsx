@@ -245,15 +245,32 @@ export default function AuthPage() {
                 </AlertDescription>
               </Alert>
               
-              <Button
-                onClick={() => {
-                  setShowResetKeyPage(false);
-                  setActiveTab("login");
-                }}
-                className="w-full mt-4 bg-kawaii-pink hover:bg-kawaii-pink/90 text-white"
-              >
-                {t("backToSignIn")}
-              </Button>
+              <div className="flex flex-col space-y-2 mt-4">
+                <Button
+                  onClick={() => {
+                    // Automatically log in the user
+                    loginMutation.mutate({
+                      username: newUsername,
+                      password: registerForm.getValues("password")
+                    });
+                  }}
+                  className="w-full bg-kawaii-pink hover:bg-kawaii-pink/90 text-white"
+                  disabled={loginMutation.isPending}
+                >
+                  {loginMutation.isPending ? "Logging in..." : "Continue to Drive"}
+                </Button>
+                
+                <Button
+                  onClick={() => {
+                    setShowResetKeyPage(false);
+                    setActiveTab("login");
+                  }}
+                  variant="outline"
+                  className="w-full border-gray-300 dark:border-gray-600"
+                >
+                  {t("backToSignIn")}
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>

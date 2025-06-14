@@ -57,10 +57,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: SelectUser) => {
-      queryClient.setQueryData(["/api/user"], user);
-      // Clear all cached data for new user
-      queryClient.invalidateQueries({ queryKey: ["/api/files"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/folders"] });
+      // Don't set user data in cache since user isn't logged in yet
+      // The reset key page will handle this flow
     },
     onError: (error: Error) => {
       toast({
