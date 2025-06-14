@@ -255,7 +255,10 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
                       size="sm"
                       variant="ghost"
                       className="p-1 hover:bg-cinnamoroll-100 dark:hover:bg-kuromi-800"
-                      onClick={() => downloadFile(item as File)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        downloadFile(item as File);
+                      }}
                     >
                       <Download className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
                     </Button>
@@ -264,7 +267,10 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
                     size="sm"
                     variant="ghost"
                     className="p-1 hover:bg-red-100 dark:hover:bg-red-900/20"
-                    onClick={() => deleteMutation.mutate(item.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteMutation.mutate(item.id);
+                    }}
                     disabled={deleteMutation.isPending}
                   >
                     <Trash2 className="w-4 h-4 text-red-500" />
