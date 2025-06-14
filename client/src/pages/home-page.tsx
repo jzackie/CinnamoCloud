@@ -123,10 +123,10 @@ export default function HomePage() {
     },
   });
 
-  // Memoized filtered files for better performance
+  // Memoized filtered files with debounced search for better performance
   const filteredFiles = useMemo(() => {
     return files.filter(file => {
-      const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = file.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
       
       if (currentCategory === "all") return matchesSearch;
       if (currentCategory === "images") return matchesSearch && file.mimeType?.startsWith("image/");
@@ -141,15 +141,15 @@ export default function HomePage() {
       
       return matchesSearch;
     });
-  }, [files, searchQuery, currentCategory]);
+  }, [files, debouncedSearchQuery, currentCategory]);
 
-  // Memoized filtered items for better performance
+  // Memoized filtered items with debounced search for better performance
   const filteredItems = useMemo(() => {
     return [...folders, ...files].filter(item => {
       const name = "originalName" in item ? item.originalName : item.name;
-      return name.toLowerCase().includes(searchQuery.toLowerCase());
+      return name.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
     });
-  }, [folders, files, searchQuery]);
+  }, [folders, files, debouncedSearchQuery]);
 
   return (
     <div className="min-h-screen">

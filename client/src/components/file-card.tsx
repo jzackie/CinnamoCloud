@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
@@ -27,7 +27,7 @@ interface FileCardProps {
   viewMode?: "grid" | "list";
 }
 
-export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActions = false, viewMode = "grid" }: FileCardProps) {
+const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, showRestoreActions = false, viewMode = "grid" }: FileCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -420,4 +420,6 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
       </div>
     </Card>
   );
-}
+});
+
+export { FileCard };
