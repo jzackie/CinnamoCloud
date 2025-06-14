@@ -269,6 +269,17 @@ export function registerRoutes(app: Express): Server {
     res.json({ message: "File permanently deleted" });
   });
 
+  // Add missing API endpoints for favorites and trash
+  app.get("/api/files/favorites", requireAuth, async (req, res) => {
+    const files = await storage.getFavoriteFiles(req.user!.id);
+    res.json(files);
+  });
+
+  app.get("/api/files/deleted", requireAuth, async (req, res) => {
+    const files = await storage.getDeletedFiles(req.user!.id);
+    res.json(files);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

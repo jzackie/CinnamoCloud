@@ -44,18 +44,23 @@ export default function HomePage() {
   const [folderDialogOpen, setFolderDialogOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [currentCategory, setCurrentCategory] = useState<string>("all");
+  const [currentFolderId, setCurrentFolderId] = useState<number | null>(null);
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
   const { toast } = useToast();
 
   const { data: folders = [] } = useQuery<Folder[]>({
-    queryKey: ["/api/folders"],
+    queryKey: ["/api/folders", { parentId: currentFolderId }],
   });
 
   const { data: files = [] } = useQuery<File[]>({
-    queryKey: ["/api/files"],
+    queryKey: ["/api/files", { folderId: currentFolderId }],
   });
+
+  const handleFolderClick = (folder: Folder) => {
+    setCurrentFolderId(folder.id);
+  };
 
   const createFolderMutation = useMutation({
     mutationFn: async (name: string) => {
@@ -399,7 +404,7 @@ export default function HomePage() {
                       key={`folder-${folder.id}`}
                       item={folder}
                       type="folder"
-                      onPreview={() => {}}
+                      onFolderClick={handleFolderClick}
                     />
                   ))}
                   {filteredFiles.map((file) => (

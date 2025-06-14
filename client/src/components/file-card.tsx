@@ -22,10 +22,11 @@ interface FileCardProps {
   item: File | FolderType;
   type: "file" | "folder";
   onPreview?: (file: File) => void;
+  onFolderClick?: (folder: FolderType) => void;
   showRestoreActions?: boolean;
 }
 
-export function FileCard({ item, type, onPreview, showRestoreActions = false }: FileCardProps) {
+export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActions = false }: FileCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -144,11 +145,20 @@ export function FileCard({ item, type, onPreview, showRestoreActions = false }: 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
+  const handleClick = () => {
+    if (type === "folder" && onFolderClick) {
+      onFolderClick(item as FolderType);
+    } else if (type === "file" && onPreview) {
+      onPreview(item as File);
+    }
+  };
+
   return (
     <Card 
-      className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden"
+      className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
     >
       <div className="p-4">
         <div className="text-center mb-3">
