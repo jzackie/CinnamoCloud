@@ -463,7 +463,7 @@ export default function AuthPage() {
               <Input
                 id="resetKey"
                 {...resetForm.register("resetKey")}
-                placeholder="Enter your reset key"
+                placeholder={t("enter_reset_key")}
                 className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
               />
               {resetForm.formState.errors.resetKey && (
@@ -474,12 +474,12 @@ export default function AuthPage() {
             </div>
 
             <div>
-              <Label htmlFor="newPassword">New Password</Label>
+              <Label htmlFor="newPassword">{t("new_password_label")}</Label>
               <Input
                 id="newPassword"
                 type="password"
                 {...resetForm.register("newPassword")}
-                placeholder="Enter your new password"
+                placeholder={t("enter_new_password")}
                 className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
               />
               {resetForm.formState.errors.newPassword && (
@@ -493,7 +493,7 @@ export default function AuthPage() {
               type="submit"
               className="w-full gradient-cinnamoroll dark:gradient-kuromi text-white font-nunito font-semibold"
             >
-              Reset Password
+              {t("reset_with_key")}
             </Button>
           </form>
         </DialogContent>
