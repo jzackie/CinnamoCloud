@@ -84,18 +84,22 @@ export default function AuthPage() {
 
   const onRegister = async (data: RegisterData) => {
     const { confirmPassword, ...registerData } = data;
-    registerMutation.mutate(registerData, {
-      onSuccess: (user) => {
-        setNewUserResetKey(user.currentResetKey);
-        setNewUsername(user.username);
-        setShowNewUserResetKey(true);
-        toast({
-          title: "Welcome to CinnamoCloud!",
-          description: "Your account has been created successfully.",
-        });
-      },
-    });
+    registerMutation.mutate(registerData);
   };
+
+  // Watch for successful registration
+  React.useEffect(() => {
+    if (registerMutation.isSuccess && registerMutation.data) {
+      const user = registerMutation.data;
+      setNewUserResetKey(user.currentResetKey);
+      setNewUsername(user.username);
+      setShowNewUserResetKey(true);
+      toast({
+        title: "Welcome to CinnamoCloud!",
+        description: "Your account has been created successfully.",
+      });
+    }
+  }, [registerMutation.isSuccess, registerMutation.data]);
 
   const onResetPassword = async (data: ResetPasswordData) => {
     try {

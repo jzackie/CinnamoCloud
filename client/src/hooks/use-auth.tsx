@@ -38,6 +38,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (user: SelectUser) => {
       queryClient.setQueryData(["/api/user"], user);
+      // Clear all cached data for user switch
+      queryClient.invalidateQueries({ queryKey: ["/api/files"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/folders"] });
     },
     onError: (error: Error) => {
       toast({
@@ -55,6 +58,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (user: SelectUser) => {
       queryClient.setQueryData(["/api/user"], user);
+      // Clear all cached data for new user
+      queryClient.invalidateQueries({ queryKey: ["/api/files"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/folders"] });
     },
     onError: (error: Error) => {
       toast({
