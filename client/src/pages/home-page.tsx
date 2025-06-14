@@ -138,19 +138,19 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Navigation Header */}
       <nav className="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-cinnamoroll-200 dark:border-kuromi-700 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
             {/* Logo & Brand */}
-            <div className="flex items-center space-x-3">
-              <div className="cloud-shape w-10 h-6 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
-              <h1 className="font-nunito font-bold text-xl text-cinnamoroll-600 dark:text-kuromi-400">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="cloud-shape w-8 h-5 sm:w-10 sm:h-6 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
+              <h1 className="font-nunito font-bold text-lg sm:text-xl text-cinnamoroll-600 dark:text-kuromi-400">
                 {t("cinnamocloud")}
               </h1>
             </div>
 
-            {/* Search Bar */}
-            <div className="flex-1 max-w-lg mx-8">
-              <div className="relative">
+            {/* Search Bar - Hidden on small screens */}
+            <div className="hidden md:flex flex-1 max-w-lg mx-8">
+              <div className="relative w-full">
                 <Input
                   type="text"
                   placeholder={t("search_files")}
@@ -163,7 +163,7 @@ export default function HomePage() {
             </div>
 
             {/* Header Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Theme Toggle */}
               <Button
                 variant="ghost"
@@ -184,9 +184,23 @@ export default function HomePage() {
         </div>
       </nav>
 
+      {/* Mobile Search Bar */}
+      <div className="md:hidden px-4 py-3 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-b border-cinnamoroll-200 dark:border-kuromi-700">
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder={t("search_files")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 rounded-full border-2 border-cinnamoroll-200 dark:border-kuromi-600 bg-white/50 dark:bg-gray-700/50 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
+          />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-cinnamoroll-400 dark:text-kuromi-400" />
+        </div>
+      </div>
+
       <div className="flex min-h-[calc(100vh-4rem)]">
         {/* Sidebar */}
-        <aside className="w-64 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-r border-cinnamoroll-200 dark:border-kuromi-700 p-4">
+        <aside className="w-64 lg:w-64 md:w-56 sm:w-16 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-r border-cinnamoroll-200 dark:border-kuromi-700 p-2 sm:p-4">
           {/* Upload Button */}
           <Button
             onClick={() => setUploadModalOpen(true)}

@@ -177,18 +177,18 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Header with Language Selector */}
-      <div className="absolute top-4 right-4 z-10">
+      <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="sm"
-              className="bg-white/10 hover:bg-white/20 text-white border border-white/20"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs sm:text-sm px-2 sm:px-3"
             >
-              <Languages className="w-4 h-4 mr-2" />
-              <span className="text-sm">{languages.find(l => l.code === language)?.flag}</span>
+              <Languages className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              <span className="text-xs sm:text-sm">{languages.find(l => l.code === language)?.flag}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent 
@@ -199,12 +199,12 @@ export default function AuthPage() {
               <DropdownMenuItem
                 key={lang.code}
                 onClick={() => setLanguage(lang.code as any)}
-                className={`flex items-center space-x-3 p-2 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer ${
+                className={`flex items-center space-x-2 sm:space-x-3 p-2 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer ${
                   language === lang.code ? 'bg-cinnamoroll-100 dark:bg-kuromi-700' : ''
                 }`}
               >
-                <span className="text-base">{lang.flag}</span>
-                <span className="font-medium">{lang.name}</span>
+                <span className="text-sm sm:text-base">{lang.flag}</span>
+                <span className="font-medium text-sm sm:text-base">{lang.name}</span>
                 {language === lang.code && (
                   <div className="ml-auto w-2 h-2 bg-cinnamoroll-500 dark:bg-kuromi-400 rounded-full"></div>
                 )}
@@ -215,17 +215,17 @@ export default function AuthPage() {
       </div>
 
       {/* Left Side - Auth Forms */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <Card className="w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
-          <CardHeader className="text-center gradient-cinnamoroll dark:gradient-kuromi rounded-t-lg">
-            <div className="cloud-shape w-16 h-10 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-4 animate-float"></div>
-            <CardTitle className="font-nunito font-bold text-2xl text-white mb-2">
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+        <Card className="w-full max-w-sm sm:max-w-md lg:w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
+          <CardHeader className="text-center gradient-cinnamoroll dark:gradient-kuromi rounded-t-lg p-4 sm:p-6">
+            <div className="cloud-shape w-12 h-7 sm:w-16 sm:h-10 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-3 sm:mb-4 animate-float"></div>
+            <CardTitle className="font-nunito font-bold text-xl sm:text-2xl text-white mb-2">
               {t("welcome_to_cinnamocloud")}
             </CardTitle>
-            <p className="text-white/80">{t("kawaii_cloud_storage")} ✨</p>
+            <p className="text-white/80 text-sm sm:text-base">{t("kawaii_cloud_storage")} ✨</p>
           </CardHeader>
           
-          <CardContent className="p-6">
+          <CardContent className="p-4 sm:p-6">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2 mb-6">
                 <TabsTrigger 
@@ -397,30 +397,30 @@ export default function AuthPage() {
       </div>
 
       {/* Right Side - Hero Section */}
-      <div className="flex-1 gradient-cinnamoroll dark:gradient-kuromi p-8 flex items-center justify-center">
-        <div className="text-center text-white max-w-md">
-          <div className="cloud-shape w-32 h-20 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-8 animate-float"></div>
-          <h2 className="font-nunito font-bold text-4xl mb-4">
+      <div className="flex-1 gradient-cinnamoroll dark:gradient-kuromi p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+        <div className="text-center text-white max-w-xs sm:max-w-md">
+          <div className="cloud-shape w-20 h-12 sm:w-32 sm:h-20 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-4 sm:mb-8 animate-float"></div>
+          <h2 className="font-nunito font-bold text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4">
             {t("store_kawaii_files")} ☁️
           </h2>
-          <p className="text-xl mb-6 text-white/90">
+          <p className="text-lg sm:text-xl mb-4 sm:mb-6 text-white/90">
             {t("unlimited_storage")} ✨
           </p>
-          <div className="space-y-4 text-white/80">
+          <div className="space-y-2 sm:space-y-4 text-white/80 text-sm sm:text-base">
             <div className="flex items-center justify-center space-x-2">
-              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/60 rounded-full"></div>
               <span>{t("unlimited_kawaii_storage")}</span>
             </div>
             <div className="flex items-center justify-center space-x-2">
-              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/60 rounded-full"></div>
               <span>{t("preview_files")}</span>
             </div>
             <div className="flex items-center justify-center space-x-2">
-              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/60 rounded-full"></div>
               <span>{t("organize_folders")}</span>
             </div>
             <div className="flex items-center justify-center space-x-2">
-              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/60 rounded-full"></div>
               <span>{t("secure_reset")}</span>
             </div>
           </div>
@@ -428,7 +428,7 @@ export default function AuthPage() {
           <Button
             onClick={toggleTheme}
             variant="outline"
-            className="mt-8 border-white/80 dark:border-kuromi-300/50 text-white hover:bg-white/20 dark:hover:bg-kuromi-300/20 bg-black/20 dark:bg-kuromi-900/30 backdrop-blur-sm shadow-lg"
+            className="mt-4 sm:mt-8 border-white/80 dark:border-kuromi-300/50 text-white hover:bg-white/20 dark:hover:bg-kuromi-300/20 bg-black/20 dark:bg-kuromi-900/30 backdrop-blur-sm shadow-lg text-sm sm:text-base px-3 sm:px-4 py-2"
           >
             Switch to {theme === "light" ? "Kuromi" : "Cinnamoroll"} Theme
           </Button>
