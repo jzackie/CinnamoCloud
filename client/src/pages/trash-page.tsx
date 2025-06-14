@@ -1,22 +1,45 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileCard } from "@/components/file-card";
 import { ProfileMenu } from "@/components/profile-menu";
 import { CinnamorollLoader } from "@/components/cinnamoroll-loader";
-import { Search, Trash2, Moon, Sun, ArrowLeft } from "lucide-react";
+import { Search, Trash2, Moon, Sun, ArrowLeft, AlertTriangle } from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
 import { useLocation } from "wouter";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { File } from "@shared/schema";
 
 export default function TrashPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { toast } = useToast();
 
   const { data: deletedFiles = [], isLoading } = useQuery<File[]>({
     queryKey: ["/api/files/deleted"],
+  });
+
+  const permanentDeleteMutation = useMutation({
+    mutationFn: async (fileId: number) => {
+      await apiRequest("DELETE", `/api/files/${fileId}/permanent`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/files/deleted"] });
+      toast({
+        title: "Permanently deleted",
+        description: "File has been permanently deleted and cannot be recovered.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to permanently delete file",
+        variant: "destructive",
+      });
+    },
   });
 
   const filteredFiles = deletedFiles.filter(file =>
@@ -84,18 +107,36 @@ export default function TrashPage() {
       {/* Main Content */}
       <main className="p-6 max-w-7xl mx-auto">
         {/* Page Header */}
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-2xl">
-            <Trash2 className="w-8 h-8 text-red-500" />
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-2xl">
+              <Trash2 className="w-8 h-8 text-red-500" />
+            </div>
+            <div>
+              <h2 className="font-nunito font-bold text-3xl text-cinnamoroll-700 dark:text-kuromi-300">
+                Trash
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                {deletedFiles.length} deleted files (can be restored)
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="font-nunito font-bold text-3xl text-cinnamoroll-700 dark:text-kuromi-300">
-              Trash
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              {deletedFiles.length} deleted files (can be restored) 🗑️
-            </p>
-          </div>
+          
+          {deletedFiles.length > 0 && (
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (window.confirm(`Permanently delete all ${deletedFiles.length} files? This cannot be undone.`)) {
+                  deletedFiles.forEach(file => permanentDeleteMutation.mutate(file.id));
+                }
+              }}
+              disabled={permanentDeleteMutation.isPending}
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
+              <AlertTriangle className="w-4 h-4 mr-2" />
+              Empty Trash
+            </Button>
+          )}
         </div>
 
         {/* Files Grid */}
@@ -110,11 +151,11 @@ export default function TrashPage() {
         ) : filteredFiles.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
             {filteredFiles.map((file) => (
-              <FileCard
+              <TrashFileCard
                 key={file.id}
-                item={file}
-                type="file"
-                showRestoreActions={true}
+                file={file}
+                onPermanentDelete={() => permanentDeleteMutation.mutate(file.id)}
+                isPermanentDeleting={permanentDeleteMutation.isPending}
               />
             ))}
           </div>

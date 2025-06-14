@@ -74,6 +74,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       return Promise.all(uploadPromises);
     },
     onSuccess: () => {
+      // Invalidate all file queries to ensure files appear in current folder
       queryClient.invalidateQueries({ queryKey: ["/api/files"] });
       toast({
         title: "Success",
