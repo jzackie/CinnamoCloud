@@ -202,7 +202,11 @@ export function registerRoutes(app: Express): Server {
   });
 
   app.get("/api/files/:id", requireAuth, async (req, res) => {
-    const file = await storage.getFile(parseInt(req.params.id), req.user!.id);
+    const fileId = parseInt(req.params.id);
+    if (isNaN(fileId)) {
+      return res.status(400).json({ message: "Invalid file ID" });
+    }
+    const file = await storage.getFile(fileId, req.user!.id);
     if (!file) {
       return res.status(404).json({ message: "File not found" });
     }
@@ -210,7 +214,11 @@ export function registerRoutes(app: Express): Server {
   });
 
   app.get("/api/files/:id/preview", requireAuth, async (req, res) => {
-    const file = await storage.getFile(parseInt(req.params.id), req.user!.id);
+    const fileId = parseInt(req.params.id);
+    if (isNaN(fileId)) {
+      return res.status(400).json({ message: "Invalid file ID" });
+    }
+    const file = await storage.getFile(fileId, req.user!.id);
     if (!file) {
       return res.status(404).json({ message: "File not found" });
     }

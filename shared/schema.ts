@@ -82,6 +82,7 @@ export const updateUserSchema = createInsertSchema(users).pick({
   profilePicture: true,
   language: true,
   preferences: true,
+  password: true,
 }).partial();
 
 export const resetPasswordSchema = z.object({
