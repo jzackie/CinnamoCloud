@@ -153,7 +153,7 @@ export default function HomePage() {
               <div className="relative">
                 <Input
                   type="text"
-                  placeholder="Search your kawaii files..."
+                  placeholder={t("search_files")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 rounded-full border-2 border-cinnamoroll-200 dark:border-kuromi-600 bg-white/50 dark:bg-gray-700/50 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
@@ -375,27 +375,27 @@ export default function HomePage() {
                     className="flex items-center space-x-2 px-4 py-2 border-cinnamoroll-200 dark:border-kuromi-600 hover:shadow-md transition-all"
                   >
                     <FolderPlus className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
-                    <span className="font-nunito font-medium">New Folder</span>
+                    <span className="font-nunito font-medium">{t("new_folder")}</span>
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Create New Folder</DialogTitle>
+                    <DialogTitle>{t("create_folder")}</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="folderName">Folder Name</Label>
+                      <Label htmlFor="folderName">{t("folder_name")}</Label>
                       <Input
                         id="folderName"
                         value={newFolderName}
                         onChange={(e) => setNewFolderName(e.target.value)}
-                        placeholder="Enter folder name..."
+                        placeholder={t("folder_name")}
                         className="mt-1"
                       />
                     </div>
                     <div className="flex justify-end space-x-2">
                       <Button variant="outline" onClick={() => setFolderDialogOpen(false)}>
-                        Cancel
+                        {t("cancel")}
                       </Button>
                       <Button 
                         onClick={() => createFolderMutation.mutate(newFolderName)}
@@ -404,10 +404,10 @@ export default function HomePage() {
                         {createFolderMutation.isPending ? (
                           <div className="flex items-center space-x-2">
                             <CinnamorollSpinner />
-                            <span>Creating...</span>
+                            <span>{t("loading")}</span>
                           </div>
                         ) : (
-                          "Create"
+                          t("create")
                         )}
                       </Button>
                     </div>

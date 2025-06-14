@@ -11,11 +11,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, Settings, Languages, LogOut, ChevronDown, Download } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useLanguage } from "@/lib/language-provider";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 
 export function ProfileMenu() {
   const { user, logoutMutation } = useAuth();
+  const { t } = useLanguage();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
