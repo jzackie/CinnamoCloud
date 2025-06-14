@@ -142,7 +142,7 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-14 sm:h-16">
             {/* Logo & Brand */}
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="cloud-shape w-8 h-5 sm:w-10 sm:h-6 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
+              <div className="cloud-shape cloud-shape-enhanced w-8 h-5 sm:w-10 sm:h-6 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
               <h1 className="font-nunito font-bold text-lg sm:text-xl text-cinnamoroll-600 dark:text-kuromi-400">
                 {t("cinnamocloud")}
               </h1>
@@ -350,7 +350,7 @@ export default function HomePage() {
           {/* Action Bar */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="cloud-shape w-6 h-4 sm:w-8 sm:h-5 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
+              <div className="cloud-shape cloud-shape-enhanced w-6 h-4 sm:w-8 sm:h-5 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
               <h2 className="font-nunito font-bold text-lg sm:text-xl lg:text-2xl text-cinnamoroll-700 dark:text-kuromi-300">
                 My Kawaii Drive
               </h2>

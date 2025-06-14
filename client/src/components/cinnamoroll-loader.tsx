@@ -1,20 +1,18 @@
-import { Cloud, Sparkles } from "lucide-react";
-
 interface CinnamorollLoaderProps {
   size?: "sm" | "md" | "lg";
   message?: string;
-  variant?: "cloud" | "bounce" | "drift";
+  variant?: "classic" | "bounce" | "pulse";
 }
 
 export function CinnamorollLoader({ 
   size = "md", 
   message = "Loading kawaii files...", 
-  variant = "cloud" 
+  variant = "classic" 
 }: CinnamorollLoaderProps) {
   const sizeClasses = {
     sm: "w-8 h-8",
-    md: "w-12 h-12",
-    lg: "w-16 h-16"
+    md: "w-16 h-16",
+    lg: "w-24 h-24"
   };
 
   const textSizeClasses = {
@@ -23,81 +21,149 @@ export function CinnamorollLoader({
     lg: "text-lg"
   };
 
-  if (variant === "cloud") {
-    return (
-      <div className="flex flex-col items-center justify-center space-y-4 p-6">
-        {/* Floating Cinnamoroll clouds */}
-        <div className="relative">
-          <div className={`${sizeClasses[size]} gradient-cinnamoroll dark:gradient-kuromi cloud-shape animate-float`}>
-            {/* Cinnamoroll ears */}
-            <div className="absolute -top-2 left-2 w-3 h-3 bg-white dark:bg-kuromi-300 rounded-full animate-ears-wiggle opacity-90"></div>
-            <div className="absolute -top-2 right-2 w-3 h-3 bg-white dark:bg-kuromi-300 rounded-full animate-ears-wiggle opacity-90" style={{ animationDelay: '0.2s' }}></div>
-          </div>
-          
-          {/* Sparkles */}
-          <Sparkles className="absolute -top-2 -right-2 w-4 h-4 text-kawaii-pink dark:text-kuromi-400 animate-sparkle" />
-          <Sparkles className="absolute -bottom-1 -left-2 w-3 h-3 text-kawaii-purple dark:text-kuromi-500 animate-sparkle" style={{ animationDelay: '0.7s' }} />
-        </div>
-        
-        <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center animate-pulse-soft`}>
-          {message}
-        </p>
-      </div>
-    );
-  }
+  const strokeWidths = {
+    sm: "3",
+    md: "4",
+    lg: "6"
+  };
 
   if (variant === "bounce") {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 p-6">
-        {/* Bouncing Cinnamoroll */}
-        <div className="relative">
-          <div className={`${sizeClasses[size]} bg-gradient-to-br from-cinnamoroll-100 to-cinnamoroll-300 dark:from-kuromi-700 dark:to-kuromi-500 rounded-full animate-cinnamoroll-bounce shadow-lg`}>
-            {/* Eyes */}
-            <div className="absolute top-3 left-3 w-1 h-1 bg-cinnamoroll-800 dark:bg-white rounded-full"></div>
-            <div className="absolute top-3 right-3 w-1 h-1 bg-cinnamoroll-800 dark:bg-white rounded-full"></div>
-            
-            {/* Blush */}
-            <div className="absolute top-4 left-1 w-2 h-1 bg-kawaii-pink dark:bg-kuromi-400 rounded-full opacity-60"></div>
-            <div className="absolute top-4 right-1 w-2 h-1 bg-kawaii-pink dark:bg-kuromi-400 rounded-full opacity-60"></div>
-          </div>
-          
-          {/* Tail wiggle */}
-          <div className="absolute -bottom-1 -right-1 w-3 h-2 bg-cinnamoroll-200 dark:bg-kuromi-600 rounded-full animate-wiggle"></div>
+        <div className={`${sizeClasses[size]} relative animate-bounce`}>
+          <svg className="w-full h-full" viewBox="0 0 100 100">
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke="currentColor"
+              strokeWidth={strokeWidths[size]}
+              fill="none"
+              className="text-gray-200 dark:text-gray-700"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke="currentColor"
+              strokeWidth={strokeWidths[size]}
+              fill="none"
+              strokeLinecap="round"
+              strokeDasharray="251.2"
+              strokeDashoffset="125.6"
+              className="text-kawaii-pink animate-spin"
+            />
+          </svg>
         </div>
-        
-        <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center animate-pulse-soft`}>
+        <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center animate-pulse`}>
           {message}
         </p>
       </div>
     );
   }
 
-  if (variant === "drift") {
+  if (variant === "pulse") {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 p-6">
-        {/* Drifting clouds */}
-        <div className="relative w-20 h-12">
-          <Cloud className={`absolute ${sizeClasses[size]} text-cinnamoroll-300 dark:text-kuromi-600 animate-cloud-drift`} />
-          <Cloud className={`absolute ${sizeClasses[size]} text-cinnamoroll-400 dark:text-kuromi-500 animate-cloud-drift opacity-70`} style={{ animationDelay: '1s', left: '10px' }} />
-          <Cloud className={`absolute ${sizeClasses[size]} text-cinnamoroll-500 dark:text-kuromi-400 animate-cloud-drift opacity-50`} style={{ animationDelay: '2s', left: '20px' }} />
+        <div className={`${sizeClasses[size]} relative animate-pulse`}>
+          <svg className="w-full h-full" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="donutGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#FF69B4" />
+                <stop offset="100%" stopColor="#9370DB" />
+              </linearGradient>
+            </defs>
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke="currentColor"
+              strokeWidth={strokeWidths[size]}
+              fill="none"
+              className="text-gray-200 dark:text-gray-700"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke="url(#donutGradient)"
+              strokeWidth={strokeWidths[size]}
+              fill="none"
+              strokeLinecap="round"
+              strokeDasharray="188.4"
+              strokeDashoffset="62.8"
+            />
+          </svg>
         </div>
-        
-        <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center animate-pulse-soft`}>
+        <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center animate-pulse`}>
           {message}
         </p>
       </div>
     );
   }
 
-  return null;
+  // Default classic spinning donut
+  return (
+    <div className="flex flex-col items-center justify-center space-y-4 p-6">
+      <div className={`${sizeClasses[size]} relative`}>
+        <svg className="w-full h-full animate-spin" viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            stroke="currentColor"
+            strokeWidth={strokeWidths[size]}
+            fill="none"
+            className="text-gray-200 dark:text-gray-700"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            stroke="currentColor"
+            strokeWidth={strokeWidths[size]}
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray="251.2"
+            strokeDashoffset="62.8"
+            className="text-kawaii-pink"
+          />
+        </svg>
+      </div>
+      <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center animate-pulse`}>
+        {message}
+      </p>
+    </div>
+  );
 }
 
 // Quick inline loader for small spaces
 export function CinnamorollSpinner({ className = "" }: { className?: string }) {
   return (
-    <div className={`cloud-shape w-6 h-4 gradient-cinnamoroll dark:gradient-kuromi animate-spin-slow ${className}`}>
-      <div className="absolute -top-1 left-1 w-2 h-2 bg-white dark:bg-kuromi-300 rounded-full animate-bounce-gentle opacity-80"></div>
-      <div className="absolute -top-1 right-1 w-2 h-2 bg-white dark:bg-kuromi-300 rounded-full animate-bounce-gentle opacity-80" style={{ animationDelay: '0.3s' }}></div>
+    <div className={`inline-block ${className}`}>
+      <svg className="animate-spin w-5 h-5" viewBox="0 0 100 100">
+        <circle
+          cx="50"
+          cy="50"
+          r="40"
+          stroke="currentColor"
+          strokeWidth="8"
+          fill="none"
+          className="text-gray-200 dark:text-gray-700"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="40"
+          stroke="currentColor"
+          strokeWidth="8"
+          fill="none"
+          strokeLinecap="round"
+          strokeDasharray="251.2"
+          strokeDashoffset="62.8"
+          className="text-kawaii-pink"
+        />
+      </svg>
     </div>
   );
 }

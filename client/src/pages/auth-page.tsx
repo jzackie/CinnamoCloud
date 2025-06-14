@@ -218,7 +218,7 @@ export default function AuthPage() {
       <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <Card className="w-full max-w-sm sm:max-w-md lg:w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
           <CardHeader className="text-center gradient-cinnamoroll dark:gradient-kuromi rounded-t-lg p-4 sm:p-6">
-            <div className="cloud-shape w-12 h-7 sm:w-16 sm:h-10 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-3 sm:mb-4 animate-float"></div>
+            <div className="cloud-shape cloud-shape-enhanced w-12 h-7 sm:w-16 sm:h-10 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-3 sm:mb-4 animate-float"></div>
             <CardTitle className="font-nunito font-bold text-xl sm:text-2xl text-white mb-2">
               {t("welcome_to_cinnamocloud")}
             </CardTitle>
@@ -399,7 +399,7 @@ export default function AuthPage() {
       {/* Right Side - Hero Section */}
       <div className="flex-1 gradient-cinnamoroll dark:gradient-kuromi p-4 sm:p-6 lg:p-8 flex items-center justify-center">
         <div className="text-center text-white max-w-xs sm:max-w-md">
-          <div className="cloud-shape w-20 h-12 sm:w-32 sm:h-20 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-4 sm:mb-8 animate-float"></div>
+          <div className="cloud-shape cloud-shape-enhanced w-20 h-12 sm:w-32 sm:h-20 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-4 sm:mb-8 animate-float"></div>
           <h2 className="font-nunito font-bold text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4">
             {t("store_kawaii_files")} ☁️
           </h2>
