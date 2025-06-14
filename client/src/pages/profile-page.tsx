@@ -307,7 +307,7 @@ export default function ProfilePage() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <h3 className="font-nunito font-semibold text-lg mb-2">Profile Picture</h3>
+                      <h3 className="font-nunito font-semibold text-lg mb-2">{t("change_picture")}</h3>
                       <input
                         type="file"
                         accept="image/*"
@@ -338,7 +338,7 @@ export default function ProfilePage() {
                       <Input
                         id="displayName"
                         {...form.register("displayName")}
-                        placeholder="Your kawaii name"
+                        placeholder={t("kawaii_name_placeholder")}
                         className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
                       />
                       {form.formState.errors.displayName && (
