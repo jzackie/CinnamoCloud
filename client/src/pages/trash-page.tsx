@@ -15,7 +15,7 @@ export default function TrashPage() {
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
 
-  const { data: deletedFiles = [] } = useQuery<File[]>({
+  const { data: deletedFiles = [], isLoading } = useQuery<File[]>({
     queryKey: ["/api/files/deleted"],
   });
 
@@ -99,7 +99,15 @@ export default function TrashPage() {
         </div>
 
         {/* Files Grid */}
-        {filteredFiles.length > 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <CinnamorollLoader 
+              size="lg" 
+              message="Loading deleted kawaii files..." 
+              variant="cloud" 
+            />
+          </div>
+        ) : filteredFiles.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
             {filteredFiles.map((file) => (
               <FileCard

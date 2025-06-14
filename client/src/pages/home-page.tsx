@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { CinnamorollLoader, CinnamorollSkeleton, CinnamorollSpinner } from "@/components/cinnamoroll-loader";
 import { 
   Search, 
   Grid3x3, 
@@ -50,7 +51,7 @@ export default function HomePage() {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const { data: folders = [] } = useQuery<Folder[]>({
+  const { data: folders = [], isLoading: foldersLoading } = useQuery<Folder[]>({
     queryKey: ["/api/folders", currentFolderId],
     queryFn: async () => {
       const url = currentFolderId 
@@ -62,7 +63,7 @@ export default function HomePage() {
     }
   });
 
-  const { data: files = [] } = useQuery<File[]>({
+  const { data: files = [], isLoading: filesLoading } = useQuery<File[]>({
     queryKey: ["/api/files", currentFolderId],
     queryFn: async () => {
       const url = currentFolderId 
@@ -388,7 +389,14 @@ export default function HomePage() {
                         onClick={() => createFolderMutation.mutate(newFolderName)}
                         disabled={!newFolderName.trim() || createFolderMutation.isPending}
                       >
-                        {createFolderMutation.isPending ? "Creating..." : "Create"}
+                        {createFolderMutation.isPending ? (
+                          <div className="flex items-center space-x-2">
+                            <CinnamorollSpinner />
+                            <span>Creating...</span>
+                          </div>
+                        ) : (
+                          "Create"
+                        )}
                       </Button>
                     </div>
                   </div>
@@ -415,7 +423,15 @@ export default function HomePage() {
           </nav>
 
           {/* Files Grid */}
-          {(currentCategory === "all" ? [...folders, ...filteredFiles] : filteredFiles).length > 0 ? (
+          {foldersLoading || filesLoading ? (
+            <div className="flex flex-col items-center justify-center py-16">
+              <CinnamorollLoader 
+                size="lg" 
+                message="Loading your kawaii files..." 
+                variant="bounce" 
+              />
+            </div>
+          ) : (currentCategory === "all" ? [...folders, ...filteredFiles] : filteredFiles).length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
               {currentCategory === "all" ? (
                 <>
