@@ -218,7 +218,7 @@ export default function AuthPage() {
       <div className="flex-1 flex items-center justify-center p-8">
         <Card className="w-full max-w-md bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
           <CardHeader className="text-center gradient-cinnamoroll dark:gradient-kuromi rounded-t-lg">
-            <div className="cloud-shape w-16 h-10 bg-white/20 mx-auto mb-4 animate-float"></div>
+            <div className="cloud-shape w-16 h-10 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-4 animate-float"></div>
             <CardTitle className="font-nunito font-bold text-2xl text-white mb-2">
               {t("welcome_to_cinnamocloud")}
             </CardTitle>
@@ -399,7 +399,7 @@ export default function AuthPage() {
       {/* Right Side - Hero Section */}
       <div className="flex-1 gradient-cinnamoroll dark:gradient-kuromi p-8 flex items-center justify-center">
         <div className="text-center text-white max-w-md">
-          <div className="cloud-shape w-32 h-20 bg-white/20 mx-auto mb-8 animate-float"></div>
+          <div className="cloud-shape w-32 h-20 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-8 animate-float"></div>
           <h2 className="font-nunito font-bold text-4xl mb-4">
             {t("store_kawaii_files")} ☁️
           </h2>
@@ -428,7 +428,7 @@ export default function AuthPage() {
           <Button
             onClick={toggleTheme}
             variant="outline"
-            className="mt-8 border-white/30 text-white hover:bg-white/10"
+            className="mt-8 border-white/30 dark:border-kuromi-300/50 text-white hover:bg-white/10 dark:hover:bg-kuromi-300/20"
           >
             Switch to {theme === "light" ? "Kuromi" : "Cinnamoroll"} Theme
           </Button>

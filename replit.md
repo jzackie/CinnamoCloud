@@ -97,6 +97,7 @@ CinnamoCloud is a modern web-based file management system with a kawaii-themed i
 - June 14, 2025. Initial setup
 - June 14, 2025. Completed comprehensive internationalization system with 40+ translation keys for English, Japanese, Korean, and Chinese languages. Added real-time language switching throughout main navigation, authentication forms, profile management, search functionality, and file management interfaces. Fixed profile picture display issue by resolving path mismatch between file storage and database URLs.
 - June 14, 2025. Completed comprehensive translation coverage for all remaining untranslated text elements including authentication page hero section, profile page sections, theme preferences, username sections, and welcome messages. Added 15+ new translation keys covering welcome messages, hero text, feature descriptions, and placeholder text. All text elements now properly translate across 6 languages (English, Japanese, Korean, Chinese, Spanish, French) for complete internationalization coverage.
+- June 14, 2025. Fixed list view functionality by implementing proper viewMode conditional rendering and added comprehensive list view layout to FileCard component. Fixed missing dark mode CSS for upload buttons and cloud elements by adding Kuromi-themed variants for all light-mode-only styling including cloud backgrounds, button borders, and hover states.
 
 ## User Preferences
 
