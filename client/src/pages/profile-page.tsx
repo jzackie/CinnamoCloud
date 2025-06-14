@@ -153,6 +153,8 @@ export default function ProfilePage() {
   // Update form when profile data loads
   useEffect(() => {
     if (profile) {
+      console.log('Profile loaded:', profile);
+      console.log('Profile picture URL:', profile.profilePicture);
       form.reset({
         displayName: profile.displayName,
         language: profile.language,
@@ -291,7 +293,15 @@ export default function ProfilePage() {
                   {/* Profile Picture */}
                   <div className="flex items-center space-x-6">
                     <Avatar className="w-24 h-24">
-                      <AvatarImage src={profile?.profilePicture || undefined} alt={profile?.displayName || ""} />
+                      <AvatarImage 
+                        src={profile?.profilePicture ? `${profile.profilePicture}?t=${Date.now()}` : undefined} 
+                        alt={profile?.displayName || ""} 
+                        className="object-cover"
+                        onError={(e) => {
+                          console.log('Avatar image failed to load:', profile?.profilePicture);
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
                       <AvatarFallback className="text-2xl bg-gradient-to-r from-cinnamoroll-300 to-kawaii-pink dark:from-kuromi-600 dark:to-kawaii-purple text-white">
                         {profile?.displayName?.charAt(0).toUpperCase() || "?"}
                       </AvatarFallback>
