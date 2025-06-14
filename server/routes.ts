@@ -156,7 +156,17 @@ export function registerRoutes(app: Express): Server {
     res.json({ message: "Folder restored" });
   });
 
-  // File operations
+  // File operations - specific routes first to avoid conflicts
+  app.get("/api/files/favorites", requireAuth, async (req, res) => {
+    const files = await storage.getFavoriteFiles(req.user!.id);
+    res.json(files);
+  });
+
+  app.get("/api/files/deleted", requireAuth, async (req, res) => {
+    const files = await storage.getDeletedFiles(req.user!.id);
+    res.json(files);
+  });
+
   app.get("/api/files", requireAuth, async (req, res) => {
     const folderId = req.query.folderId ? parseInt(req.query.folderId as string) : undefined;
     const category = req.query.category as string;
@@ -228,6 +238,7 @@ export function registerRoutes(app: Express): Server {
     }
 
     res.setHeader('Content-Type', file.mimeType);
+    res.setHeader('Content-Disposition', 'inline');
     res.sendFile(path.resolve(file.path));
   });
 
@@ -269,16 +280,7 @@ export function registerRoutes(app: Express): Server {
     res.json({ message: "File permanently deleted" });
   });
 
-  // Add missing API endpoints for favorites and trash
-  app.get("/api/files/favorites", requireAuth, async (req, res) => {
-    const files = await storage.getFavoriteFiles(req.user!.id);
-    res.json(files);
-  });
 
-  app.get("/api/files/deleted", requireAuth, async (req, res) => {
-    const files = await storage.getDeletedFiles(req.user!.id);
-    res.json(files);
-  });
 
   const httpServer = createServer(app);
   return httpServer;
