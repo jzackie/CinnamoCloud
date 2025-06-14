@@ -220,9 +220,9 @@ export default function AuthPage() {
           <CardHeader className="text-center gradient-cinnamoroll dark:gradient-kuromi rounded-t-lg">
             <div className="cloud-shape w-16 h-10 bg-white/20 mx-auto mb-4 animate-float"></div>
             <CardTitle className="font-nunito font-bold text-2xl text-white mb-2">
-              Welcome to CinnamoCloud!
+              {t("welcome_to_cinnamocloud")}
             </CardTitle>
-            <p className="text-white/80">Your kawaii cloud storage ✨</p>
+            <p className="text-white/80">{t("kawaii_cloud_storage")} ✨</p>
           </CardHeader>
           
           <CardContent className="p-6">
@@ -389,8 +389,7 @@ export default function AuthPage() {
             <Alert className="mt-6 border-cinnamoroll-200 dark:border-kuromi-600 bg-cinnamoroll-50 dark:bg-kuromi-900/50">
               <Key className="w-4 h-4 text-kawaii-pink dark:text-kuromi-400" />
               <AlertDescription className="text-sm">
-                <strong>Reset Key Info:</strong> After signing up, you'll receive a downloadable reset key. 
-                Keep it safe - it's the only way to reset your password! 🔐✨
+                <strong>{t("reset_key_download")}:</strong> {t("reset_key_info_alert")} 🔐✨
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -402,27 +401,27 @@ export default function AuthPage() {
         <div className="text-center text-white max-w-md">
           <div className="cloud-shape w-32 h-20 bg-white/20 mx-auto mb-8 animate-float"></div>
           <h2 className="font-nunito font-bold text-4xl mb-4">
-            Store Your Kawaii Files in the Cloud! ☁️
+            {t("store_kawaii_files")} ☁️
           </h2>
           <p className="text-xl mb-6 text-white/90">
-            Unlimited storage, cute themes, and secure file management all in one place ✨
+            {t("unlimited_storage")} ✨
           </p>
           <div className="space-y-4 text-white/80">
             <div className="flex items-center justify-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span>Unlimited kawaii storage space</span>
+              <span>{t("unlimited_kawaii_storage")}</span>
             </div>
             <div className="flex items-center justify-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span>Preview files instantly</span>
+              <span>{t("preview_files")}</span>
             </div>
             <div className="flex items-center justify-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span>Organize with cute folders</span>
+              <span>{t("organize_folders")}</span>
             </div>
             <div className="flex items-center justify-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span>Secure reset key system</span>
+              <span>{t("secure_reset")}</span>
             </div>
           </div>
           
