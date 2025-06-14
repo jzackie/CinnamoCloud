@@ -20,7 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 
 export function ProfileMenu() {
   const { user, logoutMutation } = useAuth();
-  const { t } = useLanguage();
+  const { t, language, setLanguage, languages } = useLanguage();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
@@ -119,7 +119,26 @@ export function ProfileMenu() {
           <span>{t("preferences")}</span>
         </DropdownMenuItem>
         
-
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="flex items-center space-x-3 p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer">
+            <Languages className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
+            <span>{t("language")}</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
+            {languages.map((lang) => (
+              <DropdownMenuItem
+                key={lang.code}
+                onClick={() => setLanguage(lang.code as any)}
+                className={`flex items-center space-x-3 p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer ${
+                  language === lang.code ? 'bg-cinnamoroll-100 dark:bg-kuromi-700' : ''
+                }`}
+              >
+                <span className="text-lg">{lang.flag}</span>
+                <span>{lang.name}</span>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         
         <DropdownMenuItem 
           onClick={downloadResetKey}
