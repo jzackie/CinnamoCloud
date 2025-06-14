@@ -24,9 +24,10 @@ interface FileCardProps {
   onPreview?: (file: File) => void;
   onFolderClick?: (folder: FolderType) => void;
   showRestoreActions?: boolean;
+  viewMode?: "grid" | "list";
 }
 
-export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActions = false }: FileCardProps) {
+export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActions = false, viewMode = "grid" }: FileCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -165,6 +166,133 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
       onPreview(item as File);
     }
   };
+
+  if (viewMode === "list") {
+    return (
+      <Card 
+        className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700 hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={handleClick}
+      >
+        <div className="p-3 flex items-center justify-between">
+          <div className="flex items-center space-x-3 flex-1 min-w-0">
+            {type === "folder" ? (
+              <Folder className="w-8 h-8 text-cinnamoroll-400 dark:text-kuromi-400 group-hover:text-kawaii-pink transition-colors flex-shrink-0" />
+            ) : (
+              <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
+                {(item as File).mimeType.startsWith('image/') ? (
+                  <img 
+                    src={`/api/files/${item.id}/preview`} 
+                    alt={(item as File).originalName}
+                    className="w-8 h-8 object-cover rounded"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const icon = getFileIcon((item as File).mimeType);
+                      const wrapper = e.currentTarget.parentElement;
+                      if (wrapper) {
+                        wrapper.innerHTML = '';
+                        const iconElement = document.createElement('div');
+                        iconElement.className = 'w-8 h-8 flex items-center justify-center text-gray-500';
+                        wrapper.appendChild(iconElement);
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="text-gray-500 scale-50">
+                    {getFileIcon((item as File).mimeType)}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            <div className="flex-1 min-w-0">
+              <h3 className="font-nunito font-semibold text-sm text-gray-800 dark:text-gray-200 truncate">
+                {type === "folder" ? item.name : (item as File).originalName}
+              </h3>
+              {type === "file" && (
+                <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                  <span>{formatFileSize((item as File).size)}</span>
+                  <span>•</span>
+                  <span>{new Date((item as File).createdAt).toLocaleDateString()}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* List view actions */}
+          <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            {type === "file" && !showRestoreActions && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavoriteMutation.mutate(item.id);
+                  }}
+                  className="p-1 h-auto"
+                  disabled={toggleFavoriteMutation.isPending}
+                >
+                  <Star className={`w-4 h-4 ${(item as File).isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onPreview?.(item as File);
+                  }}
+                  className="p-1 h-auto"
+                >
+                  <Eye className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    downloadFile(item as File);
+                  }}
+                  className="p-1 h-auto"
+                >
+                  <Download className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteMutation.mutate(item.id);
+                  }}
+                  className="p-1 h-auto"
+                  disabled={deleteMutation.isPending}
+                >
+                  <Trash2 className="w-4 h-4 text-red-500" />
+                </Button>
+              </>
+            )}
+            {showRestoreActions && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    restoreMutation.mutate(item.id);
+                  }}
+                  className="p-1 h-auto"
+                  disabled={restoreMutation.isPending}
+                >
+                  <RotateCcw className="w-4 h-4 text-green-500" />
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card 

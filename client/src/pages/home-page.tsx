@@ -454,7 +454,10 @@ export default function HomePage() {
               />
             </div>
           ) : (currentCategory === "all" ? [...folders, ...filteredFiles] : filteredFiles).length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            <div className={viewMode === "grid" 
+              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4"
+              : "space-y-2"
+            }>
               {currentCategory === "all" ? (
                 <>
                   {folders.map((folder) => (
@@ -463,6 +466,7 @@ export default function HomePage() {
                       item={folder}
                       type="folder"
                       onFolderClick={handleFolderClick}
+                      viewMode={viewMode}
                     />
                   ))}
                   {filteredFiles.map((file) => (
@@ -471,6 +475,7 @@ export default function HomePage() {
                       item={file}
                       type="file"
                       onPreview={setSelectedFile}
+                      viewMode={viewMode}
                     />
                   ))}
                 </>
@@ -481,6 +486,7 @@ export default function HomePage() {
                     item={file}
                     type="file"
                     onPreview={setSelectedFile}
+                    viewMode={viewMode}
                   />
                 ))
               )}
