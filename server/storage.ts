@@ -1,6 +1,6 @@
-import { users, folders, files, type User, type InsertUser, type Folder, type InsertFolder, type File, type InsertFile, type UpdateUser } from "@shared/schema";
+import { users, folders, files, achievements, userAchievements, type User, type InsertUser, type Folder, type InsertFolder, type File, type InsertFile, type UpdateUser, type Achievement, type UserAchievement, type InsertUserAchievement } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, isNull } from "drizzle-orm";
+import { eq, and, isNull, count, sql } from "drizzle-orm";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { pool } from "./db";
@@ -35,6 +35,12 @@ export interface IStorage {
   deleteFile(id: number, userId: number): Promise<void>;
   restoreFile(id: number, userId: number): Promise<void>;
   permanentlyDeleteFile(id: number, userId: number): Promise<void>;
+  
+  // Achievement operations
+  getAchievements(): Promise<Achievement[]>;
+  getUserAchievements(userId: number): Promise<UserAchievement[]>;
+  checkAndUnlockAchievements(userId: number): Promise<UserAchievement[]>;
+  updateUserProgress(userId: number, achievementKey: string, progress: number): Promise<void>;
   
   sessionStore: any;
 }
@@ -208,6 +214,146 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(files)
       .where(and(eq(files.id, id), eq(files.userId, userId)));
+  }
+
+  // Achievement operations
+  async getAchievements(): Promise<Achievement[]> {
+    return await db.select().from(achievements);
+  }
+
+  async getUserAchievements(userId: number): Promise<UserAchievement[]> {
+    return await db
+      .select()
+      .from(userAchievements)
+      .where(eq(userAchievements.userId, userId));
+  }
+
+  async checkAndUnlockAchievements(userId: number): Promise<UserAchievement[]> {
+    const newAchievements: UserAchievement[] = [];
+    
+    // Get user stats
+    const [fileCount] = await db
+      .select({ count: count() })
+      .from(files)
+      .where(and(eq(files.userId, userId), eq(files.isDeleted, false)));
+
+    const [folderCount] = await db
+      .select({ count: count() })
+      .from(folders)
+      .where(and(eq(folders.userId, userId), eq(folders.isDeleted, false)));
+
+    const [favoriteCount] = await db
+      .select({ count: count() })
+      .from(files)
+      .where(and(eq(files.userId, userId), eq(files.isFavorite, true), eq(files.isDeleted, false)));
+
+    const [imageCount] = await db
+      .select({ count: count() })
+      .from(files)
+      .where(and(eq(files.userId, userId), sql`mime_type LIKE 'image/%'`, eq(files.isDeleted, false)));
+
+    const [videoCount] = await db
+      .select({ count: count() })
+      .from(files)
+      .where(and(eq(files.userId, userId), sql`mime_type LIKE 'video/%'`, eq(files.isDeleted, false)));
+
+    const [docCount] = await db
+      .select({ count: count() })
+      .from(files)
+      .where(and(eq(files.userId, userId), sql`mime_type LIKE '%document%' OR mime_type LIKE '%pdf%'`, eq(files.isDeleted, false)));
+
+    // Check all achievements
+    const allAchievements = await this.getAchievements();
+    const userUnlockedAchievements = await this.getUserAchievements(userId);
+    const unlockedKeys = userUnlockedAchievements.map(ua => ua.achievementId);
+
+    for (const achievement of allAchievements) {
+      if (unlockedKeys.includes(achievement.id)) continue;
+
+      let shouldUnlock = false;
+
+      switch (achievement.key) {
+        case 'first_upload':
+        case 'file_collector':
+        case 'storage_master':
+          shouldUnlock = fileCount.count >= achievement.requirement;
+          break;
+        case 'organizer':
+        case 'folder_architect':
+          shouldUnlock = folderCount.count >= achievement.requirement;
+          break;
+        case 'favorite_finder':
+        case 'star_collector':
+          shouldUnlock = favoriteCount.count >= achievement.requirement;
+          break;
+        case 'image_lover':
+          shouldUnlock = imageCount.count >= achievement.requirement;
+          break;
+        case 'video_enthusiast':
+          shouldUnlock = videoCount.count >= achievement.requirement;
+          break;
+        case 'document_keeper':
+          shouldUnlock = docCount.count >= achievement.requirement;
+          break;
+        case 'early_adopter':
+          shouldUnlock = true; // Unlocked on account creation
+          break;
+        case 'nested_genius':
+          // Check if user has nested folders
+          const nestedFolders = await db
+            .select({ count: count() })
+            .from(folders)
+            .where(and(eq(folders.userId, userId), isNull(folders.parentId).not()));
+          shouldUnlock = nestedFolders[0].count > 0;
+          break;
+      }
+
+      if (shouldUnlock) {
+        const [newUserAchievement] = await db
+          .insert(userAchievements)
+          .values({
+            userId,
+            achievementId: achievement.id,
+            progress: achievement.requirement
+          })
+          .returning();
+        
+        newAchievements.push(newUserAchievement);
+      }
+    }
+
+    return newAchievements;
+  }
+
+  async updateUserProgress(userId: number, achievementKey: string, progress: number): Promise<void> {
+    const achievement = await db
+      .select()
+      .from(achievements)
+      .where(eq(achievements.key, achievementKey))
+      .limit(1);
+
+    if (achievement.length === 0) return;
+
+    const existingProgress = await db
+      .select()
+      .from(userAchievements)
+      .where(and(eq(userAchievements.userId, userId), eq(userAchievements.achievementId, achievement[0].id)))
+      .limit(1);
+
+    if (existingProgress.length === 0) {
+      await db
+        .insert(userAchievements)
+        .values({
+          userId,
+          achievementId: achievement[0].id,
+          progress
+        });
+    } else {
+      await db
+        .update(userAchievements)
+        .set({ progress })
+        .where(and(eq(userAchievements.userId, userId), eq(userAchievements.achievementId, achievement[0].id)));
+    }
   }
 
   private generateResetKey(): string {

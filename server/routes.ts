@@ -178,6 +178,36 @@ export function registerRoutes(app: Express): Server {
     res.json({ message: "Folder moved to trash" });
   });
 
+  // Achievement operations
+  app.get("/api/achievements", requireAuth, async (req: any, res: any) => {
+    try {
+      const achievements = await storage.getAchievements();
+      const userAchievements = await storage.getUserAchievements(req.user.id);
+      
+      // Check for new achievements
+      const newAchievements = await storage.checkAndUnlockAchievements(req.user.id);
+      
+      res.json({
+        achievements,
+        userAchievements: [...userAchievements, ...newAchievements],
+        newUnlocked: newAchievements
+      });
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
+      res.status(500).send('Failed to fetch achievements');
+    }
+  });
+
+  app.get("/api/user-achievements", requireAuth, async (req: any, res: any) => {
+    try {
+      const userAchievements = await storage.getUserAchievements(req.user.id);
+      res.json(userAchievements);
+    } catch (error) {
+      console.error('Error fetching user achievements:', error);
+      res.status(500).send('Failed to fetch user achievements');
+    }
+  });
+
   app.post("/api/folders/:id/restore", requireAuth, async (req, res) => {
     await storage.restoreFolder(parseInt(req.params.id), req.user!.id);
     res.json({ message: "Folder restored" });
