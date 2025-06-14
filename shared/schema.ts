@@ -39,9 +39,30 @@ export const files = pgTable("files", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const achievements = pgTable("achievements", {
+  id: serial("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  icon: text("icon").notNull(),
+  category: text("category").notNull(), // storage, organization, activity, special
+  requirement: integer("requirement").notNull(), // threshold value
+  isHidden: boolean("is_hidden").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const userAchievements = pgTable("user_achievements", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  achievementId: integer("achievement_id").references(() => achievements.id).notNull(),
+  unlockedAt: timestamp("unlocked_at").defaultNow().notNull(),
+  progress: integer("progress").default(0).notNull(),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
   files: many(files),
   folders: many(folders),
+  userAchievements: many(userAchievements),
 }));
 
 export const foldersRelations = relations(folders, ({ one, many }) => ({
@@ -54,6 +75,15 @@ export const foldersRelations = relations(folders, ({ one, many }) => ({
 export const filesRelations = relations(files, ({ one }) => ({
   user: one(users, { fields: [files.userId], references: [users.id] }),
   folder: one(folders, { fields: [files.folderId], references: [folders.id] }),
+}));
+
+export const achievementsRelations = relations(achievements, ({ many }) => ({
+  userAchievements: many(userAchievements),
+}));
+
+export const userAchievementsRelations = relations(userAchievements, ({ one }) => ({
+  user: one(users, { fields: [userAchievements.userId], references: [users.id] }),
+  achievement: one(achievements, { fields: [userAchievements.achievementId], references: [achievements.id] }),
 }));
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -90,6 +120,22 @@ export const resetPasswordSchema = z.object({
   newPassword: z.string().min(6),
 });
 
+export const insertAchievementSchema = createInsertSchema(achievements).pick({
+  key: true,
+  name: true,
+  description: true,
+  icon: true,
+  category: true,
+  requirement: true,
+  isHidden: true,
+});
+
+export const insertUserAchievementSchema = createInsertSchema(userAchievements).pick({
+  userId: true,
+  achievementId: true,
+  progress: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertFolder = z.infer<typeof insertFolderSchema>;
@@ -98,3 +144,7 @@ export type InsertFile = z.infer<typeof insertFileSchema>;
 export type File = typeof files.$inferSelect;
 export type UpdateUser = z.infer<typeof updateUserSchema>;
 export type ResetPassword = z.infer<typeof resetPasswordSchema>;
+export type Achievement = typeof achievements.$inferSelect;
+export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
+export type UserAchievement = typeof userAchievements.$inferSelect;
+export type InsertUserAchievement = z.infer<typeof insertUserAchievementSchema>;
