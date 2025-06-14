@@ -44,12 +44,12 @@ export default function AuthPage() {
   const { t, language, setLanguage, languages } = useLanguage();
   const { toast } = useToast();
 
-  // Redirect if already logged in
+  // Redirect if already logged in (but not if showing reset key popup)
   React.useEffect(() => {
-    if (user) {
+    if (user && !showNewUserResetKey) {
       setLocation("/");
     }
-  }, [user, setLocation]);
+  }, [user, setLocation, showNewUserResetKey]);
 
   const loginForm = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -559,7 +559,12 @@ export default function AuthPage() {
       )}
 
       {/* New User Reset Key Modal */}
-      <Dialog open={showNewUserResetKey} onOpenChange={setShowNewUserResetKey}>
+      <Dialog open={showNewUserResetKey} onOpenChange={(open) => {
+        if (!open) {
+          setShowNewUserResetKey(false);
+          setLocation("/");
+        }
+      }}>
         <DialogContent className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md max-w-md">
           <DialogHeader>
             <DialogTitle className="font-nunito font-bold text-lg flex items-center space-x-2 text-center justify-center">
@@ -600,7 +605,10 @@ export default function AuthPage() {
             </div>
 
             <Button
-              onClick={() => setShowNewUserResetKey(false)}
+              onClick={() => {
+                setShowNewUserResetKey(false);
+                setLocation("/");
+              }}
               variant="outline"
               className="w-full border-gray-300 dark:border-gray-600"
             >
