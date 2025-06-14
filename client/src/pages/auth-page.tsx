@@ -428,7 +428,7 @@ export default function AuthPage() {
           <Button
             onClick={toggleTheme}
             variant="outline"
-            className="mt-8 border-white/30 dark:border-kuromi-300/50 text-white hover:bg-white/10 dark:hover:bg-kuromi-300/20"
+            className="mt-8 border-white/80 dark:border-kuromi-300/50 text-white hover:bg-white/20 dark:hover:bg-kuromi-300/20 bg-black/20 dark:bg-kuromi-900/30 backdrop-blur-sm shadow-lg"
           >
             Switch to {theme === "light" ? "Kuromi" : "Cinnamoroll"} Theme
           </Button>
