@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { CloudUpload, X, Upload } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import imageCompression from "browser-image-compression";
 
 interface UploadModalProps {
   open: boolean;
@@ -19,11 +20,39 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Compress images if they're too large
+  const compressFile = async (file: File): Promise<File> => {
+    // Only compress images larger than 2MB
+    if (file.type.startsWith('image/') && file.size > 2 * 1024 * 1024) {
+      try {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        };
+        const compressedFile = await imageCompression(file, options);
+        
+        // Create a new file with original name but compressed content
+        return new File([compressedFile], file.name, {
+          type: compressedFile.type,
+          lastModified: Date.now(),
+        });
+      } catch (error) {
+        console.warn('Compression failed, using original file:', error);
+        return file;
+      }
+    }
+    return file;
+  };
+
   const uploadMutation = useMutation({
     mutationFn: async (files: File[]) => {
       const uploadPromises = files.map(async (file) => {
+        // Compress file if needed
+        const processedFile = await compressFile(file);
+        
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', processedFile);
         if (folderId) {
           formData.append('folderId', folderId.toString());
         }

@@ -28,8 +28,24 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, [user]);
 
-  const setLanguage = (lang: Language) => {
+  const setLanguage = async (lang: Language) => {
     setLanguageState(lang);
+    
+    // Save language preference to user profile
+    if (user) {
+      try {
+        await fetch('/api/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({ language: lang }),
+        });
+      } catch (error) {
+        console.warn('Failed to save language preference:', error);
+      }
+    }
   };
 
   const t = (key: string) => getTranslation(language, key);
