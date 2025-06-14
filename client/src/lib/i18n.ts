@@ -130,6 +130,13 @@ export const translations = {
     "secure_reset": "Secure reset key system",
     "reset_key_info_alert": "After signing up, you'll receive a downloadable reset key. Keep it safe - it's the only way to reset your password!",
     "kawaii_name_placeholder": "Your display name",
+    "achievements": "Achievements",
+    "achievements.title": "Achievements",
+    "achievements.description": "Track your progress and unlock storage milestones",
+    "achievements.unlocked": "unlocked",
+    "achievements.completed": "Completed",
+    "achievements.progress": "Progress",
+    "achievements.points": "Points",
   },
   ja: {
     "cinnamocloud": "シナモクラウド",
