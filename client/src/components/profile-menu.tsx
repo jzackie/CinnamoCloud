@@ -119,33 +119,30 @@ export function ProfileMenu() {
           <span>{t("preferences")}</span>
         </DropdownMenuItem>
         
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="flex items-center space-x-3 p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer">
+        <div className="border-t border-cinnamoroll-200 dark:border-kuromi-700 my-2"></div>
+        
+        <div className="px-3 py-2">
+          <div className="flex items-center space-x-3 mb-3">
             <Languages className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
-            <span>{t("language")}</span>
-            <ChevronDown className="w-3 h-3 ml-auto" />
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent 
-            className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700 min-w-[200px]"
-            sideOffset={5}
-          >
+            <span className="font-medium text-sm text-gray-700 dark:text-gray-300">{t("language")}</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
             {languages.map((lang) => (
-              <DropdownMenuItem
+              <button
                 key={lang.code}
                 onClick={() => setLanguage(lang.code as any)}
-                className={`flex items-center space-x-3 p-2 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer ${
-                  language === lang.code ? 'bg-cinnamoroll-100 dark:bg-kuromi-700' : ''
+                className={`flex items-center space-x-2 p-2 rounded-md text-sm transition-colors ${
+                  language === lang.code 
+                    ? 'bg-cinnamoroll-100 dark:bg-kuromi-700 text-cinnamoroll-700 dark:text-kuromi-300' 
+                    : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 text-gray-600 dark:text-gray-400'
                 }`}
               >
                 <span className="text-base">{lang.flag}</span>
-                <span className="font-medium">{lang.name}</span>
-                {language === lang.code && (
-                  <div className="ml-auto w-2 h-2 bg-cinnamoroll-500 dark:bg-kuromi-400 rounded-full"></div>
-                )}
-              </DropdownMenuItem>
+                <span className="font-medium text-xs">{lang.name}</span>
+              </button>
             ))}
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
+          </div>
+        </div>
         
         <DropdownMenuItem 
           onClick={downloadResetKey}

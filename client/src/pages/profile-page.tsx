@@ -264,7 +264,7 @@ export default function ProfilePage() {
               {t("profile_settings")}
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
-              Manage your kawaii profile and preferences ✨
+              {t("account_info")}
             </p>
           </div>
         </div>
