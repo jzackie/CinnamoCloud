@@ -34,7 +34,7 @@ type ResetPasswordData = z.infer<typeof resetPasswordSchema>;
 export default function AuthPage() {
   const [activeTab, setActiveTab] = useState("login");
   const [showResetModal, setShowResetModal] = useState(false);
-  const [showNewUserResetKey, setShowNewUserResetKey] = useState(false);
+  const [showResetKeyPage, setShowResetKeyPage] = useState(false);
   const [resetKeyData, setResetKeyData] = useState<any>(null);
   const [newUserResetKey, setNewUserResetKey] = useState("");
   const [newUsername, setNewUsername] = useState("");
@@ -44,12 +44,12 @@ export default function AuthPage() {
   const { t, language, setLanguage, languages } = useLanguage();
   const { toast } = useToast();
 
-  // Redirect if already logged in (but not if showing reset key popup)
+  // Redirect if already logged in (but not if showing reset key page)
   React.useEffect(() => {
-    if (user && !showNewUserResetKey) {
+    if (user && !showResetKeyPage) {
       setLocation("/");
     }
-  }, [user, setLocation, showNewUserResetKey]);
+  }, [user, setLocation, showResetKeyPage]);
 
   const loginForm = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -93,7 +93,7 @@ export default function AuthPage() {
       const user = registerMutation.data;
       setNewUserResetKey(user.currentResetKey);
       setNewUsername(user.username);
-      setShowNewUserResetKey(true);
+      setShowResetKeyPage(true);
       toast({
         title: "Welcome to CinnamoCloud!",
         description: "Your account has been created successfully.",
@@ -192,6 +192,74 @@ export default function AuthPage() {
       reader.readAsText(file);
     }
   };
+
+  // Show reset key page after successful registration
+  if (showResetKeyPage) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-kawaii-pink via-cinnamoroll-300 to-kawaii-blue dark:from-kuromi-900 dark:via-kuromi-800 dark:to-kuromi-700">
+        <Card className="w-full max-w-md mx-4 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
+          <CardHeader className="text-center">
+            <CardTitle className="font-nunito font-bold text-xl flex items-center justify-center space-x-2">
+              <Key className="w-6 h-6 text-kawaii-pink dark:text-kuromi-400" />
+              <span>{t("accountCreated")}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                {t("welcomeMessage")} {newUsername}! {t("resetKeyGenerated")}
+              </p>
+              
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border">
+                <Label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  {t("yourResetKey")}
+                </Label>
+                <p className="font-mono text-sm break-all mt-2 text-gray-800 dark:text-gray-200">
+                  {newUserResetKey}
+                </p>
+              </div>
+              
+              <div className="flex flex-col space-y-2 mt-4">
+                <Button
+                  onClick={copyResetKey}
+                  variant="outline"
+                  className="w-full border-kawaii-pink/30 text-kawaii-pink hover:bg-kawaii-pink/10"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  {t("copyResetKey")}
+                </Button>
+                
+                <Button
+                  onClick={() => downloadResetKey(newUserResetKey, newUsername)}
+                  variant="outline"
+                  className="w-full border-kawaii-blue/30 text-kawaii-blue hover:bg-kawaii-blue/10"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  {t("downloadResetKey")}
+                </Button>
+              </div>
+              
+              <Alert className="mt-4 bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300 dark:border-yellow-700">
+                <AlertDescription className="text-xs text-yellow-800 dark:text-yellow-200">
+                  {t("resetKeyWarning")}
+                </AlertDescription>
+              </Alert>
+              
+              <Button
+                onClick={() => {
+                  setShowResetKeyPage(false);
+                  setActiveTab("login");
+                }}
+                className="w-full mt-4 bg-kawaii-pink hover:bg-kawaii-pink/90 text-white"
+              >
+                {t("backToSignIn")}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
