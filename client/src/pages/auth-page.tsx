@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Key, Download, Upload } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/lib/theme-provider";
+import { useLanguage } from "@/lib/language-provider";
 import { useLocation } from "wouter";
 import { insertUserSchema, resetPasswordSchema } from "@shared/schema";
 import { z } from "zod";
@@ -36,6 +37,7 @@ export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
   const { toast } = useToast();
 
   // Redirect if already logged in
@@ -193,24 +195,24 @@ export default function AuthPage() {
                   value="login"
                   className="font-nunito font-semibold data-[state=active]:text-cinnamoroll-600 dark:data-[state=active]:text-kuromi-400"
                 >
-                  Sign In
+                  {t("sign_in")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="register"
                   className="font-nunito font-semibold data-[state=active]:text-cinnamoroll-600 dark:data-[state=active]:text-kuromi-400"
                 >
-                  Sign Up
+                  {t("sign_up")}
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="login">
                 <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
                   <div>
-                    <Label htmlFor="username">Username</Label>
+                    <Label htmlFor="username">{t("username")}</Label>
                     <Input
                       id="username"
                       {...loginForm.register("username")}
-                      placeholder="Enter your username"
+                      placeholder={t("username")}
                       className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
                     />
                     {loginForm.formState.errors.username && (
@@ -221,12 +223,12 @@ export default function AuthPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{t("password")}</Label>
                     <Input
                       id="password"
                       type="password"
                       {...loginForm.register("password")}
-                      placeholder="Enter your password"
+                      placeholder={t("password")}
                       className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
                     />
                     {loginForm.formState.errors.password && (
@@ -241,7 +243,7 @@ export default function AuthPage() {
                     disabled={loginMutation.isPending}
                     className="w-full gradient-cinnamoroll dark:gradient-kuromi text-white font-nunito font-semibold"
                   >
-                    {loginMutation.isPending ? "Signing In..." : "Sign In to Your Cloud"}
+                    {loginMutation.isPending ? t("loading") : t("sign_in_button")}
                   </Button>
                 </form>
 
