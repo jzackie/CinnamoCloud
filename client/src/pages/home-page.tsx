@@ -144,7 +144,7 @@ export default function HomePage() {
             <div className="flex items-center space-x-3">
               <div className="cloud-shape w-10 h-6 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
               <h1 className="font-nunito font-bold text-xl text-cinnamoroll-600 dark:text-kuromi-400">
-                CinnamoCloud
+                {t("cinnamocloud")}
               </h1>
             </div>
 
@@ -250,7 +250,7 @@ export default function HomePage() {
             {/* File Categories */}
             <div className="pt-4">
               <h3 className="font-nunito font-semibold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                Categories
+                {t("categories")}
               </h3>
               <Button
                 variant="ghost"
@@ -321,11 +321,11 @@ export default function HomePage() {
           {/* Storage Info */}
           <Card className="mt-8 p-4 bg-gradient-to-r from-cinnamoroll-100 to-kawaii-yellow dark:from-kuromi-800 dark:to-gray-700 border-none">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-nunito font-medium text-sm">Storage</span>
+              <span className="font-nunito font-medium text-sm">{t("storage")}</span>
               <Infinity className="w-4 h-4 text-kawaii-pink dark:text-kuromi-400 animate-pulse-soft" />
             </div>
             <p className="text-xs text-gray-600 dark:text-gray-300 mb-2">
-              Unlimited kawaii space! ✨
+              {t("unlimited_space")} ✨
             </p>
             <div className="h-2 bg-gradient-to-r from-kawaii-pink to-kawaii-purple rounded-full animate-pulse-soft"></div>
           </Card>
