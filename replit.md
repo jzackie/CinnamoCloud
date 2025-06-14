@@ -95,6 +95,7 @@ CinnamoCloud is a modern web-based file management system with a kawaii-themed i
 
 ## Changelog
 - June 14, 2025. Initial setup
+- June 14, 2025. Completed comprehensive internationalization system with 40+ translation keys for English, Japanese, Korean, and Chinese languages. Added real-time language switching throughout main navigation, authentication forms, profile management, search functionality, and file management interfaces. Fixed profile picture display issue by resolving path mismatch between file storage and database URLs.
 
 ## User Preferences
 

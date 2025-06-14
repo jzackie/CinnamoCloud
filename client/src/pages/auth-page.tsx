@@ -343,7 +343,7 @@ export default function AuthPage() {
                     disabled={registerMutation.isPending}
                     className="w-full gradient-cinnamoroll dark:gradient-kuromi text-white font-nunito font-semibold"
                   >
-                    {registerMutation.isPending ? "Creating Account..." : "Create Your Cloud"}
+                    {registerMutation.isPending ? t("loading") : t("create_account_button")}
                   </Button>
                 </form>
               </TabsContent>
