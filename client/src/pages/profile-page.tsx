@@ -212,8 +212,8 @@ export default function ProfilePage() {
     <div className="min-h-screen">
       {/* Navigation Header */}
       <nav className="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-cinnamoroll-200 dark:border-kuromi-700 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="flex justify-between items-center h-16 lg:h-18 xl:h-20">
             {/* Logo & Brand */}
             <div className="flex items-center space-x-3">
               <Button
@@ -253,17 +253,17 @@ export default function ProfilePage() {
       </nav>
 
       {/* Main Content */}
-      <main className="p-6 max-w-4xl mx-auto">
+      <main className="p-6 lg:p-8 xl:p-10 2xl:p-12 max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto">
         {/* Page Header */}
-        <div className="flex items-center space-x-4 mb-8">
-          <div className="p-3 gradient-cinnamoroll dark:gradient-kuromi rounded-2xl">
-            <User className="w-8 h-8 text-white" />
+        <div className="flex items-center space-x-4 lg:space-x-6 mb-8 lg:mb-10 xl:mb-12">
+          <div className="p-3 lg:p-4 xl:p-5 gradient-cinnamoroll dark:gradient-kuromi rounded-2xl">
+            <User className="w-8 h-8 lg:w-10 lg:h-10 xl:w-12 xl:h-12 text-white" />
           </div>
           <div>
-            <h2 className="font-nunito font-bold text-3xl text-cinnamoroll-700 dark:text-kuromi-300">
+            <h2 className="font-nunito font-bold text-3xl lg:text-4xl xl:text-5xl text-cinnamoroll-700 dark:text-kuromi-300">
               {t("profile_settings")}
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-gray-600 dark:text-gray-400 text-base lg:text-lg xl:text-xl">
               {t("account_info")}
             </p>
           </div>
@@ -271,7 +271,7 @@ export default function ProfilePage() {
 
         {/* Profile Content */}
         <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
-          <CardContent className="p-6">
+          <CardContent className="p-6 lg:p-8 xl:p-10 2xl:p-12">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-3 mb-6">
                 <TabsTrigger value="profile" className="font-nunito">

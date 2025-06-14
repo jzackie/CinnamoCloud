@@ -68,18 +68,18 @@ export default function AchievementsPage() {
   const isUnlocked = (achievementId: number) => unlockedIds.has(achievementId);
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">{t("achievements.title")}</h1>
-        <p className="text-muted-foreground">{t("achievements.description")}</p>
-        <div className="mt-4">
-          <Badge variant="secondary" className="mr-2">
+    <div className="container mx-auto p-6 lg:p-8 xl:p-10 2xl:p-12 max-w-screen-2xl">
+      <div className="mb-8 lg:mb-10 xl:mb-12">
+        <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold mb-2">{t("achievements.title")}</h1>
+        <p className="text-muted-foreground text-lg lg:text-xl">{t("achievements.description")}</p>
+        <div className="mt-4 lg:mt-6">
+          <Badge variant="secondary" className="mr-2 text-sm lg:text-base px-3 lg:px-4 py-1 lg:py-2">
             {userAchievements.length} / {achievements.length} {t("achievements.unlocked")}
           </Badge>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10">
         {achievements.map((achievement) => {
           const IconComponent = achievementIcons[achievement.key] || Trophy;
           const unlocked = isUnlocked(achievement.id);

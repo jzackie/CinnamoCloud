@@ -361,7 +361,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
             <div className="flex items-center space-x-2 sm:space-x-4">
               <div className="cloud-shape cloud-shape-enhanced w-6 h-4 sm:w-8 sm:h-5 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
-              <h2 className="font-nunito font-bold text-lg sm:text-xl lg:text-2xl text-cinnamoroll-700 dark:text-kuromi-300">
+              <h2 className="font-nunito font-bold text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-cinnamoroll-700 dark:text-kuromi-300">
                 My Kawaii Drive
               </h2>
               <div className="flex items-center space-x-1 sm:space-x-2">
