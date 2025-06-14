@@ -386,10 +386,10 @@ export default function AuthPage() {
               </TabsContent>
             </Tabs>
 
-            <Alert className="mt-6 border-cinnamoroll-200 dark:border-kuromi-600 bg-cinnamoroll-50 dark:bg-kuromi-900/50">
+            <Alert className="mt-6 border-cinnamoroll-200 dark:border-kuromi-600 bg-cinnamoroll-50 dark:bg-kuromi-900/50 text-gray-800 dark:text-gray-200">
               <Key className="w-4 h-4 text-kawaii-pink dark:text-kuromi-400" />
-              <AlertDescription className="text-sm">
-                <strong>{t("reset_key_download")}:</strong> {t("reset_key_info_alert")} 🔐✨
+              <AlertDescription className="text-sm text-gray-700 dark:text-gray-300">
+                <strong className="text-cinnamoroll-700 dark:text-kuromi-300">{t("reset_key_download")}:</strong> {t("reset_key_info_alert")} 🔐✨
               </AlertDescription>
             </Alert>
           </CardContent>
