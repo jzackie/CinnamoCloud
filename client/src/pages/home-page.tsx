@@ -336,6 +336,7 @@ export default function HomePage() {
           {/* Action Bar */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
+              <div className="cloud-shape w-8 h-5 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
               <h2 className="font-nunito font-bold text-2xl text-cinnamoroll-700 dark:text-kuromi-300">
                 My Kawaii Drive
               </h2>
@@ -362,7 +363,7 @@ export default function HomePage() {
                       : "hover:bg-cinnamoroll-100 dark:hover:bg-kuromi-800"
                   }`}
                 >
-                  <List className="w-4 h-4 text-gray-400" />
+                  <List className="w-4 h-4 text-cinnamoroll-600 dark:text-kuromi-400" />
                 </Button>
               </div>
             </div>
