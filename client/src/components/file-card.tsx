@@ -145,7 +145,12 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    // Prevent action if clicking on buttons
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+    
     if (type === "folder" && onFolderClick) {
       onFolderClick(item as FolderType);
     } else if (type === "file" && onPreview) {
@@ -206,7 +211,10 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
                     size="sm"
                     variant="ghost"
                     className="p-1 hover:bg-cinnamoroll-100 dark:hover:bg-kuromi-800"
-                    onClick={() => toggleFavoriteMutation.mutate(item.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavoriteMutation.mutate(item.id);
+                    }}
                     disabled={toggleFavoriteMutation.isPending}
                   >
                     <Star className={`w-4 h-4 ${(item as File).isFavorite ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`} />
@@ -215,7 +223,10 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
                     size="sm"
                     variant="ghost"
                     className="p-1 hover:bg-cinnamoroll-100 dark:hover:bg-kuromi-800"
-                    onClick={() => onPreview?.(item as File)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onPreview?.(item as File);
+                    }}
                   >
                     <Eye className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
                   </Button>
@@ -229,7 +240,10 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
                   size="sm"
                   variant="ghost"
                   className="p-1 hover:bg-green-100 dark:hover:bg-green-900/20"
-                  onClick={() => restoreMutation.mutate(item.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    restoreMutation.mutate(item.id);
+                  }}
                   disabled={restoreMutation.isPending}
                 >
                   <RotateCcw className="w-4 h-4 text-green-500" />

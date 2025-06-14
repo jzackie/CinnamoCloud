@@ -85,11 +85,14 @@ export default function HomePage() {
 
   const createFolderMutation = useMutation({
     mutationFn: async (name: string) => {
-      const res = await apiRequest("POST", "/api/folders", { name });
+      const res = await apiRequest("POST", "/api/folders", { 
+        name,
+        parentId: currentFolderId 
+      });
       return await res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/folders"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/folders", currentFolderId] });
       setFolderDialogOpen(false);
       setNewFolderName("");
       toast({
@@ -412,14 +415,24 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Breadcrumb */}
+          {/* Breadcrumb Navigation */}
           <nav className="flex items-center space-x-2 mb-6 text-sm">
             <Button
               variant="link"
-              className="p-0 h-auto text-cinnamoroll-600 dark:text-kuromi-400 hover:underline font-nunito"
+              onClick={handleBackToParent}
+              className="p-0 h-auto text-cinnamoroll-600 dark:text-kuromi-400 hover:underline font-nunito flex items-center"
             >
+              <Home className="w-4 h-4 mr-1" />
               My Drive
             </Button>
+            {currentFolderId && (
+              <>
+                <span className="text-gray-400">/</span>
+                <span className="text-gray-600 dark:text-gray-300 font-nunito font-medium">
+                  {folders.find(f => f.id === currentFolderId)?.name || "Current Folder"}
+                </span>
+              </>
+            )}
           </nav>
 
           {/* Files Grid */}

@@ -153,7 +153,12 @@ export function registerRoutes(app: Express): Server {
   app.post("/api/folders", requireAuth, async (req, res) => {
     try {
       const folderData = insertFolderSchema.parse(req.body);
-      const folder = await storage.createFolder(req.user!.id, folderData);
+      // Add parentId from request body if provided
+      const folderWithParent = {
+        ...folderData,
+        parentId: req.body.parentId ? parseInt(req.body.parentId) : undefined
+      };
+      const folder = await storage.createFolder(req.user!.id, folderWithParent);
       res.status(201).json(folder);
     } catch (error) {
       res.status(400).json({ message: "Invalid folder data" });
