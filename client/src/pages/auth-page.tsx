@@ -34,7 +34,10 @@ type ResetPasswordData = z.infer<typeof resetPasswordSchema>;
 export default function AuthPage() {
   const [activeTab, setActiveTab] = useState("login");
   const [showResetModal, setShowResetModal] = useState(false);
+  const [showNewUserResetKey, setShowNewUserResetKey] = useState(false);
   const [resetKeyData, setResetKeyData] = useState<any>(null);
+  const [newUserResetKey, setNewUserResetKey] = useState("");
+  const [newUsername, setNewUsername] = useState("");
   const { user, loginMutation, registerMutation } = useAuth();
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
@@ -83,11 +86,13 @@ export default function AuthPage() {
     const { confirmPassword, ...registerData } = data;
     registerMutation.mutate(registerData, {
       onSuccess: (user) => {
+        setNewUserResetKey(user.currentResetKey);
+        setNewUsername(user.username);
+        setShowNewUserResetKey(true);
         toast({
-          title: "Welcome to CinnamoCloud! 🎉",
-          description: "Your account has been created successfully. Don't forget to download your reset key!",
+          title: "Welcome to CinnamoCloud!",
+          description: "Your account has been created successfully.",
         });
-        downloadResetKey(user.currentResetKey);
       },
     });
   };
@@ -129,9 +134,9 @@ export default function AuthPage() {
     }
   };
 
-  const downloadResetKey = (resetKey: string) => {
+  const downloadResetKey = (resetKey: string, username: string) => {
     const resetKeyData = {
-      username: registerForm.getValues().username,
+      username: username,
       resetKey: resetKey,
       generatedAt: new Date().toISOString(),
       warning: "Keep this file safe! It's the only way to reset your password."
@@ -150,6 +155,14 @@ export default function AuthPage() {
     a.click();
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+  };
+
+  const copyResetKey = () => {
+    navigator.clipboard.writeText(newUserResetKey);
+    toast({
+      title: "Copied!",
+      description: "Reset key copied to clipboard.",
+    });
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -540,6 +553,58 @@ export default function AuthPage() {
           </DialogContent>
         </Dialog>
       )}
+
+      {/* New User Reset Key Modal */}
+      <Dialog open={showNewUserResetKey} onOpenChange={setShowNewUserResetKey}>
+        <DialogContent className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-nunito font-bold text-lg flex items-center space-x-2 text-center justify-center">
+              <Key className="w-5 h-5 text-kawaii-pink dark:text-kuromi-400" />
+              <span>{t("reset_key_download")}</span>
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <Alert className="border-cinnamoroll-200 dark:border-kuromi-600 bg-cinnamoroll-50 dark:bg-kuromi-900/50">
+              <AlertDescription className="text-sm text-gray-700 dark:text-gray-300">
+                <strong className="text-cinnamoroll-700 dark:text-kuromi-300">{t("backup_warning")}</strong>
+              </AlertDescription>
+            </Alert>
+
+            <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+              <Label className="text-sm font-medium text-gray-600 dark:text-gray-300">Reset Key:</Label>
+              <div className="mt-1 p-2 bg-white dark:bg-gray-800 border rounded text-xs font-mono break-all">
+                {newUserResetKey}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button
+                onClick={copyResetKey}
+                variant="outline"
+                className="flex-1 border-cinnamoroll-200 dark:border-kuromi-600 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50"
+              >
+                Copy Key
+              </Button>
+              <Button
+                onClick={() => downloadResetKey(newUserResetKey, newUsername)}
+                className="flex-1 bg-kawaii-pink hover:bg-kawaii-pink/90 text-white"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download File
+              </Button>
+            </div>
+
+            <Button
+              onClick={() => setShowNewUserResetKey(false)}
+              variant="outline"
+              className="w-full border-gray-300 dark:border-gray-600"
+            >
+              {t("close")}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
