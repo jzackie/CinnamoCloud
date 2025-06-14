@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');
+
+:root {
+  --background: hsl(207, 100%, 98%);
+  --foreground: hsl(240, 6%, 10%);
+  --muted: hsl(207, 40%, 96%);
+  --muted-foreground: hsl(240, 4%, 46%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(240, 6%, 10%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(240, 6%, 10%);
+  --border: hsl(207, 30%, 90%);
+  --input: hsl(207, 30%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(207, 40%, 96%);
+  --secondary-foreground: hsl(240, 6%, 10%);
+  --accent: hsl(207, 40%, 96%);
+  --accent-foreground: hsl(240, 6%, 10%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(207, 90%, 54%);
+  --radius: 1rem;
+
+  /* Cinnamoroll colors */
+  --cinnamoroll-50: hsl(207, 100%, 98%);
+  --cinnamoroll-100: hsl(207, 95%, 92%);
+  --cinnamoroll-200: hsl(207, 85%, 85%);
+  --cinnamoroll-300: hsl(207, 80%, 75%);
+  --cinnamoroll-400: hsl(207, 75%, 65%);
+  --cinnamoroll-500: hsl(207, 90%, 54%);
+  --cinnamoroll-600: hsl(207, 85%, 45%);
+
+  /* Kawaii colors */
+  --kawaii-pink: hsl(350, 100%, 85%);
+  --kawaii-purple: hsl(280, 70%, 85%);
+  --kawaii-blue: hsl(207, 80%, 75%);
+  --kawaii-yellow: hsl(55, 100%, 95%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 4%);
+  --foreground: hsl(0, 0%, 95%);
+  --muted: hsl(240, 3%, 11%);
+  --muted-foreground: hsl(240, 5%, 65%);
+  --popover: hsl(240, 10%, 4%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --card: hsl(240, 10%, 4%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --border: hsl(240, 6%, 20%);
+  --input: hsl(240, 6%, 20%);
+  --primary: hsl(263, 70%, 60%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(240, 3%, 11%);
+  --secondary-foreground: hsl(0, 0%, 95%);
+  --accent: hsl(240, 3%, 11%);
+  --accent-foreground: hsl(0, 0%, 95%);
+  --destructive: hsl(0, 63%, 31%);
+  --destructive-foreground: hsl(0, 0%, 95%);
+  --ring: hsl(263, 70%, 60%);
+
+  /* Kuromi colors */
+  --kuromi-50: hsl(280, 100%, 98%);
+  --kuromi-100: hsl(280, 95%, 92%);
+  --kuromi-200: hsl(280, 85%, 85%);
+  --kuromi-300: hsl(280, 80%, 75%);
+  --kuromi-400: hsl(280, 75%, 65%);
+  --kuromi-500: hsl(263, 70%, 60%);
+  --kuromi-600: hsl(263, 85%, 45%);
+  --kuromi-700: hsl(263, 85%, 35%);
+  --kuromi-800: hsl(263, 85%, 25%);
+  --kuromi-900: hsl(263, 85%, 15%);
+
+  /* Dark kawaii colors */
+  --kawaii-pink: hsl(320, 70%, 70%);
+  --kawaii-purple: hsl(280, 70%, 70%);
+  --kawaii-blue: hsl(207, 70%, 70%);
+  --kawaii-yellow: hsl(55, 80%, 85%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-cinnamoroll-50 to-kawaii-yellow dark:from-gray-900 dark:to-kuromi-900;
+    @apply text-foreground;
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+}
+
+@layer utilities {
+  .gradient-cinnamoroll {
+    background: linear-gradient(135deg, hsl(var(--kawaii-blue)), hsl(var(--kawaii-pink)), hsl(var(--cinnamoroll-100)));
+  }
+
+  .gradient-kuromi {
+    background: linear-gradient(135deg, hsl(var(--kuromi-600)), hsl(var(--kawaii-pink)), hsl(var(--kuromi-900)));
+  }
+
+  .cloud-shape {
+    border-radius: 50px;
+    position: relative;
+  }
+
+  .cloud-shape::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: inherit;
+  }
+
+  .cloud-shape::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: inherit;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-bounce-soft {
+    animation: bounce-soft 2s infinite;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2s infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+}
