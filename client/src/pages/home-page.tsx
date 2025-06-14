@@ -461,12 +461,12 @@ export default function HomePage() {
 
           {/* Files Grid */}
           {foldersLoading || filesLoading ? (
-            <div className="flex flex-col items-center justify-center py-16">
-              <CinnamorollLoader 
-                size="lg" 
-                message="Loading your kawaii files..." 
-                variant="bounce" 
-              />
+            <div className="flex flex-col items-center justify-center py-16 space-y-6">
+              <div className="cloud-shape w-20 h-12 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
+              <CinnamorollSpinner className="w-8 h-8 text-kawaii-pink dark:text-kuromi-400" />
+              <p className="text-sm text-gray-600 dark:text-gray-300 font-nunito">
+                {t("loading_files")}
+              </p>
             </div>
           ) : (currentCategory === "all" ? [...folders, ...filteredFiles] : filteredFiles).length > 0 ? (
             <div className={viewMode === "grid" 
