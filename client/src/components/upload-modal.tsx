@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { CloudUpload, X, Upload } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { CinnamorollLoader, CinnamorollSpinner } from "@/components/cinnamoroll-loader";
 import imageCompression from "browser-image-compression";
 
 interface UploadModalProps {
@@ -227,8 +228,17 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                   disabled={uploadMutation.isPending}
                   className="gradient-cinnamoroll dark:gradient-kuromi font-nunito font-medium"
                 >
-                  <Upload className="w-4 h-4 mr-2" />
-                  {uploadMutation.isPending ? "Uploading..." : "Upload Files"}
+                  {uploadMutation.isPending ? (
+                    <div className="flex items-center space-x-2">
+                      <CinnamorollSpinner />
+                      <span>Uploading kawaii files...</span>
+                    </div>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Files
+                    </>
+                  )}
                 </Button>
               </div>
             </div>

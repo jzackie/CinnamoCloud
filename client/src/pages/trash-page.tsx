@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileCard } from "@/components/file-card";
 import { ProfileMenu } from "@/components/profile-menu";
+import { CinnamorollLoader } from "@/components/cinnamoroll-loader";
 import { Search, Trash2, Moon, Sun, ArrowLeft } from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
 import { useLocation } from "wouter";

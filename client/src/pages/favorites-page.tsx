@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FileCard } from "@/components/file-card";
 import { FilePreview } from "@/components/file-preview";
 import { ProfileMenu } from "@/components/profile-menu";
+import { CinnamorollLoader, CinnamorollSkeleton } from "@/components/cinnamoroll-loader";
 import { Search, Star, Moon, Sun, ArrowLeft } from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
 import { useLocation } from "wouter";
@@ -16,7 +17,7 @@ export default function FavoritesPage() {
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
 
-  const { data: favoriteFiles = [] } = useQuery<File[]>({
+  const { data: favoriteFiles = [], isLoading } = useQuery<File[]>({
     queryKey: ["/api/files/favorites"],
   });
 
@@ -100,7 +101,15 @@ export default function FavoritesPage() {
         </div>
 
         {/* Files Grid */}
-        {filteredFiles.length > 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <CinnamorollLoader 
+              size="lg" 
+              message="Loading your favorite kawaii files..." 
+              variant="drift" 
+            />
+          </div>
+        ) : filteredFiles.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
             {filteredFiles.map((file) => (
               <FileCard
