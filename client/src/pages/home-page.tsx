@@ -139,8 +139,8 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Navigation Header */}
       <nav className="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-cinnamoroll-200 dark:border-kuromi-700 shadow-lg">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-          <div className="flex justify-between items-center h-14 sm:h-16">
+        <div className="max-w-screen-2xl mx-auto px-2 sm:px-4 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="flex justify-between items-center h-14 sm:h-16 lg:h-18">
             {/* Logo & Brand */}
             <div className="flex items-center space-x-2 sm:space-x-3">
               <div className="cloud-shape cloud-shape-enhanced w-8 h-5 sm:w-10 sm:h-6 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
@@ -150,16 +150,16 @@ export default function HomePage() {
             </div>
 
             {/* Search Bar - Hidden on small screens */}
-            <div className="hidden md:flex flex-1 max-w-lg mx-8">
+            <div className="hidden md:flex flex-1 max-w-lg lg:max-w-xl xl:max-w-2xl mx-8 lg:mx-12 xl:mx-16">
               <div className="relative w-full">
                 <Input
                   type="text"
                   placeholder={t("search_files")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-full border-2 border-cinnamoroll-200 dark:border-kuromi-600 bg-white/50 dark:bg-gray-700/50 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
+                  className="w-full pl-10 pr-4 py-2 lg:py-3 text-sm lg:text-base rounded-full border-2 border-cinnamoroll-200 dark:border-kuromi-600 bg-white/50 dark:bg-gray-700/50 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
                 />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-cinnamoroll-400 dark:text-kuromi-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 lg:w-5 lg:h-5 text-cinnamoroll-400 dark:text-kuromi-400" />
               </div>
             </div>
 
@@ -201,7 +201,7 @@ export default function HomePage() {
 
       <div className="flex min-h-[calc(100vh-4rem)]">
         {/* Sidebar */}
-        <aside className="w-16 sm:w-20 md:w-56 lg:w-64 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-r border-cinnamoroll-200 dark:border-kuromi-700 p-2 sm:p-4">
+        <aside className="w-16 sm:w-20 md:w-56 lg:w-64 xl:w-72 2xl:w-80 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-r border-cinnamoroll-200 dark:border-kuromi-700 p-2 sm:p-4 lg:p-6">
           {/* Upload Button */}
           <Button
             onClick={() => setUploadModalOpen(true)}
@@ -356,7 +356,7 @@ export default function HomePage() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-3 sm:p-4 lg:p-6">
+        <main className="flex-1 p-3 sm:p-4 lg:p-6 xl:p-8 2xl:p-10">
           {/* Action Bar */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
             <div className="flex items-center space-x-2 sm:space-x-4">
@@ -480,7 +480,7 @@ export default function HomePage() {
             </div>
           ) : (currentCategory === "all" ? [...folders, ...filteredFiles] : filteredFiles).length > 0 ? (
             <div className={viewMode === "grid" 
-              ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 lg:gap-4"
+              ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-2 sm:gap-3 lg:gap-4 xl:gap-5 2xl:gap-6"
               : "space-y-1 sm:space-y-2"
             }>
               {currentCategory === "all" ? (

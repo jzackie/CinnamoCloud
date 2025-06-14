@@ -137,13 +137,14 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
   };
 
   const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return <FileImage className="w-16 h-16" />;
-    if (mimeType.startsWith('video/')) return <FileVideo className="w-16 h-16" />;
-    if (mimeType.includes('pdf')) return <FileText className="w-16 h-16 text-red-500" />;
+    const iconClass = "w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20";
+    if (mimeType.startsWith('image/')) return <FileImage className={iconClass} />;
+    if (mimeType.startsWith('video/')) return <FileVideo className={iconClass} />;
+    if (mimeType.includes('pdf')) return <FileText className={`${iconClass} text-red-500`} />;
     if (mimeType.includes('document') || mimeType.includes('word')) {
-      return <FileText className="w-16 h-16 text-blue-500" />;
+      return <FileText className={`${iconClass} text-blue-500`} />;
     }
-    return <FileIcon className="w-16 h-16" />;
+    return <FileIcon className={iconClass} />;
   };
 
   const formatFileSize = (bytes: number) => {
