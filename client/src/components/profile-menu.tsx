@@ -105,7 +105,7 @@ export function ProfileMenu() {
           className="flex items-center space-x-3 p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer"
         >
           <User className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
-          <span>Edit Profile</span>
+          <span>{t("edit_profile")}</span>
         </DropdownMenuItem>
         
         <DropdownMenuItem 
@@ -113,7 +113,7 @@ export function ProfileMenu() {
           className="flex items-center space-x-3 p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer"
         >
           <Settings className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
-          <span>Preferences</span>
+          <span>{t("preferences")}</span>
         </DropdownMenuItem>
         
 
@@ -123,7 +123,7 @@ export function ProfileMenu() {
           className="flex items-center space-x-3 p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer"
         >
           <Download className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
-          <span>Download Reset Key</span>
+          <span>{t("download_reset_key")}</span>
         </DropdownMenuItem>
         
         <DropdownMenuSeparator className="border-cinnamoroll-200 dark:border-kuromi-700" />
@@ -133,7 +133,7 @@ export function ProfileMenu() {
           className="flex items-center space-x-3 p-3 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer text-red-600"
         >
           <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
+          <span>{t("logout")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

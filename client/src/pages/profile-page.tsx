@@ -261,7 +261,7 @@ export default function ProfilePage() {
           </div>
           <div>
             <h2 className="font-nunito font-bold text-3xl text-cinnamoroll-700 dark:text-kuromi-300">
-              Profile Settings
+              {t("profile_settings")}
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
               Manage your kawaii profile and preferences ✨
@@ -276,15 +276,15 @@ export default function ProfilePage() {
               <TabsList className="grid w-full grid-cols-3 mb-6">
                 <TabsTrigger value="profile" className="font-nunito">
                   <User className="w-4 h-4 mr-2" />
-                  Profile
+                  {t("edit_profile")}
                 </TabsTrigger>
                 <TabsTrigger value="preferences" className="font-nunito">
                   <Settings className="w-4 h-4 mr-2" />
-                  Preferences
+                  {t("preferences")}
                 </TabsTrigger>
                 <TabsTrigger value="security" className="font-nunito">
                   <Download className="w-4 h-4 mr-2" />
-                  Security
+                  {t("security")}
                 </TabsTrigger>
               </TabsList>
 
@@ -324,7 +324,7 @@ export default function ProfilePage() {
                         disabled={uploadProfilePictureMutation.isPending}
                       >
                         <Camera className="w-4 h-4 mr-2" />
-                        {uploadProfilePictureMutation.isPending ? "Uploading..." : "Change Picture"}
+                        {uploadProfilePictureMutation.isPending ? t("loading") : t("upload")}
                       </Button>
                     </div>
                   </div>
@@ -334,7 +334,7 @@ export default function ProfilePage() {
                   {/* Basic Info */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <Label htmlFor="displayName">Display Name</Label>
+                      <Label htmlFor="displayName">{t("display_name")}</Label>
                       <Input
                         id="displayName"
                         {...form.register("displayName")}
@@ -349,7 +349,7 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="email">Email Address</Label>
+                      <Label htmlFor="email">{t("email")}</Label>
                       <Input
                         id="email"
                         type="email"
@@ -357,7 +357,7 @@ export default function ProfilePage() {
                         disabled
                         className="border-cinnamoroll-200 dark:border-kuromi-600 bg-gray-100 dark:bg-gray-700"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                      <p className="text-xs text-gray-500 mt-1">{t("email")} {t("cannot_change")}</p>
                     </div>
                   </div>
 
