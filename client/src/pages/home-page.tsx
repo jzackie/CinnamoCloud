@@ -26,7 +26,8 @@ import {
   File as FileIcon,
   Moon,
   Sun,
-  Infinity
+  Infinity,
+  Trophy
 } from "lucide-react";
 import { FileCard } from "@/components/file-card";
 import { FilePreview } from "@/components/file-preview";
@@ -247,6 +248,15 @@ export default function HomePage() {
               <span className="ml-auto bg-kawaii-pink dark:bg-kuromi-500 text-white text-xs px-1 sm:px-2 py-1 rounded-full hidden sm:inline">
                 {files.filter(f => f.isFavorite).length}
               </span>
+            </Button>
+            
+            <Button
+              variant="ghost"
+              className="w-full justify-start p-2 sm:p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all text-sm sm:text-base"
+              onClick={() => setLocation('/achievements')}
+            >
+              <Trophy className="w-4 h-4 sm:mr-3" />
+              <span className="hidden sm:inline font-nunito font-medium">{t("achievements")}</span>
             </Button>
             
             <Button
