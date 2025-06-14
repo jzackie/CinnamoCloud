@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -151,7 +151,7 @@ export default function ProfilePage() {
   });
 
   // Update form when profile data loads
-  useState(() => {
+  useEffect(() => {
     if (profile) {
       form.reset({
         displayName: profile.displayName,
@@ -159,7 +159,7 @@ export default function ProfilePage() {
         preferences: profile.preferences as any || {},
       });
     }
-  });
+  }, [profile, form]);
 
   const onSubmit = (data: ProfileFormData) => {
     const { currentPassword, newPassword, confirmPassword, ...updateData } = data;
@@ -291,9 +291,9 @@ export default function ProfilePage() {
                   {/* Profile Picture */}
                   <div className="flex items-center space-x-6">
                     <Avatar className="w-24 h-24">
-                      <AvatarImage src={profile.profilePicture || undefined} alt={profile.displayName} />
+                      <AvatarImage src={profile?.profilePicture || undefined} alt={profile?.displayName || ""} />
                       <AvatarFallback className="text-2xl bg-gradient-to-r from-cinnamoroll-300 to-kawaii-pink dark:from-kuromi-600 dark:to-kawaii-purple text-white">
-                        {profile.displayName.charAt(0).toUpperCase()}
+                        {profile?.displayName?.charAt(0).toUpperCase() || "?"}
                       </AvatarFallback>
                     </Avatar>
                     <div>
@@ -334,7 +334,7 @@ export default function ProfilePage() {
                       <Input
                         id="email"
                         type="email"
-                        value={profile.email}
+                        value={profile?.email || ""}
                         disabled
                         className="border-cinnamoroll-200 dark:border-kuromi-600 bg-gray-100 dark:bg-gray-700"
                       />
@@ -346,7 +346,7 @@ export default function ProfilePage() {
                     <Label htmlFor="username">Username</Label>
                     <Input
                       id="username"
-                      value={profile.username}
+                      value={profile?.username || ""}
                       disabled
                       className="border-cinnamoroll-200 dark:border-kuromi-600 bg-gray-100 dark:bg-gray-700"
                     />
@@ -424,15 +424,15 @@ export default function ProfilePage() {
                     <div className="space-y-3 text-sm">
                       <div className="flex justify-between">
                         <span className="text-gray-600 dark:text-gray-400">Account Created:</span>
-                        <span>{new Date(profile.createdAt).toLocaleDateString()}</span>
+                        <span>{profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString() : "Loading..."}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600 dark:text-gray-400">Username:</span>
-                        <span>{profile.username}</span>
+                        <span>{profile?.username || "Loading..."}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600 dark:text-gray-400">Email:</span>
-                        <span>{profile.email}</span>
+                        <span>{profile?.email || "Loading..."}</span>
                       </div>
                     </div>
                   </div>
