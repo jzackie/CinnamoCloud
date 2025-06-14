@@ -261,11 +261,11 @@ export default function AuthPage() {
               <TabsContent value="register">
                 <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">
                   <div>
-                    <Label htmlFor="reg-username">Username</Label>
+                    <Label htmlFor="reg-username">{t("username")}</Label>
                     <Input
                       id="reg-username"
                       {...registerForm.register("username")}
-                      placeholder="Choose a username"
+                      placeholder={t("username")}
                       className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
                     />
                     {registerForm.formState.errors.username && (
@@ -276,12 +276,12 @@ export default function AuthPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">{t("email")}</Label>
                     <Input
                       id="email"
                       type="email"
                       {...registerForm.register("email")}
-                      placeholder="Enter your email"
+                      placeholder={t("email")}
                       className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
                     />
                     {registerForm.formState.errors.email && (
@@ -292,11 +292,11 @@ export default function AuthPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="displayName">Display Name</Label>
+                    <Label htmlFor="displayName">{t("display_name")}</Label>
                     <Input
                       id="displayName"
                       {...registerForm.register("displayName")}
-                      placeholder="Your kawaii name"
+                      placeholder={t("display_name")}
                       className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
                     />
                     {registerForm.formState.errors.displayName && (
@@ -307,12 +307,12 @@ export default function AuthPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="reg-password">Password</Label>
+                    <Label htmlFor="reg-password">{t("password")}</Label>
                     <Input
                       id="reg-password"
                       type="password"
                       {...registerForm.register("password")}
-                      placeholder="Create a strong password"
+                      placeholder={t("password")}
                       className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
                     />
                     {registerForm.formState.errors.password && (
@@ -323,12 +323,12 @@ export default function AuthPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Label htmlFor="confirmPassword">{t("confirm_password_label")}</Label>
                     <Input
                       id="confirmPassword"
                       type="password"
                       {...registerForm.register("confirmPassword")}
-                      placeholder="Confirm your password"
+                      placeholder={t("confirm_password_label")}
                       className="border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400"
                     />
                     {registerForm.formState.errors.confirmPassword && (
