@@ -36,7 +36,9 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
       await apiRequest("POST", `/api/files/${id}/favorite`);
     },
     onSuccess: () => {
+      // Invalidate all file-related queries to ensure consistency across folders/favorites/trash
       queryClient.invalidateQueries({ queryKey: ["/api/files"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/files/favorites"] });
       toast({
         title: "Success",
         description: "File favorite status updated! ⭐",
@@ -57,8 +59,11 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
       await apiRequest("DELETE", endpoint);
     },
     onSuccess: () => {
+      // Invalidate all queries to ensure files/folders disappear from current view and appear in trash
       queryClient.invalidateQueries({ queryKey: ["/api/files"] });
       queryClient.invalidateQueries({ queryKey: ["/api/folders"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/files/deleted"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/files/favorites"] });
       toast({
         title: "Success",
         description: `${type === "file" ? "File" : "Folder"} moved to trash! 🗑️`,
@@ -79,8 +84,11 @@ export function FileCard({ item, type, onPreview, onFolderClick, showRestoreActi
       await apiRequest("POST", endpoint);
     },
     onSuccess: () => {
+      // Invalidate all queries to ensure restored items appear in correct locations
       queryClient.invalidateQueries({ queryKey: ["/api/files"] });
       queryClient.invalidateQueries({ queryKey: ["/api/folders"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/files/deleted"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/files/favorites"] });
       toast({
         title: "Success",
         description: `${type === "file" ? "File" : "Folder"} restored! ✨`,

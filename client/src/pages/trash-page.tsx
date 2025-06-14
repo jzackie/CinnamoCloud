@@ -2,15 +2,132 @@ import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { FileCard } from "@/components/file-card";
 import { ProfileMenu } from "@/components/profile-menu";
 import { CinnamorollLoader } from "@/components/cinnamoroll-loader";
-import { Search, Trash2, Moon, Sun, ArrowLeft, AlertTriangle } from "lucide-react";
+import { 
+  Search, 
+  Trash2, 
+  Moon, 
+  Sun, 
+  ArrowLeft, 
+  AlertTriangle, 
+  RotateCcw,
+  FileText,
+  FileImage,
+  FileVideo,
+  File as FileIcon
+} from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { File } from "@shared/schema";
+
+interface TrashFileCardProps {
+  file: File;
+  onPermanentDelete: () => void;
+  isPermanentDeleting: boolean;
+}
+
+function TrashFileCard({ file, onPermanentDelete, isPermanentDeleting }: TrashFileCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const { toast } = useToast();
+
+  const restoreMutation = useMutation({
+    mutationFn: async () => {
+      await apiRequest("POST", `/api/files/${file.id}/restore`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/files/deleted"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/files"] });
+      toast({
+        title: "Success",
+        description: "File restored successfully! ✨",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to restore file",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const getFileIcon = (mimeType: string) => {
+    if (mimeType.startsWith('image/')) return <FileImage className="w-16 h-16" />;
+    if (mimeType.startsWith('video/')) return <FileVideo className="w-16 h-16" />;
+    if (mimeType.includes('pdf')) return <FileText className="w-16 h-16 text-red-500" />;
+    if (mimeType.includes('document') || mimeType.includes('word')) {
+      return <FileText className="w-16 h-16 text-blue-500" />;
+    }
+    return <FileIcon className="w-16 h-16" />;
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  return (
+    <Card 
+      className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-red-200 dark:border-red-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="p-4">
+        <div className="flex flex-col items-center text-center">
+          <div className="text-red-400 dark:text-red-300 mb-3 opacity-60">
+            {getFileIcon(file.mimeType)}
+          </div>
+          <h3 className="font-medium text-sm text-gray-700 dark:text-gray-300 mb-1 line-clamp-2">
+            {file.originalName}
+          </h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {formatFileSize(file.size)}
+          </p>
+        </div>
+
+        <div className={`transition-opacity duration-200 mt-3 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="flex justify-between items-center">
+            <Button
+              size="sm"
+              variant="ghost"
+              className="p-1 hover:bg-green-100 dark:hover:bg-green-900/20"
+              onClick={(e) => {
+                e.stopPropagation();
+                restoreMutation.mutate();
+              }}
+              disabled={restoreMutation.isPending}
+            >
+              <RotateCcw className="w-4 h-4 text-green-500" />
+            </Button>
+            
+            <Button
+              size="sm"
+              variant="ghost"
+              className="p-1 hover:bg-red-100 dark:hover:bg-red-900/20"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (window.confirm(`Permanently delete "${file.originalName}"? This cannot be undone.`)) {
+                  onPermanentDelete();
+                }
+              }}
+              disabled={isPermanentDeleting}
+            >
+              <AlertTriangle className="w-4 h-4 text-red-500" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
 
 export default function TrashPage() {
   const [searchQuery, setSearchQuery] = useState("");
