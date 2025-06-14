@@ -297,8 +297,36 @@ export function registerRoutes(app: Express): Server {
       return res.status(404).json({ message: "File not found on disk" });
     }
 
+    const stat = fs.statSync(file.path);
+    const fileSize = stat.size;
+    
+    // Enable range requests for video streaming
+    if (file.mimeType.startsWith('video/')) {
+      const range = req.headers.range;
+      
+      if (range) {
+        const parts = range.replace(/bytes=/, "").split("-");
+        const start = parseInt(parts[0], 10);
+        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+        const chunksize = (end - start) + 1;
+        
+        const fileStream = fs.createReadStream(file.path, { start, end });
+        
+        res.writeHead(206, {
+          'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+          'Accept-Ranges': 'bytes',
+          'Content-Length': chunksize,
+          'Content-Type': file.mimeType,
+        });
+        
+        fileStream.pipe(res);
+        return;
+      }
+    }
+
     res.setHeader('Content-Type', file.mimeType);
     res.setHeader('Content-Disposition', 'inline');
+    res.setHeader('Accept-Ranges', 'bytes');
     res.sendFile(path.resolve(file.path));
   });
 

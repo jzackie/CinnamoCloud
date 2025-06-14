@@ -22,15 +22,21 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Compress images if they're too large
+  // Compress images if they're too large, skip videos for faster upload
   const compressFile = async (file: File): Promise<File> => {
+    // Skip compression for videos and large files to improve upload speed
+    if (file.type.startsWith('video/') || file.size > 50 * 1024 * 1024) {
+      return file;
+    }
+    
     // Only compress images larger than 2MB
     if (file.type.startsWith('image/') && file.size > 2 * 1024 * 1024) {
       try {
         const options = {
-          maxSizeMB: 1,
+          maxSizeMB: 2,
           maxWidthOrHeight: 1920,
           useWebWorker: true,
+          initialQuality: 0.85,
         };
         const compressedFile = await imageCompression(file, options);
         

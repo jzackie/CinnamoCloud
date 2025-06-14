@@ -66,6 +66,8 @@ export function FilePreview({ file, open, onClose }: FilePreviewProps) {
           controls 
           className="max-w-full max-h-[70vh] rounded-lg"
           preload="metadata"
+          controlsList="nodownload"
+          playsInline
         >
           <source src={previewUrl} type={file.mimeType} />
           Your browser does not support the video tag.
