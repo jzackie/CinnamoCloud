@@ -216,7 +216,7 @@ export default function AuthPage() {
 
       {/* Left Side - Auth Forms */}
       <div className="flex-1 flex items-center justify-center p-8">
-        <Card className="w-full max-w-md bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
+        <Card className="w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
           <CardHeader className="text-center gradient-cinnamoroll dark:gradient-kuromi rounded-t-lg">
             <div className="cloud-shape w-16 h-10 bg-white/20 dark:bg-kuromi-300/30 mx-auto mb-4 animate-float"></div>
             <CardTitle className="font-nunito font-bold text-2xl text-white mb-2">
