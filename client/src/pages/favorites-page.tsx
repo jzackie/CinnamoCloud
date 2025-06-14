@@ -17,7 +17,7 @@ export default function FavoritesPage() {
   const { theme, toggleTheme } = useTheme();
 
   const { data: favoriteFiles = [] } = useQuery<File[]>({
-    queryKey: ["/api/files", { category: "favorites" }],
+    queryKey: ["/api/files/favorites"],
   });
 
   const filteredFiles = favoriteFiles.filter(file =>

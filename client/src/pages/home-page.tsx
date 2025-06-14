@@ -178,18 +178,11 @@ export default function HomePage() {
             
             <Button
               variant="ghost"
-              className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all"
+              className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all text-gray-400 cursor-not-allowed"
+              disabled
             >
               <Users className="w-4 h-4 mr-3" />
-              <span className="font-nunito font-medium">Shared with me</span>
-            </Button>
-            
-            <Button
-              variant="ghost"
-              className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all"
-            >
-              <Clock className="w-4 h-4 mr-3" />
-              <span className="font-nunito font-medium">Recent</span>
+              <span className="font-nunito font-medium">Shared (Coming Soon)</span>
             </Button>
             
             <Button
@@ -223,49 +216,65 @@ export default function HomePage() {
               </h3>
               <Button
                 variant="ghost"
-                className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all"
-                onClick={() => setLocation('/category/images')}
+                className={`w-full justify-start p-3 rounded-xl transition-all ${
+                  currentCategory === 'images' 
+                    ? 'bg-cinnamoroll-100 dark:bg-kuromi-800 text-cinnamoroll-700 dark:text-kuromi-300' 
+                    : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
+                }`}
+                onClick={() => setCurrentCategory('images')}
               >
                 <Image className="w-4 h-4 mr-3 text-green-500" />
                 <span className="font-nunito font-medium">Images</span>
-                <span className="ml-auto text-xs text-gray-500">
-                  {files.filter(f => f.mimeType.startsWith('image/')).length}
+                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                  {files.filter(f => f.mimeType?.startsWith('image/')).length}
                 </span>
               </Button>
               
               <Button
                 variant="ghost"
-                className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all"
-                onClick={() => setLocation('/category/videos')}
+                className={`w-full justify-start p-3 rounded-xl transition-all ${
+                  currentCategory === 'videos' 
+                    ? 'bg-cinnamoroll-100 dark:bg-kuromi-800 text-cinnamoroll-700 dark:text-kuromi-300' 
+                    : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
+                }`}
+                onClick={() => setCurrentCategory('videos')}
               >
                 <Video className="w-4 h-4 mr-3 text-red-500" />
                 <span className="font-nunito font-medium">Videos</span>
-                <span className="ml-auto text-xs text-gray-500">
-                  {files.filter(f => f.mimeType.startsWith('video/')).length}
+                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                  {files.filter(f => f.mimeType?.startsWith('video/')).length}
                 </span>
               </Button>
               
               <Button
                 variant="ghost"
-                className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all"
-                onClick={() => setLocation('/category/pdfs')}
+                className={`w-full justify-start p-3 rounded-xl transition-all ${
+                  currentCategory === 'pdfs' 
+                    ? 'bg-cinnamoroll-100 dark:bg-kuromi-800 text-cinnamoroll-700 dark:text-kuromi-300' 
+                    : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
+                }`}
+                onClick={() => setCurrentCategory('pdfs')}
               >
                 <FileText className="w-4 h-4 mr-3 text-red-600" />
                 <span className="font-nunito font-medium">PDFs</span>
-                <span className="ml-auto text-xs text-gray-500">
-                  {files.filter(f => f.mimeType.includes('pdf')).length}
+                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                  {files.filter(f => f.mimeType?.includes('pdf')).length}
                 </span>
               </Button>
               
               <Button
                 variant="ghost"
-                className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all"
-                onClick={() => setLocation('/category/documents')}
+                className={`w-full justify-start p-3 rounded-xl transition-all ${
+                  currentCategory === 'documents' 
+                    ? 'bg-cinnamoroll-100 dark:bg-kuromi-800 text-cinnamoroll-700 dark:text-kuromi-300' 
+                    : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
+                }`}
+                onClick={() => setCurrentCategory('documents')}
               >
                 <FileIcon className="w-4 h-4 mr-3 text-blue-600" />
                 <span className="font-nunito font-medium">Documents</span>
-                <span className="ml-auto text-xs text-gray-500">
-                  {files.filter(f => f.mimeType.includes('document') || f.mimeType.includes('word')).length}
+                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                  {files.filter(f => f.mimeType?.includes('document') || f.mimeType?.includes('word')).length}
                 </span>
               </Button>
             </div>
@@ -321,13 +330,45 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center space-x-3">
-              <Button
-                variant="outline"
-                className="flex items-center space-x-2 px-4 py-2 border-cinnamoroll-200 dark:border-kuromi-600 hover:shadow-md transition-all"
-              >
-                <FolderPlus className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
-                <span className="font-nunito font-medium">New Folder</span>
-              </Button>
+              <Dialog open={folderDialogOpen} onOpenChange={setFolderDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex items-center space-x-2 px-4 py-2 border-cinnamoroll-200 dark:border-kuromi-600 hover:shadow-md transition-all"
+                  >
+                    <FolderPlus className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
+                    <span className="font-nunito font-medium">New Folder</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create New Folder</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="folderName">Folder Name</Label>
+                      <Input
+                        id="folderName"
+                        value={newFolderName}
+                        onChange={(e) => setNewFolderName(e.target.value)}
+                        placeholder="Enter folder name..."
+                        className="mt-1"
+                      />
+                    </div>
+                    <div className="flex justify-end space-x-2">
+                      <Button variant="outline" onClick={() => setFolderDialogOpen(false)}>
+                        Cancel
+                      </Button>
+                      <Button 
+                        onClick={() => createFolderMutation.mutate(newFolderName)}
+                        disabled={!newFolderName.trim() || createFolderMutation.isPending}
+                      >
+                        {createFolderMutation.isPending ? "Creating..." : "Create"}
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <Button
                 onClick={() => setUploadModalOpen(true)}
                 className="flex items-center space-x-2 px-4 py-2 gradient-cinnamoroll dark:gradient-kuromi text-white rounded-lg hover:shadow-lg transition-all"
@@ -349,16 +390,37 @@ export default function HomePage() {
           </nav>
 
           {/* Files Grid */}
-          {filteredItems.length > 0 ? (
+          {(currentCategory === "all" ? [...folders, ...filteredFiles] : filteredFiles).length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-              {filteredItems.map((item) => (
-                <FileCard
-                  key={item.id}
-                  item={item}
-                  type={"originalName" in item ? "file" : "folder"}
-                  onPreview={setSelectedFile}
-                />
-              ))}
+              {currentCategory === "all" ? (
+                <>
+                  {folders.map((folder) => (
+                    <FileCard
+                      key={`folder-${folder.id}`}
+                      item={folder}
+                      type="folder"
+                      onPreview={() => {}}
+                    />
+                  ))}
+                  {filteredFiles.map((file) => (
+                    <FileCard
+                      key={`file-${file.id}`}
+                      item={file}
+                      type="file"
+                      onPreview={setSelectedFile}
+                    />
+                  ))}
+                </>
+              ) : (
+                filteredFiles.map((file) => (
+                  <FileCard
+                    key={`file-${file.id}`}
+                    item={file}
+                    type="file"
+                    onPreview={setSelectedFile}
+                  />
+                ))
+              )}
             </div>
           ) : (
             /* Empty State */
