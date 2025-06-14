@@ -204,17 +204,17 @@ export default function HomePage() {
           {/* Upload Button */}
           <Button
             onClick={() => setUploadModalOpen(true)}
-            className="w-full mb-6 p-3 gradient-cinnamoroll dark:gradient-kuromi text-white rounded-2xl hover:shadow-lg transform hover:scale-105 transition-all duration-300 font-nunito font-semibold"
+            className="w-full mb-4 sm:mb-6 p-2 sm:p-3 gradient-cinnamoroll dark:gradient-kuromi text-white rounded-2xl hover:shadow-lg transform hover:scale-105 transition-all duration-300 font-nunito font-semibold text-sm sm:text-base"
           >
-            <Upload className="w-4 h-4 mr-2" />
-            {t("upload_files")}
+            <Upload className="w-4 h-4 sm:mr-2" />
+            <span className="hidden sm:inline">{t("upload_files")}</span>
           </Button>
 
           {/* Navigation Menu */}
-          <nav className="space-y-2">
+          <nav className="space-y-1 sm:space-y-2">
             <Button
               variant="ghost"
-              className={`w-full justify-start p-3 rounded-xl transition-all ${
+              className={`w-full justify-start p-2 sm:p-3 rounded-xl transition-all text-sm sm:text-base ${
                 currentCategory === 'all' && !currentFolderId
                   ? 'text-cinnamoroll-600 dark:text-kuromi-400 bg-cinnamoroll-50 dark:bg-kuromi-900/50'
                   : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
@@ -224,60 +224,60 @@ export default function HomePage() {
                 setCurrentFolderId(null);
               }}
             >
-              <Home className="w-4 h-4 mr-3" />
-              <span className="font-nunito font-medium">{t("my_drive")}</span>
+              <Home className="w-4 h-4 sm:mr-3" />
+              <span className="hidden sm:inline font-nunito font-medium">{t("my_drive")}</span>
             </Button>
             
             <Button
               variant="ghost"
-              className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all text-gray-400 cursor-not-allowed"
+              className="w-full justify-start p-2 sm:p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all text-gray-400 cursor-not-allowed text-sm sm:text-base"
               disabled
             >
-              <Users className="w-4 h-4 mr-3" />
-              <span className="font-nunito font-medium">Shared (Coming Soon)</span>
+              <Users className="w-4 h-4 sm:mr-3" />
+              <span className="hidden sm:inline font-nunito font-medium">Shared (Coming Soon)</span>
             </Button>
             
             <Button
               variant="ghost"
-              className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all"
+              className="w-full justify-start p-2 sm:p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all text-sm sm:text-base"
               onClick={() => setLocation('/favorites')}
             >
-              <Star className="w-4 h-4 mr-3" />
-              <span className="font-nunito font-medium">{t("favorites")}</span>
-              <span className="ml-auto bg-kawaii-pink dark:bg-kuromi-500 text-white text-xs px-2 py-1 rounded-full">
+              <Star className="w-4 h-4 sm:mr-3" />
+              <span className="hidden sm:inline font-nunito font-medium">{t("favorites")}</span>
+              <span className="ml-auto bg-kawaii-pink dark:bg-kuromi-500 text-white text-xs px-1 sm:px-2 py-1 rounded-full hidden sm:inline">
                 {files.filter(f => f.isFavorite).length}
               </span>
             </Button>
             
             <Button
               variant="ghost"
-              className="w-full justify-start p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all"
+              className="w-full justify-start p-2 sm:p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50 rounded-xl transition-all text-sm sm:text-base"
               onClick={() => setLocation('/trash')}
             >
-              <Trash2 className="w-4 h-4 mr-3" />
-              <span className="font-nunito font-medium">{t("trash")}</span>
-              <span className="ml-auto bg-red-400 text-white text-xs px-2 py-1 rounded-full">
+              <Trash2 className="w-4 h-4 sm:mr-3" />
+              <span className="hidden sm:inline font-nunito font-medium">{t("trash")}</span>
+              <span className="ml-auto bg-red-400 text-white text-xs px-1 sm:px-2 py-1 rounded-full hidden sm:inline">
                 {files.filter(f => f.isDeleted).length}
               </span>
             </Button>
 
             {/* File Categories */}
-            <div className="pt-4">
-              <h3 className="font-nunito font-semibold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+            <div className="pt-2 sm:pt-4">
+              <h3 className="hidden sm:block font-nunito font-semibold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                 {t("categories")}
               </h3>
               <Button
                 variant="ghost"
-                className={`w-full justify-start p-3 rounded-xl transition-all ${
+                className={`w-full justify-start p-2 sm:p-3 rounded-xl transition-all text-sm sm:text-base ${
                   currentCategory === 'images' 
                     ? 'bg-cinnamoroll-100 dark:bg-kuromi-800 text-cinnamoroll-700 dark:text-kuromi-300' 
                     : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
                 }`}
                 onClick={() => setCurrentCategory('images')}
               >
-                <Image className="w-4 h-4 mr-3 text-green-500" />
-                <span className="font-nunito font-medium">{t("images")}</span>
-                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                <Image className="w-4 h-4 sm:mr-3 text-green-500" />
+                <span className="hidden sm:inline font-nunito font-medium">{t("images")}</span>
+                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
                   {files.filter(f => f.mimeType?.startsWith('image/')).length}
                 </span>
               </Button>
@@ -346,43 +346,43 @@ export default function HomePage() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-3 sm:p-4 lg:p-6">
           {/* Action Bar */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <div className="cloud-shape w-8 h-5 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
-              <h2 className="font-nunito font-bold text-2xl text-cinnamoroll-700 dark:text-kuromi-300">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="cloud-shape w-6 h-4 sm:w-8 sm:h-5 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
+              <h2 className="font-nunito font-bold text-lg sm:text-xl lg:text-2xl text-cinnamoroll-700 dark:text-kuromi-300">
                 My Kawaii Drive
               </h2>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1 sm:space-x-2">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded-lg transition-all ${
+                  className={`p-1.5 sm:p-2 rounded-lg transition-all ${
                     viewMode === "grid"
                       ? "bg-cinnamoroll-100 dark:bg-kuromi-800"
                       : "hover:bg-cinnamoroll-100 dark:hover:bg-kuromi-800"
                   }`}
                 >
-                  <Grid3x3 className="w-4 h-4 text-cinnamoroll-600 dark:text-kuromi-400" />
+                  <Grid3x3 className="w-3 h-3 sm:w-4 sm:h-4 text-cinnamoroll-600 dark:text-kuromi-400" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setViewMode("list")}
-                  className={`p-2 rounded-lg transition-all ${
+                  className={`p-1.5 sm:p-2 rounded-lg transition-all ${
                     viewMode === "list"
                       ? "bg-cinnamoroll-100 dark:bg-kuromi-800"
                       : "hover:bg-cinnamoroll-100 dark:hover:bg-kuromi-800"
                   }`}
                 >
-                  <List className="w-4 h-4 text-cinnamoroll-600 dark:text-kuromi-400" />
+                  <List className="w-3 h-3 sm:w-4 sm:h-4 text-cinnamoroll-600 dark:text-kuromi-400" />
                 </Button>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto">
               <Dialog open={folderDialogOpen} onOpenChange={setFolderDialogOpen}>
                 <DialogTrigger asChild>
                   <Button
@@ -470,8 +470,8 @@ export default function HomePage() {
             </div>
           ) : (currentCategory === "all" ? [...folders, ...filteredFiles] : filteredFiles).length > 0 ? (
             <div className={viewMode === "grid" 
-              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4"
-              : "space-y-2"
+              ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 lg:gap-4"
+              : "space-y-1 sm:space-y-2"
             }>
               {currentCategory === "all" ? (
                 <>
