@@ -27,6 +27,7 @@ import { useTheme } from "@/lib/theme-provider";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/lib/language-provider";
 import { updateUserSchema, User as UserType } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { z } from "zod";
@@ -65,6 +66,7 @@ export default function ProfilePage() {
   const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
   const { toast } = useToast();
+  const { language, setLanguage, t, languages: availableLanguages } = useLanguage();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("profile");
 
@@ -309,6 +311,28 @@ export default function ProfilePage() {
                 </TabsContent>
 
                 <TabsContent value="preferences" className="space-y-6">
+                  <div>
+                    <Label htmlFor="language">Language</Label>
+                    <Select
+                      value={form.watch("language") || language}
+                      onValueChange={(value) => {
+                        form.setValue("language", value);
+                        setLanguage(value as any);
+                      }}
+                    >
+                      <SelectTrigger className="border-cinnamoroll-200 dark:border-kuromi-600">
+                        <SelectValue placeholder="Select language" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableLanguages.map((lang) => (
+                          <SelectItem key={lang.code} value={lang.code}>
+                            {lang.flag} {lang.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
                   <div>
                     <h3 className="font-nunito font-semibold text-lg mb-4">Theme Preferences</h3>
                     <div className="space-y-4">
