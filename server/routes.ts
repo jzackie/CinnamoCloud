@@ -127,7 +127,7 @@ export function registerRoutes(app: Express): Server {
         return res.status(400).json({ message: "No profile picture uploaded" });
       }
 
-      const profilePictureUrl = `/uploads/${req.file.filename}`;
+      const profilePictureUrl = `/uploads/${req.user!.id}/${req.file.filename}`;
       const updatedUser = await storage.updateUser(req.user!.id, { 
         profilePicture: profilePictureUrl 
       });
