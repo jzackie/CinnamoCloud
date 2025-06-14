@@ -310,25 +310,6 @@ export default function ProfilePage() {
 
                 <TabsContent value="preferences" className="space-y-6">
                   <div>
-                    <Label htmlFor="language">Language</Label>
-                    <Select
-                      value={form.watch("language")}
-                      onValueChange={(value) => form.setValue("language", value)}
-                    >
-                      <SelectTrigger className="border-cinnamoroll-200 dark:border-kuromi-600">
-                        <SelectValue placeholder="Select language" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {languages.map((lang) => (
-                          <SelectItem key={lang.code} value={lang.code}>
-                            {lang.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
                     <h3 className="font-nunito font-semibold text-lg mb-4">Theme Preferences</h3>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between p-4 border border-cinnamoroll-200 dark:border-kuromi-600 rounded-lg">

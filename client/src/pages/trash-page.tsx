@@ -15,7 +15,7 @@ export default function TrashPage() {
   const { theme, toggleTheme } = useTheme();
 
   const { data: deletedFiles = [] } = useQuery<File[]>({
-    queryKey: ["/api/files", { category: "trash" }],
+    queryKey: ["/api/files/deleted"],
   });
 
   const filteredFiles = deletedFiles.filter(file =>

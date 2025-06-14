@@ -114,13 +114,7 @@ export function ProfileMenu() {
           <span>Preferences</span>
         </DropdownMenuItem>
         
-        <DropdownMenuItem 
-          onClick={() => setLocation('/profile')}
-          className="flex items-center space-x-3 p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer"
-        >
-          <Languages className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
-          <span>Language</span>
-        </DropdownMenuItem>
+
         
         <DropdownMenuItem 
           onClick={downloadResetKey}
