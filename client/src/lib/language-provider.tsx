@@ -15,9 +15,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const [language, setLanguageState] = useState<Language>("en");
 
-  // Set language from user preferences or browser
+  // Initialize language from localStorage or browser preference
   useEffect(() => {
-    if (user?.language && user.language in translations) {
+    const savedLang = localStorage.getItem('preferred-language') as Language;
+    if (savedLang && savedLang in translations) {
+      setLanguageState(savedLang);
+    } else if (user?.language && user.language in translations) {
       setLanguageState(user.language as Language);
     } else {
       // Fallback to browser language
@@ -32,7 +35,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     // Update the language state immediately for instant UI feedback
     setLanguageState(lang);
     
-    // Save language preference to user profile
+    // Save to localStorage for immediate persistence
+    localStorage.setItem('preferred-language', lang);
+    
+    // Save language preference to user profile if user is logged in
     if (user) {
       try {
         const response = await fetch('/api/profile', {
@@ -45,22 +51,19 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         });
         
         if (!response.ok) {
-          throw new Error('Failed to save language preference');
+          console.warn('Failed to save language preference to profile');
         }
-        
-        // Force a re-render by updating the state again after successful save
-        setLanguageState(lang);
       } catch (error) {
         console.warn('Failed to save language preference:', error);
-        // Revert to previous language if save failed
-        if (user?.language) {
-          setLanguageState(user.language as Language);
-        }
       }
     }
   };
 
-  const t = (key: string) => getTranslation(language, key);
+  const t = (key: string) => {
+    const translation = getTranslation(language, key);
+    console.log(`Translation: ${key} -> ${translation} (lang: ${language})`);
+    return translation;
+  };
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t, languages }}>
