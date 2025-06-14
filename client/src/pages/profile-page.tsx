@@ -298,14 +298,23 @@ export default function ProfilePage() {
                     </Avatar>
                     <div>
                       <h3 className="font-nunito font-semibold text-lg mb-2">Profile Picture</h3>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleProfilePictureChange}
+                        className="hidden"
+                        id="profile-picture-input"
+                      />
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
                         className="border-cinnamoroll-200 dark:border-kuromi-600"
+                        onClick={() => document.getElementById('profile-picture-input')?.click()}
+                        disabled={uploadProfilePictureMutation.isPending}
                       >
                         <Camera className="w-4 h-4 mr-2" />
-                        Change Picture
+                        {uploadProfilePictureMutation.isPending ? "Uploading..." : "Change Picture"}
                       </Button>
                     </div>
                   </div>
