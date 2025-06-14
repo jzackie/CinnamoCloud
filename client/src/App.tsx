@@ -14,6 +14,7 @@ import FavoritesPage from "@/pages/favorites-page";
 import TrashPage from "@/pages/trash-page";
 import CategoryPage from "@/pages/category-page";
 import ProfilePage from "@/pages/profile-page";
+import AchievementsPage from "@/pages/achievements-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -25,6 +26,7 @@ function Router() {
       <ProtectedRoute path="/trash" component={TrashPage} />
       <ProtectedRoute path="/category/:type" component={CategoryPage} />
       <ProtectedRoute path="/profile" component={ProfilePage} />
+      <ProtectedRoute path="/achievements" component={AchievementsPage} />
       <Route path="/auth" component={AuthPage} />
       <Route component={NotFound} />
     </Switch>

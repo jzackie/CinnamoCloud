@@ -47,6 +47,7 @@ export const achievements = pgTable("achievements", {
   icon: text("icon").notNull(),
   category: text("category").notNull(), // storage, organization, activity, special
   requirement: integer("requirement").notNull(), // threshold value
+  points: integer("points").notNull().default(10), // points awarded for achievement
   isHidden: boolean("is_hidden").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

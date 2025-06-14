@@ -1,6 +1,6 @@
 import { users, folders, files, achievements, userAchievements, type User, type InsertUser, type Folder, type InsertFolder, type File, type InsertFile, type UpdateUser, type Achievement, type UserAchievement, type InsertUserAchievement } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, isNull, count, sql } from "drizzle-orm";
+import { eq, and, isNull, isNotNull, count, sql } from "drizzle-orm";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { pool } from "./db";
@@ -303,7 +303,7 @@ export class DatabaseStorage implements IStorage {
           const nestedFolders = await db
             .select({ count: count() })
             .from(folders)
-            .where(and(eq(folders.userId, userId), isNull(folders.parentId).not()));
+            .where(and(eq(folders.userId, userId), isNotNull(folders.parentId)));
           shouldUnlock = nestedFolders[0].count > 0;
           break;
       }
