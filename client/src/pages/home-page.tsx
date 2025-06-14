@@ -200,7 +200,7 @@ export default function HomePage() {
 
       <div className="flex min-h-[calc(100vh-4rem)]">
         {/* Sidebar */}
-        <aside className="w-64 lg:w-64 md:w-56 sm:w-16 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-r border-cinnamoroll-200 dark:border-kuromi-700 p-2 sm:p-4">
+        <aside className="w-16 sm:w-20 md:w-56 lg:w-64 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-r border-cinnamoroll-200 dark:border-kuromi-700 p-2 sm:p-4">
           {/* Upload Button */}
           <Button
             onClick={() => setUploadModalOpen(true)}
@@ -284,48 +284,48 @@ export default function HomePage() {
               
               <Button
                 variant="ghost"
-                className={`w-full justify-start p-3 rounded-xl transition-all ${
+                className={`w-full justify-start p-2 sm:p-3 rounded-xl transition-all text-sm sm:text-base ${
                   currentCategory === 'videos' 
                     ? 'bg-cinnamoroll-100 dark:bg-kuromi-800 text-cinnamoroll-700 dark:text-kuromi-300' 
                     : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
                 }`}
                 onClick={() => setCurrentCategory('videos')}
               >
-                <Video className="w-4 h-4 mr-3 text-red-500" />
-                <span className="font-nunito font-medium">{t("videos")}</span>
-                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                <Video className="w-4 h-4 sm:mr-3 text-red-500" />
+                <span className="hidden sm:inline font-nunito font-medium">{t("videos")}</span>
+                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
                   {files.filter(f => f.mimeType?.startsWith('video/')).length}
                 </span>
               </Button>
               
               <Button
                 variant="ghost"
-                className={`w-full justify-start p-3 rounded-xl transition-all ${
+                className={`w-full justify-start p-2 sm:p-3 rounded-xl transition-all text-sm sm:text-base ${
                   currentCategory === 'pdfs' 
                     ? 'bg-cinnamoroll-100 dark:bg-kuromi-800 text-cinnamoroll-700 dark:text-kuromi-300' 
                     : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
                 }`}
                 onClick={() => setCurrentCategory('pdfs')}
               >
-                <FileText className="w-4 h-4 mr-3 text-red-600" />
-                <span className="font-nunito font-medium">{t("pdfs")}</span>
-                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                <FileText className="w-4 h-4 sm:mr-3 text-red-600" />
+                <span className="hidden sm:inline font-nunito font-medium">{t("pdfs")}</span>
+                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
                   {files.filter(f => f.mimeType?.includes('pdf')).length}
                 </span>
               </Button>
               
               <Button
                 variant="ghost"
-                className={`w-full justify-start p-3 rounded-xl transition-all ${
+                className={`w-full justify-start p-2 sm:p-3 rounded-xl transition-all text-sm sm:text-base ${
                   currentCategory === 'documents' 
                     ? 'bg-cinnamoroll-100 dark:bg-kuromi-800 text-cinnamoroll-700 dark:text-kuromi-300' 
                     : 'hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/50'
                 }`}
                 onClick={() => setCurrentCategory('documents')}
               >
-                <FileIcon className="w-4 h-4 mr-3 text-blue-600" />
-                <span className="font-nunito font-medium">{t("documents")}</span>
-                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                <FileIcon className="w-4 h-4 sm:mr-3 text-blue-600" />
+                <span className="hidden sm:inline font-nunito font-medium">{t("documents")}</span>
+                <span className="ml-auto text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
                   {files.filter(f => f.mimeType?.includes('document') || f.mimeType?.includes('word')).length}
                 </span>
               </Button>
@@ -333,12 +333,12 @@ export default function HomePage() {
           </nav>
 
           {/* Storage Info */}
-          <Card className="mt-8 p-4 bg-gradient-to-r from-cinnamoroll-100 to-kawaii-yellow dark:from-kuromi-800 dark:to-gray-700 border-none">
+          <Card className="mt-4 sm:mt-8 p-3 sm:p-4 bg-gradient-to-r from-cinnamoroll-100 to-kawaii-yellow dark:from-kuromi-800 dark:to-gray-700 border-none">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-nunito font-medium text-sm">{t("storage")}</span>
-              <Infinity className="w-4 h-4 text-kawaii-pink dark:text-kuromi-400 animate-pulse-soft" />
+              <span className="hidden sm:inline font-nunito font-medium text-sm">{t("storage")}</span>
+              <Infinity className="w-4 h-4 text-kawaii-pink dark:text-kuromi-400 animate-pulse-soft mx-auto sm:mx-0" />
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-300 mb-2">
+            <p className="hidden sm:block text-xs text-gray-600 dark:text-gray-300 mb-2">
               {t("unlimited_space")} ✨
             </p>
             <div className="h-2 bg-gradient-to-r from-kawaii-pink to-kawaii-purple rounded-full animate-pulse-soft"></div>
@@ -387,10 +387,10 @@ export default function HomePage() {
                 <DialogTrigger asChild>
                   <Button
                     variant="outline"
-                    className="flex items-center space-x-2 px-4 py-2 border-cinnamoroll-200 dark:border-kuromi-600 hover:shadow-md transition-all"
+                    className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 border-cinnamoroll-200 dark:border-kuromi-600 hover:shadow-md transition-all text-sm sm:text-base"
                   >
                     <FolderPlus className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
-                    <span className="font-nunito font-medium">{t("new_folder")}</span>
+                    <span className="hidden sm:inline font-nunito font-medium">{t("new_folder")}</span>
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
@@ -440,19 +440,19 @@ export default function HomePage() {
           </div>
 
           {/* Breadcrumb Navigation */}
-          <nav className="flex items-center space-x-2 mb-6 text-sm">
+          <nav className="flex items-center space-x-2 mb-4 sm:mb-6 text-xs sm:text-sm">
             <Button
               variant="link"
               onClick={handleBackToParent}
-              className="p-0 h-auto text-cinnamoroll-600 dark:text-kuromi-400 hover:underline font-nunito flex items-center"
+              className="p-0 h-auto text-cinnamoroll-600 dark:text-kuromi-400 hover:underline font-nunito flex items-center text-xs sm:text-sm"
             >
-              <Home className="w-4 h-4 mr-1" />
-              My Drive
+              <Home className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+              <span className="hidden sm:inline">My Drive</span>
             </Button>
             {currentFolderId && (
               <>
                 <span className="text-gray-400">/</span>
-                <span className="text-gray-600 dark:text-gray-300 font-nunito font-medium">
+                <span className="text-gray-600 dark:text-gray-300 font-nunito font-medium text-xs sm:text-sm truncate max-w-32 sm:max-w-none">
                   {folders.find(f => f.id === currentFolderId)?.name || "Current Folder"}
                 </span>
               </>
