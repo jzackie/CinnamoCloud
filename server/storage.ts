@@ -36,11 +36,11 @@ export interface IStorage {
   restoreFile(id: number, userId: number): Promise<void>;
   permanentlyDeleteFile(id: number, userId: number): Promise<void>;
   
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 }
 
 export class DatabaseStorage implements IStorage {
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 
   constructor() {
     this.sessionStore = new PostgresSessionStore({ 

@@ -61,6 +61,33 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        cinnamoroll: {
+          "50": "var(--cinnamoroll-50)",
+          "100": "var(--cinnamoroll-100)",
+          "200": "var(--cinnamoroll-200)",
+          "300": "var(--cinnamoroll-300)",
+          "400": "var(--cinnamoroll-400)",
+          "500": "var(--cinnamoroll-500)",
+          "600": "var(--cinnamoroll-600)",
+        },
+        kuromi: {
+          "50": "var(--kuromi-50)",
+          "100": "var(--kuromi-100)",
+          "200": "var(--kuromi-200)",
+          "300": "var(--kuromi-300)",
+          "400": "var(--kuromi-400)",
+          "500": "var(--kuromi-500)",
+          "600": "var(--kuromi-600)",
+          "700": "var(--kuromi-700)",
+          "800": "var(--kuromi-800)",
+          "900": "var(--kuromi-900)",
+        },
+        kawaii: {
+          pink: "var(--kawaii-pink)",
+          purple: "var(--kawaii-purple)",
+          blue: "var(--kawaii-blue)",
+          yellow: "var(--kawaii-yellow)",
+        },
       },
       keyframes: {
         "accordion-down": {

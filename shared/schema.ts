@@ -16,11 +16,11 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const folders = pgTable("folders", {
+export const folders: any = pgTable("folders", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   userId: integer("user_id").references(() => users.id).notNull(),
-  parentId: integer("parent_id").references(() => folders.id),
+  parentId: integer("parent_id").references((): any => folders.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   isDeleted: boolean("is_deleted").default(false).notNull(),
 });
