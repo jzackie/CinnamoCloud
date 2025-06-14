@@ -490,10 +490,10 @@ export default function HomePage() {
             <div className="text-center py-16">
               <div className="cloud-shape w-24 h-16 gradient-cinnamoroll dark:gradient-kuromi mx-auto mb-6 animate-float"></div>
               <h3 className="font-nunito font-bold text-xl text-gray-600 dark:text-gray-300 mb-2">
-                Your kawaii cloud is empty!
+                {t("empty_folder")}
               </h3>
               <p className="text-gray-500 dark:text-gray-400 mb-6">
-                Start uploading your cute files to see them here ✨
+                {t("drag_files_here")} {t("or_click_upload")}
               </p>
               <Button
                 onClick={() => setUploadModalOpen(true)}

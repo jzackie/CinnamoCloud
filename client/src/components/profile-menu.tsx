@@ -123,18 +123,25 @@ export function ProfileMenu() {
           <DropdownMenuSubTrigger className="flex items-center space-x-3 p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer">
             <Languages className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
             <span>{t("language")}</span>
+            <ChevronDown className="w-3 h-3 ml-auto" />
           </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
+          <DropdownMenuSubContent 
+            className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700 min-w-[200px]"
+            sideOffset={5}
+          >
             {languages.map((lang) => (
               <DropdownMenuItem
                 key={lang.code}
                 onClick={() => setLanguage(lang.code as any)}
-                className={`flex items-center space-x-3 p-3 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer ${
+                className={`flex items-center space-x-3 p-2 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer ${
                   language === lang.code ? 'bg-cinnamoroll-100 dark:bg-kuromi-700' : ''
                 }`}
               >
-                <span className="text-lg">{lang.flag}</span>
-                <span>{lang.name}</span>
+                <span className="text-base">{lang.flag}</span>
+                <span className="font-medium">{lang.name}</span>
+                {language === lang.code && (
+                  <div className="ml-auto w-2 h-2 bg-cinnamoroll-500 dark:bg-kuromi-400 rounded-full"></div>
+                )}
               </DropdownMenuItem>
             ))}
           </DropdownMenuSubContent>

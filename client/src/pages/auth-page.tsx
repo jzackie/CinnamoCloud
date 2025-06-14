@@ -9,7 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Key, Download, Upload } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Key, Download, Upload, Languages } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/lib/theme-provider";
 import { useLanguage } from "@/lib/language-provider";
@@ -37,7 +38,7 @@ export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const { t } = useLanguage();
+  const { t, language, setLanguage, languages } = useLanguage();
   const { toast } = useToast();
 
   // Redirect if already logged in
@@ -177,6 +178,42 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex">
+      {/* Header with Language Selector */}
+      <div className="absolute top-4 right-4 z-10">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20"
+            >
+              <Languages className="w-4 h-4 mr-2" />
+              <span className="text-sm">{languages.find(l => l.code === language)?.flag}</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent 
+            className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700"
+            align="end"
+          >
+            {languages.map((lang) => (
+              <DropdownMenuItem
+                key={lang.code}
+                onClick={() => setLanguage(lang.code as any)}
+                className={`flex items-center space-x-3 p-2 hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-800 cursor-pointer ${
+                  language === lang.code ? 'bg-cinnamoroll-100 dark:bg-kuromi-700' : ''
+                }`}
+              >
+                <span className="text-base">{lang.flag}</span>
+                <span className="font-medium">{lang.name}</span>
+                {language === lang.code && (
+                  <div className="ml-auto w-2 h-2 bg-cinnamoroll-500 dark:bg-kuromi-400 rounded-full"></div>
+                )}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
       {/* Left Side - Auth Forms */}
       <div className="flex-1 flex items-center justify-center p-8">
         <Card className="w-full max-w-md bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700">
