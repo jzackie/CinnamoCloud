@@ -152,7 +152,6 @@
     border-radius: 50%;
     background: inherit;
     z-index: -3;
-    box-shadow: -25px 15px 0 -8px currentColor;
   }
 
   .cloud-shape-enhanced::after {
@@ -165,6 +164,10 @@
     border-radius: 50%;
     background: inherit;
     z-index: -2;
+  }
+
+  .cloud-shape-enhanced {
+    box-shadow: -15px -20px 0 -5px currentColor;
   }
 
   .cloud-shape-3d {
