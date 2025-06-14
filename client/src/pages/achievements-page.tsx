@@ -111,12 +111,12 @@ export default function AchievementsPage() {
                   )}
                 </div>
                 <CardTitle className={`text-lg ${unlocked ? "text-yellow-800 dark:text-yellow-200" : ""}`}>
-                  {achievement.name}
+                  {t(`achievement.${achievement.key}`) || achievement.name}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="mb-4">
-                  {achievement.description}
+                  {t(`achievement.${achievement.key}.desc`) || achievement.description}
                 </CardDescription>
                 
                 {!unlocked && (
