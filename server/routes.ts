@@ -400,7 +400,62 @@ export function registerRoutes(app: Express): Server {
     res.json({ message: "File permanently deleted" });
   });
 
+  // Folder renaming
+  app.put("/api/folders/:id", requireAuth, async (req, res) => {
+    try {
+      const folderId = parseInt(req.params.id);
+      const { name } = req.body;
+      
+      if (isNaN(folderId)) {
+        return res.status(400).json({ message: "Invalid folder ID" });
+      }
+      
+      if (!name || typeof name !== 'string' || name.trim().length === 0) {
+        return res.status(400).json({ message: "Folder name is required" });
+      }
+      
+      const updatedFolder = await storage.updateFolder(folderId, req.user!.id, { name: name.trim() });
+      
+      if (!updatedFolder) {
+        return res.status(404).json({ message: "Folder not found" });
+      }
+      
+      res.json(updatedFolder);
+    } catch (error) {
+      console.error('Error renaming folder:', error);
+      res.status(500).json({ message: "Failed to rename folder" });
+    }
+  });
 
+  // File movement
+  app.put("/api/files/:id/move", requireAuth, async (req, res) => {
+    try {
+      const fileId = parseInt(req.params.id);
+      const { folderId } = req.body;
+      
+      if (isNaN(fileId)) {
+        return res.status(400).json({ message: "Invalid file ID" });
+      }
+      
+      // folderId can be null for moving to main drive
+      const targetFolderId = folderId === null ? null : parseInt(folderId);
+      
+      if (folderId !== null && isNaN(targetFolderId!)) {
+        return res.status(400).json({ message: "Invalid folder ID" });
+      }
+      
+      const updatedFile = await storage.moveFile(fileId, req.user!.id, targetFolderId);
+      
+      if (!updatedFile) {
+        return res.status(404).json({ message: "File not found" });
+      }
+      
+      res.json(updatedFile);
+    } catch (error) {
+      console.error('Error moving file:', error);
+      res.status(500).json({ message: "Failed to move file" });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;

@@ -23,6 +23,7 @@ export interface IStorage {
   deleteFolder(id: number, userId: number): Promise<void>;
   restoreFolder(id: number, userId: number): Promise<void>;
   getFolder(id: number, userId: number): Promise<Folder | undefined>;
+  updateFolder(id: number, userId: number, updates: { name: string }): Promise<Folder | undefined>;
   
   // File operations
   getUserFiles(userId: number, folderId?: number): Promise<File[]>;
@@ -35,6 +36,7 @@ export interface IStorage {
   deleteFile(id: number, userId: number): Promise<void>;
   restoreFile(id: number, userId: number): Promise<void>;
   permanentlyDeleteFile(id: number, userId: number): Promise<void>;
+  moveFile(id: number, userId: number, targetFolderId: number | null): Promise<File | undefined>;
   
   // Achievement operations
   getAchievements(): Promise<Achievement[]>;
@@ -138,6 +140,15 @@ export class DatabaseStorage implements IStorage {
       .from(folders)
       .where(and(eq(folders.id, id), eq(folders.userId, userId)));
     return folder || undefined;
+  }
+
+  async updateFolder(id: number, userId: number, updates: { name: string }): Promise<Folder | undefined> {
+    const [updatedFolder] = await db
+      .update(folders)
+      .set({ name: updates.name })
+      .where(and(eq(folders.id, id), eq(folders.userId, userId)))
+      .returning();
+    return updatedFolder || undefined;
   }
 
   // File operations
