@@ -517,6 +517,7 @@ export default function HomePage() {
                       type="file"
                       onPreview={setSelectedFile}
                       viewMode={viewMode}
+                      availableFolders={folders}
                     />
                   ))}
                 </>
@@ -528,6 +529,7 @@ export default function HomePage() {
                     type="file"
                     onPreview={setSelectedFile}
                     viewMode={viewMode}
+                    availableFolders={folders}
                   />
                 ))
               )}

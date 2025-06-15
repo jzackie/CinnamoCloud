@@ -9,7 +9,7 @@ import { CinnamorollLoader, CinnamorollSkeleton } from "@/components/cinnamoroll
 import { Search, Star, Moon, Sun, ArrowLeft, AlertTriangle } from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
 import { useLocation } from "wouter";
-import { File } from "@shared/schema";
+import { File, Folder } from "@shared/schema";
 
 export default function FavoritesPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,6 +21,10 @@ export default function FavoritesPage() {
     queryKey: ["/api/files/favorites"],
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+  });
+
+  const { data: folders = [] } = useQuery<Folder[]>({
+    queryKey: ["/api/folders"],
   });
 
   const filteredFiles = favoriteFiles.filter(file =>

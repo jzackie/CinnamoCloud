@@ -433,12 +433,12 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
 
   return (
     <>
-    <Card 
-      className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={handleClick}
-    >
+      <Card 
+        className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={handleClick}
+      >
       <div className="p-3 sm:p-4 lg:p-5 xl:p-6">
         <div className="text-center mb-3">
           {type === "folder" ? (
@@ -555,98 +555,98 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
           </div>
         </div>
       </div>
-    </Card>
+      </Card>
     
-    {/* Rename Folder Dialog */}
-    {showRenameDialog && (
-      <Dialog open={showRenameDialog} onOpenChange={setShowRenameDialog}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Rename Folder</DialogTitle>
-          <DialogDescription>
-            Enter a new name for this folder.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              id="name"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              className="col-span-3"
-              placeholder="Enter folder name"
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setShowRenameDialog(false)}>
-            Cancel
-          </Button>
-          <Button 
-            onClick={() => {
-              if (newName.trim()) {
-                renameFolderMutation.mutate({ id: item.id, name: newName.trim() });
-              }
-            }}
-            disabled={renameFolderMutation.isPending || !newName.trim()}
-          >
-            Rename
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-      </Dialog>
-    )}
+      {/* Rename Folder Dialog */}
+      {showRenameDialog && (
+        <Dialog open={showRenameDialog} onOpenChange={setShowRenameDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Rename Folder</DialogTitle>
+              <DialogDescription>
+                Enter a new name for this folder.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  className="col-span-3"
+                  placeholder="Enter folder name"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowRenameDialog(false)}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={() => {
+                  if (newName.trim()) {
+                    renameFolderMutation.mutate({ id: item.id, name: newName.trim() });
+                  }
+                }}
+                disabled={renameFolderMutation.isPending || !newName.trim()}
+              >
+                Rename
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
 
-    {/* Move File Dialog */}
-    {showMoveDialog && (
-      <Dialog open={showMoveDialog} onOpenChange={setShowMoveDialog}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Move File</DialogTitle>
-          <DialogDescription>
-            Select a destination folder for this file.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="folder" className="text-right">
-              Folder
-            </Label>
-            <Select value={selectedFolderId} onValueChange={setSelectedFolderId}>
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Select destination" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="main">Main Drive</SelectItem>
-                {availableFolders.map((folder) => (
-                  <SelectItem key={folder.id} value={folder.id.toString()}>
-                    {folder.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setShowMoveDialog(false)}>
-            Cancel
-          </Button>
-          <Button 
-            onClick={() => {
-              const targetFolderId = selectedFolderId === "main" ? null : parseInt(selectedFolderId);
-              moveFileMutation.mutate({ fileId: item.id, folderId: targetFolderId });
-            }}
-            disabled={moveFileMutation.isPending || !selectedFolderId}
-          >
-            Move
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-      </Dialog>
-    )}
+      {/* Move File Dialog */}
+      {showMoveDialog && (
+        <Dialog open={showMoveDialog} onOpenChange={setShowMoveDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Move File</DialogTitle>
+              <DialogDescription>
+                Select a destination folder for this file.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="folder" className="text-right">
+                  Folder
+                </Label>
+                <Select value={selectedFolderId} onValueChange={setSelectedFolderId}>
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select destination" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="main">Main Drive</SelectItem>
+                    {availableFolders.map((folder) => (
+                      <SelectItem key={folder.id} value={folder.id.toString()}>
+                        {folder.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowMoveDialog(false)}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={() => {
+                  const targetFolderId = selectedFolderId === "main" ? null : parseInt(selectedFolderId);
+                  moveFileMutation.mutate({ fileId: item.id, folderId: targetFolderId });
+                }}
+                disabled={moveFileMutation.isPending || !selectedFolderId}
+              >
+                Move
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 });
