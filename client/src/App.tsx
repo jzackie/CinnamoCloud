@@ -9,6 +9,7 @@ import { LanguageProvider } from "@/lib/language-provider";
 import { UploadProgressProvider, useUploadProgress } from "@/hooks/use-upload-progress";
 import { ProtectedRoute } from "./lib/protected-route";
 import { BackgroundUploadProgress } from "@/components/background-upload-progress";
+import { WebSocketProvider } from "@/context/WebSocketProvider";
 import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
 import FolderPage from "@/pages/folder-page";
@@ -18,6 +19,7 @@ import CategoryPage from "@/pages/category-page";
 import ProfilePage from "@/pages/profile-page";
 import AchievementsPage from "@/pages/achievements-page";
 import NotFound from "@/pages/not-found";
+
 
 function Router() {
   return (
@@ -59,7 +61,9 @@ function App() {
           <LanguageProvider>
             <UploadProgressProvider>
               <TooltipProvider>
-                <AppContent />
+                <WebSocketProvider>
+                  <AppContent />
+                </WebSocketProvider>
               </TooltipProvider>
             </UploadProgressProvider>
           </LanguageProvider>
@@ -68,5 +72,4 @@ function App() {
     </QueryClientProvider>
   );
 }
-
 export default App;

@@ -24,7 +24,7 @@ const categoryConfig = {
   images: {
     icon: Image,
     title: "Images",
-    description: "Your kawaii image collection",
+    description: "Your image collection",
     color: "text-green-500",
     bgColor: "bg-green-100 dark:bg-green-900/30",
     mimeTypes: ["image/"]

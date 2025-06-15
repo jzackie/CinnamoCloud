@@ -286,7 +286,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="font-nunito font-bold text-lg">
-              Upload Kawaii Files
+              Upload Files
             </DialogTitle>
             <Button
               size="sm"

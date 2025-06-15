@@ -86,7 +86,7 @@ export default function ProfilePage() {
       queryClient.invalidateQueries({ queryKey: ["/api/user"] });
       toast({
         title: "Profile Updated!",
-        description: "Your kawaii profile has been saved successfully!",
+        description: "Your profile has been saved successfully!",
       });
     },
     onError: (error) => {

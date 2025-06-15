@@ -72,7 +72,7 @@ export const translations = {
     "sign_in": "Sign In",
     "sign_up": "Sign Up",
     "welcome_back": "Welcome back!",
-    "create_account": "Create your kawaii account",
+    "create_account": "Create your account",
     "password": "Password",
     "confirm_password_label": "Confirm Password",
     "passwords_no_match": "Passwords don't match",
@@ -598,7 +598,7 @@ export const translations = {
   },
   es: {
     "cinnamocloud": "CinnamoCloud",
-    "upload_files": "Subir Archivos Kawaii",
+    "upload_files": "Subir Archivos",
     "my_drive": "Mi Unidad",
     "favorites": "Favoritos",
     "trash": "Papelera",

@@ -6,7 +6,7 @@ interface CinnamorollLoaderProps {
 
 export function CinnamorollLoader({ 
   size = "md", 
-  message = "Loading kawaii files...", 
+  message = "Loading files...", 
   variant = "classic" 
 }: CinnamorollLoaderProps) {
   const sizeClasses = {

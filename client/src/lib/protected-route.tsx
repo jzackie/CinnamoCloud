@@ -7,7 +7,7 @@ export function ProtectedRoute({
   component: Component,
 }: {
   path: string;
-  component: () => React.JSX.Element;
+  component: () => React.JSX.Element | null;
 }) {
   const { user, isLoading } = useAuth();
 
@@ -17,7 +17,7 @@ export function ProtectedRoute({
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-cinnamoroll-50 to-kawaii-blue dark:from-kuromi-900 dark:to-kuromi-800">
           <CinnamorollLoader 
             size="lg" 
-            message="Authenticating your kawaii session..." 
+            message="Authenticating your session..." 
             variant="bounce" 
           />
         </div>
