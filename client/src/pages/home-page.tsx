@@ -76,6 +76,16 @@ export default function HomePage() {
     }
   });
 
+  // Fetch ALL folders for file movement (not filtered by current folder)
+  const { data: allFolders = [] } = useQuery<Folder[]>({
+    queryKey: ["/api/folders/all"],
+    queryFn: async () => {
+      const response = await fetch("/api/folders", { credentials: 'include' });
+      if (!response.ok) throw new Error('Failed to fetch all folders');
+      return response.json();
+    }
+  });
+
   const { data: files = [], isLoading: filesLoading } = useQuery<File[]>({
     queryKey: ["/api/files", currentFolderId],
     queryFn: async () => {
@@ -517,7 +527,7 @@ export default function HomePage() {
                       type="file"
                       onPreview={setSelectedFile}
                       viewMode={viewMode}
-                      availableFolders={folders}
+                      availableFolders={allFolders}
                     />
                   ))}
                 </>
@@ -529,7 +539,7 @@ export default function HomePage() {
                     type="file"
                     onPreview={setSelectedFile}
                     viewMode={viewMode}
-                    availableFolders={folders}
+                    availableFolders={allFolders}
                   />
                 ))
               )}

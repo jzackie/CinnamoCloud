@@ -24,7 +24,12 @@ export default function FavoritesPage() {
   });
 
   const { data: folders = [] } = useQuery<Folder[]>({
-    queryKey: ["/api/folders"],
+    queryKey: ["/api/folders/all"],
+    queryFn: async () => {
+      const response = await fetch("/api/folders", { credentials: 'include' });
+      if (!response.ok) throw new Error('Failed to fetch all folders');
+      return response.json();
+    }
   });
 
   const filteredFiles = favoriteFiles.filter(file =>
