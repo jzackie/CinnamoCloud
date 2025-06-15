@@ -11,7 +11,7 @@ interface WebSocketContextType {
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
 
 export function WebSocketProvider({ children }: { children: ReactNode }) {
-  const { messages, isConnected, sendMessage } = useWebSocket("ws://cinnamocloud.onrender.com");
+  const { messages, isConnected, sendMessage } = useWebSocket("wss://cinnamocloud.onrender.com");
 
   return (
     <WebSocketContext.Provider value={{ messages, isConnected, sendMessage }}>
