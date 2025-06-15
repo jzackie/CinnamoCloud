@@ -549,6 +549,45 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
                   >
                     <Trash2 className="w-4 h-4 text-red-500" />
                   </Button>
+                  
+                  {/* Context Menu for Rename/Move */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="p-1 hover:bg-cinnamoroll-100 dark:hover:bg-kuromi-800"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <MoreVertical className="w-4 h-4 text-cinnamoroll-500 dark:text-kuromi-400" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {type === "file" && (
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowMoveDialog(true);
+                          }}
+                        >
+                          <Move className="w-4 h-4 mr-2" />
+                          Move file
+                        </DropdownMenuItem>
+                      )}
+                      {type === "folder" && (
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setNewName(item.name);
+                            setShowRenameDialog(true);
+                          }}
+                        >
+                          <Edit3 className="w-4 h-4 mr-2" />
+                          Rename folder
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </>
               )}
             </div>
