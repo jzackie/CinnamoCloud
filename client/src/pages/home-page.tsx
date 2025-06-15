@@ -89,9 +89,10 @@ export default function HomePage() {
   const { data: files = [], isLoading: filesLoading } = useQuery<File[]>({
     queryKey: ["/api/files", currentFolderId],
     queryFn: async () => {
+      const baseUrl = import.meta.env.VITE_API_URL;
       const url = currentFolderId 
-        ? `/api/files?folderId=${currentFolderId}`
-        : "/api/files";
+        ? `${baseUrl}/api/files?folderId=${currentFolderId}`
+        : `${baseUrl}/api/files`;
       const response = await fetch(url, { credentials: 'include' });
       if (!response.ok) throw new Error('Failed to fetch files');
       return response.json();
