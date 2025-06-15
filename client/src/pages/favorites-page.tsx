@@ -154,6 +154,7 @@ export default function FavoritesPage() {
                 item={file}
                 type="file"
                 onPreview={setSelectedFile}
+                availableFolders={folders}
               />
             ))}
           </div>

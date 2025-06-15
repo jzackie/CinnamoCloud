@@ -23,15 +23,16 @@ import { useTheme } from "@/lib/theme-provider";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { File } from "@shared/schema";
+import { File, Folder } from "@shared/schema";
 
 interface TrashFileCardProps {
   file: File;
   onPermanentDelete: () => void;
   isPermanentDeleting: boolean;
+  availableFolders?: Folder[];
 }
 
-function TrashFileCard({ file, onPermanentDelete, isPermanentDeleting }: TrashFileCardProps) {
+function TrashFileCard({ file, onPermanentDelete, isPermanentDeleting, availableFolders = [] }: TrashFileCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { toast } = useToast();
 
@@ -139,6 +140,10 @@ export default function TrashPage() {
     queryKey: ["/api/files/deleted"],
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+  });
+
+  const { data: folders = [] } = useQuery<Folder[]>({
+    queryKey: ["/api/folders"],
   });
 
   const permanentDeleteMutation = useMutation({
@@ -307,6 +312,7 @@ export default function TrashPage() {
                 file={file}
                 onPermanentDelete={() => permanentDeleteMutation.mutate(file.id)}
                 isPermanentDeleting={permanentDeleteMutation.isPending}
+                availableFolders={folders}
               />
             ))}
           </div>
