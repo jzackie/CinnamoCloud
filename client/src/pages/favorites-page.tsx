@@ -105,8 +105,8 @@ export default function FavoritesPage() {
           <div className="flex flex-col items-center justify-center py-16">
             <CinnamorollLoader 
               size="lg" 
-              message="Loading your favorite kawaii files..." 
-              variant="drift" 
+              message="Loading your favorite files..." 
+              variant="pulse" 
             />
           </div>
         ) : filteredFiles.length > 0 ? (

@@ -81,11 +81,11 @@ function TrashFileCard({ file, onPermanentDelete, isPermanentDeleting }: TrashFi
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="p-4">
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center text-center min-w-0">
           <div className="text-red-400 dark:text-red-300 mb-3 opacity-60">
             {getFileIcon(file.mimeType)}
           </div>
-          <h3 className="font-medium text-sm text-gray-700 dark:text-gray-300 mb-1 line-clamp-2">
+          <h3 className="font-medium text-sm text-gray-700 dark:text-gray-300 mb-1 line-clamp-2 px-1 break-words w-full">
             {file.originalName}
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -93,7 +93,7 @@ function TrashFileCard({ file, onPermanentDelete, isPermanentDeleting }: TrashFi
           </p>
         </div>
 
-        <div className={`transition-opacity duration-200 mt-3 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="transition-opacity duration-200 mt-3 opacity-100 sm:opacity-0 sm:group-hover:opacity-100">
           <div className="flex justify-between items-center">
             <Button
               size="sm"
@@ -261,8 +261,8 @@ export default function TrashPage() {
           <div className="flex flex-col items-center justify-center py-16">
             <CinnamorollLoader 
               size="lg" 
-              message="Loading deleted kawaii files..." 
-              variant="cloud" 
+              message="Loading deleted files..." 
+              variant="bounce" 
             />
           </div>
         ) : filteredFiles.length > 0 ? (
