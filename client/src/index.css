@@ -109,7 +109,7 @@
 
   .cloud-shape {
     position: relative;
-    border-radius: 30px;
+    border-radius: 100px;
     transform-origin: center;
     overflow: visible;
   }
@@ -117,10 +117,10 @@
   .cloud-shape::before {
     content: '';
     position: absolute;
-    top: -40%;
-    left: 15%;
-    width: 40%;
-    height: 55%;
+    top: -20%;
+    left: 10%;
+    width: 50%;
+    height: 80%;
     border-radius: 50%;
     background: inherit;
     z-index: -1;
@@ -129,10 +129,10 @@
   .cloud-shape::after {
     content: '';
     position: absolute;
-    top: -25%;
-    right: 15%;
-    width: 35%;
-    height: 45%;
+    top: -15%;
+    right: 20%;
+    width: 50%;
+    height: 70%;
     border-radius: 50%;
     background: inherit;
     z-index: -1;
@@ -141,10 +141,10 @@
   .cloud-shape-enhanced::before {
     content: '';
     position: absolute;
-    top: -45%;
+    top: -20%;
     left: 10%;
-    width: 45%;
-    height: 60%;
+    width: 50%;
+    height: 80%;
     border-radius: 50%;
     background: inherit;
     z-index: -2;
@@ -153,10 +153,10 @@
   .cloud-shape-enhanced::after {
     content: '';
     position: absolute;
-    top: -30%;
-    right: 10%;
-    width: 40%;
-    height: 50%;
+    top: -15%;
+    right: 20%;
+    width: 50%;
+    height: 70%;
     border-radius: 50%;
     background: inherit;
     z-index: -2;
@@ -166,7 +166,7 @@
     position: relative;
     background: inherit;
     border-radius: 40px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgb(0, 0, 0);
   }
 
   .cloud-shape-3d::before {

@@ -97,7 +97,7 @@ export default function CategoryPage() {
               </Button>
               <div className="cloud-shape w-10 h-6 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
               <h1 className="font-nunito font-bold text-xl text-cinnamoroll-600 dark:text-kuromi-400">
-                CinnamoCloud
+                CinnaCloud
               </h1>
             </div>
 

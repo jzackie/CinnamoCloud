@@ -598,7 +598,7 @@ export const translations = {
   },
   es: {
     "cinnamocloud": "CinnamoCloud",
-    "upload_files": "Subir Archivos",
+    "upload_files": "Subir Archivos Kawaii",
     "my_drive": "Mi Unidad",
     "favorites": "Favoritos",
     "trash": "Papelera",
