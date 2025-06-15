@@ -27,6 +27,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
     completeUpload, 
     setActiveUpload, 
     removeActiveUpload,
+    cancelUpload,
     uploads,
     activeUploads 
   } = useUploadProgress();
@@ -106,7 +107,14 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
         if (event.lengthComputable) {
           const percentComplete = (event.loaded / event.total) * 100;
           updateProgress(file.name, percentComplete);
+          console.log(`Upload progress for ${file.name}: ${Math.round(percentComplete)}%`);
         }
+      });
+
+      // Add loadstart event to ensure progress tracking starts
+      xhr.upload.addEventListener('loadstart', () => {
+        console.log(`Upload started for ${file.name}`);
+        updateProgress(file.name, 1); // Set to 1% to show it started
       });
 
       xhr.addEventListener('load', () => {
@@ -134,17 +142,20 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
         }
       });
 
-      xhr.addEventListener('error', () => {
+      xhr.addEventListener('error', (event) => {
+        console.error(`Upload error for ${file.name}:`, event);
         removeActiveUpload(file.name);
         reject(new Error(`Network error uploading ${file.name}`));
       });
 
-      xhr.addEventListener('timeout', () => {
+      xhr.addEventListener('timeout', (event) => {
+        console.error(`Upload timeout for ${file.name}:`, event);
         removeActiveUpload(file.name);
         reject(new Error(`Upload timeout for ${file.name}`));
       });
 
-      xhr.addEventListener('abort', () => {
+      xhr.addEventListener('abort', (event) => {
+        console.log(`Upload cancelled for ${file.name}:`, event);
         removeActiveUpload(file.name);
         reject(new Error(`Upload cancelled for ${file.name}`));
       });
@@ -157,9 +168,14 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
 
   // Enhanced upload function that handles individual file completion
   const uploadFileIndividually = useCallback(async (file: File) => {
+    console.log(`Starting upload for ${file.name} (${Math.round(file.size / 1024 / 1024)}MB)`);
+    
     try {
       // Add to upload tracking first
       addUpload(file.name);
+      
+      // Initialize progress to 0%
+      updateProgress(file.name, 0);
       
       // Start the upload
       const result = await uploadFileWithProgress(file);
@@ -176,6 +192,8 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
           title: "File Uploaded",
           description: `${file.name} uploaded successfully!`,
         });
+        
+        console.log(`Upload completed successfully for ${file.name}`);
       }
       
       return result;
@@ -184,15 +202,16 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       removeActiveUpload(file.name);
       
       // Handle individual file error
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       toast({
         title: "Upload Failed",
-        description: `Failed to upload ${file.name}`,
+        description: `Failed to upload ${file.name}: ${errorMessage}`,
         variant: "destructive",
       });
-      console.error('Upload error for', file.name, error);
+      console.error('Upload error for', file.name, errorMessage, error);
       throw error;
     }
-  }, [queryClient, toast, uploadFileWithProgress, addUpload, completeUpload, removeActiveUpload]);
+  }, [queryClient, toast, uploadFileWithProgress, addUpload, completeUpload, removeActiveUpload, updateProgress]);
 
   const uploadMutation = useMutation({
     mutationFn: async (files: File[]) => {
