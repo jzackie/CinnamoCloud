@@ -295,14 +295,12 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                 <h5 className="font-nunito font-semibold text-sm text-gray-700 dark:text-gray-300">
                   Selected Files ({selectedFiles.length})
                 </h5>
-                {Object.keys(activeUploads).length > 0 && (
+                {activeUploads.size > 0 && (
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => {
-                      Object.values(activeUploads).forEach(xhr => xhr.abort());
-                      setActiveUploads({});
-                      setUploadProgress({});
+                      activeUploads.forEach(xhr => xhr.abort());
                     }}
                     className="text-xs"
                   >
@@ -324,22 +322,22 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                         {formatFileSize(file.size)}
                       </p>
                       {/* Progress bar for uploads */}
-                      {uploadProgress[file.name] !== undefined && (
+                      {uploads.find(u => u.fileName === file.name) && (
                         <div className="mt-1">
                           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                             <div 
                               className={`h-1.5 rounded-full transition-all duration-300 ${
-                                completedUploads.includes(file.name) 
+                                uploads.find(u => u.fileName === file.name)?.isComplete
                                   ? "bg-green-500" 
                                   : "bg-gradient-to-r from-kawaii-pink to-kawaii-purple"
                               }`}
-                              style={{ width: `${uploadProgress[file.name]}%` }}
+                              style={{ width: `${uploads.find(u => u.fileName === file.name)?.progress || 0}%` }}
                             ></div>
                           </div>
                           <p className="text-xs text-gray-500 mt-1">
-                            {completedUploads.includes(file.name) 
+                            {uploads.find(u => u.fileName === file.name)?.isComplete
                               ? "✓ Upload complete" 
-                              : `${Math.round(uploadProgress[file.name])}% uploaded`
+                              : `${Math.round(uploads.find(u => u.fileName === file.name)?.progress || 0)}% uploaded`
                             }
                           </p>
                         </div>
@@ -359,7 +357,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                 ))}
               </div>
               <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2">
-                {Object.keys(activeUploads).length > 0 && (
+                {activeUploads.size > 0 && (
                   <Button
                     onClick={onClose}
                     variant="outline"
