@@ -80,7 +80,7 @@ export default function HomePage() {
   const { data: allFolders = [] } = useQuery<Folder[]>({
     queryKey: ["/api/folders/all"],
     queryFn: async () => {
-      const response = await fetch("/api/folders", { credentials: 'include' });
+      const response = await fetch("/api/folders/all", { credentials: 'include' });
       if (!response.ok) throw new Error('Failed to fetch all folders');
       return response.json();
     }

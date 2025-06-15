@@ -162,6 +162,12 @@ export function registerRoutes(app: Express): Server {
     res.json(folders);
   });
 
+  // Get all folders (flat structure for file movement)
+  app.get("/api/folders/all", requireAuth, async (req, res) => {
+    const allFolders = await storage.getUserFolders(req.user!.id); // Get all folders without parent filtering
+    res.json(allFolders);
+  });
+
   app.post("/api/folders", requireAuth, async (req, res) => {
     try {
       const folderData = insertFolderSchema.parse(req.body);

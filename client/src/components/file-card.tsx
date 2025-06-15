@@ -599,29 +599,35 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
       {/* Rename Folder Dialog */}
       {showRenameDialog && (
         <Dialog open={showRenameDialog} onOpenChange={setShowRenameDialog}>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-2 border-cinnamoroll-200 dark:border-kuromi-600 shadow-xl">
             <DialogHeader>
-              <DialogTitle>Rename Folder</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-cinnamoroll-600 dark:text-kuromi-400 font-nunito font-bold">
+                Rename Folder
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 dark:text-gray-300">
                 Enter a new name for this folder.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
+                <Label htmlFor="name" className="text-right text-cinnamoroll-600 dark:text-kuromi-400 font-medium">
                   Name
                 </Label>
                 <Input
                   id="name"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="col-span-3"
+                  className="col-span-3 border-2 border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400 rounded-xl bg-white/50 dark:bg-gray-700/50"
                   placeholder="Enter folder name"
                 />
               </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowRenameDialog(false)}>
+            <DialogFooter className="gap-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowRenameDialog(false)}
+                className="border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl"
+              >
                 Cancel
               </Button>
               <Button 
@@ -631,8 +637,9 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
                   }
                 }}
                 disabled={renameFolderMutation.isPending || !newName.trim()}
+                className="gradient-cinnamoroll dark:gradient-kuromi text-white hover:shadow-lg rounded-xl font-medium"
               >
-                Rename
+                {renameFolderMutation.isPending ? "Renaming..." : "Rename"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -642,35 +649,47 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
       {/* Move File Dialog */}
       {showMoveDialog && (
         <Dialog open={showMoveDialog} onOpenChange={setShowMoveDialog}>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-2 border-cinnamoroll-200 dark:border-kuromi-600 shadow-xl">
             <DialogHeader>
-              <DialogTitle>Move File</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-cinnamoroll-600 dark:text-kuromi-400 font-nunito font-bold">
+                Move File
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 dark:text-gray-300">
                 Select a destination folder for this file.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="folder" className="text-right">
+                <Label htmlFor="folder" className="text-right text-cinnamoroll-600 dark:text-kuromi-400 font-medium">
                   Folder
                 </Label>
                 <Select value={selectedFolderId} onValueChange={setSelectedFolderId}>
-                  <SelectTrigger className="col-span-3">
+                  <SelectTrigger className="col-span-3 border-2 border-cinnamoroll-200 dark:border-kuromi-600 focus:border-cinnamoroll-400 dark:focus:border-kuromi-400 rounded-xl bg-white/50 dark:bg-gray-700/50">
                     <SelectValue placeholder="Select destination" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="main">Main Drive</SelectItem>
+                  <SelectContent className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-2 border-cinnamoroll-200 dark:border-kuromi-600 rounded-xl shadow-xl">
+                    <SelectItem value="main" className="hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/30 rounded-lg">
+                      📁 Main Drive
+                    </SelectItem>
                     {availableFolders.map((folder) => (
-                      <SelectItem key={folder.id} value={folder.id.toString()}>
-                        {folder.name}
+                      <SelectItem 
+                        key={folder.id} 
+                        value={folder.id.toString()}
+                        className="hover:bg-cinnamoroll-50 dark:hover:bg-kuromi-900/30 rounded-lg"
+                      >
+                        {folder.parentId ? "📂" : "📁"} {folder.parentId ? "  " : ""}{folder.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowMoveDialog(false)}>
+            <DialogFooter className="gap-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowMoveDialog(false)}
+                className="border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl"
+              >
                 Cancel
               </Button>
               <Button 
@@ -679,8 +698,9 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
                   moveFileMutation.mutate({ fileId: item.id, folderId: targetFolderId });
                 }}
                 disabled={moveFileMutation.isPending || !selectedFolderId}
+                className="gradient-cinnamoroll dark:gradient-kuromi text-white hover:shadow-lg rounded-xl font-medium"
               >
-                Move
+                {moveFileMutation.isPending ? "Moving..." : "Move"}
               </Button>
             </DialogFooter>
           </DialogContent>
