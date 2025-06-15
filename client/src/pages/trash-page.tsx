@@ -186,7 +186,7 @@ export default function TrashPage() {
             </div>
 
             {/* Search Bar */}
-            <div className="flex-1 max-w-lg mx-8">
+            <div className="flex-1 max-w-lg mx-2 sm:mx-4 lg:mx-8 hidden md:block">
               <div className="relative">
                 <Input
                   type="text"
