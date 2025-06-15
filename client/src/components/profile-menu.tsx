@@ -26,7 +26,7 @@ export function ProfileMenu() {
 
   const downloadResetKey = async () => {
     try {
-      const response = await fetch('/api/download-reset-key', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/download-reset-key`, {
         credentials: 'include',
       });
       

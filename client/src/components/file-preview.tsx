@@ -17,7 +17,7 @@ export function FilePreview({ file, open, onClose }: FilePreviewProps) {
 
   const downloadFile = async () => {
     try {
-      const response = await fetch(`/api/files/${file.id}/download`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/files/${file.id}/download`, {
         credentials: "include",
       });
       

@@ -145,7 +145,7 @@ export default function TrashPage() {
   const { data: folders = [] } = useQuery<Folder[]>({
     queryKey: ["/api/folders/all"],
     queryFn: async () => {
-      const response = await fetch("/api/folders/all", { credentials: 'include' });
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/folders/all`, { credentials: 'include' });
       if (!response.ok) throw new Error('Failed to fetch all folders');
       return response.json();
     }
