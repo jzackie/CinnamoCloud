@@ -227,6 +227,15 @@ export class DatabaseStorage implements IStorage {
       .where(and(eq(files.id, id), eq(files.userId, userId)));
   }
 
+  async moveFile(id: number, userId: number, targetFolderId: number | null): Promise<File | undefined> {
+    const [updatedFile] = await db
+      .update(files)
+      .set({ folderId: targetFolderId })
+      .where(and(eq(files.id, id), eq(files.userId, userId)))
+      .returning();
+    return updatedFile || undefined;
+  }
+
   // Achievement operations
   async getAchievements(): Promise<Achievement[]> {
     return await db.select().from(achievements);

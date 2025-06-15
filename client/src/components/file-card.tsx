@@ -1,6 +1,31 @@
 import { useState, memo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { 
   Star, 
   Eye, 
@@ -11,7 +36,10 @@ import {
   FileVideo, 
   File as FileIcon,
   Folder,
-  RotateCcw
+  RotateCcw,
+  Edit3,
+  Move,
+  MoreVertical
 } from "lucide-react";
 import { File, Folder as FolderType } from "@shared/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -25,10 +53,15 @@ interface FileCardProps {
   onFolderClick?: (folder: FolderType) => void;
   showRestoreActions?: boolean;
   viewMode?: "grid" | "list";
+  availableFolders?: FolderType[];
 }
 
-const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, showRestoreActions = false, viewMode = "grid" }: FileCardProps) {
+const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, showRestoreActions = false, viewMode = "grid", availableFolders = [] }: FileCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [showRenameDialog, setShowRenameDialog] = useState(false);
+  const [showMoveDialog, setShowMoveDialog] = useState(false);
+  const [newName, setNewName] = useState(item.name || (item as File).originalName);
+  const [selectedFolderId, setSelectedFolderId] = useState<string>("");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -99,6 +132,49 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
       toast({
         title: "Error",
         description: `Failed to restore ${type}`,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const renameFolderMutation = useMutation({
+    mutationFn: async ({ id, name }: { id: number; name: string }) => {
+      await apiRequest("PUT", `/api/folders/${id}`, { name });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/folders"] });
+      setShowRenameDialog(false);
+      toast({
+        title: "Success",
+        description: "Folder renamed successfully!",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to rename folder",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const moveFileMutation = useMutation({
+    mutationFn: async ({ fileId, folderId }: { fileId: number; folderId: number | null }) => {
+      await apiRequest("PUT", `/api/files/${fileId}/move`, { folderId });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/files"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/folders"] });
+      setShowMoveDialog(false);
+      toast({
+        title: "Success",
+        description: "File moved successfully!",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to move file",
         variant: "destructive",
       });
     },
