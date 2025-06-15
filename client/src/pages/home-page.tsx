@@ -64,12 +64,14 @@ export default function HomePage() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const { data: folders = [], isLoading: foldersLoading } = useQuery<Folder[]>({
     queryKey: ["/api/folders", currentFolderId],
     queryFn: async () => {
       const url = currentFolderId 
-        ? `/api/folders?parentId=${currentFolderId}`
-        : "/api/folders";
+        ? `${API_BASE_URL}/api/folders?parentId=${currentFolderId}`
+        : `${API_BASE_URL}/api/folders`;
       const response = await fetch(url, { credentials: 'include' });
       if (!response.ok) throw new Error('Failed to fetch folders');
       return response.json();
@@ -80,7 +82,7 @@ export default function HomePage() {
   const { data: allFolders = [] } = useQuery<Folder[]>({
     queryKey: ["/api/folders/all"],
     queryFn: async () => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/folders/all`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/api/folders/all`, { credentials: 'include' });
       if (!response.ok) throw new Error('Failed to fetch all folders');
       return response.json();
     }
@@ -89,10 +91,9 @@ export default function HomePage() {
   const { data: files = [], isLoading: filesLoading } = useQuery<File[]>({
     queryKey: ["/api/files", currentFolderId],
     queryFn: async () => {
-      const baseUrl = import.meta.env.VITE_API_URL;
       const url = currentFolderId 
-        ? `${baseUrl}/api/files?folderId=${currentFolderId}`
-        : `${baseUrl}/api/files`;
+        ? `${API_BASE_URL}/api/files?folderId=${currentFolderId}`
+        : `${API_BASE_URL}/api/files`;
       const response = await fetch(url, { credentials: 'include' });
       if (!response.ok) throw new Error('Failed to fetch files');
       return response.json();

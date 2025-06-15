@@ -48,7 +48,7 @@ export function FilePreview({ file, open, onClose }: FilePreviewProps) {
   };
 
   const renderPreview = () => {
-    const previewUrl = `/api/files/${file.id}/preview`;
+    const previewUrl = `${import.meta.env.VITE_API_URL}/api/files/${file.id}/preview`;
     
     if (file.mimeType.startsWith('image/')) {
       return (
