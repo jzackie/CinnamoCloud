@@ -221,8 +221,8 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
             </div>
           </div>
 
-          {/* List view actions */}
-          <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          {/* List view actions - always visible on mobile, hover on desktop */}
+          <div className="flex items-center space-x-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
             {type === "file" && !showRestoreActions && (
               <>
                 <Button
@@ -339,7 +339,7 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
           </p>
         </div>
 
-        <div className={`transition-opacity duration-200 mt-3 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="transition-opacity duration-200 mt-3 opacity-100 sm:opacity-0 sm:group-hover:opacity-100">
           <div className="flex justify-between items-center">
             <div className="flex space-x-1">
               {type === "file" && !showRestoreActions && (
