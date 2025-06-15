@@ -207,15 +207,15 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
               </div>
             )}
             
-            <div className="flex-1 min-w-0">
-              <h3 className="font-nunito font-semibold text-sm text-gray-800 dark:text-gray-200 truncate">
+            <div className="flex-1 min-w-0 max-w-full">
+              <h3 className="font-nunito font-semibold text-sm text-gray-800 dark:text-gray-200 break-words line-clamp-1 pr-2">
                 {type === "folder" ? item.name : (item as File).originalName}
               </h3>
               {type === "file" && (
-                <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
-                  <span>{formatFileSize((item as File).size)}</span>
+                <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
+                  <span className="truncate">{formatFileSize((item as File).size)}</span>
                   <span>•</span>
-                  <span>{new Date((item as File).createdAt).toLocaleDateString()}</span>
+                  <span className="truncate">{new Date((item as File).createdAt).toLocaleDateString()}</span>
                 </div>
               )}
             </div>
@@ -327,8 +327,8 @@ const FileCard = memo(function FileCard({ item, type, onPreview, onFolderClick, 
           )}
         </div>
 
-        <div className="text-center">
-          <h3 className="font-nunito font-medium text-sm text-gray-700 dark:text-gray-300 truncate">
+        <div className="text-center min-w-0">
+          <h3 className="font-nunito font-medium text-sm text-gray-700 dark:text-gray-300 break-words line-clamp-2 px-1">
             {type === "folder" ? item.name : (item as File).originalName}
           </h3>
           <p className="text-xs text-gray-500 mt-1">
