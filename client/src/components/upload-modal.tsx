@@ -200,6 +200,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
     } catch (error) {
       // Remove from upload tracking on error
       removeActiveUpload(file.name);
+      cancelUpload(file.name);
       
       // Handle individual file error
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -211,7 +212,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       console.error('Upload error for', file.name, errorMessage, error);
       throw error;
     }
-  }, [queryClient, toast, uploadFileWithProgress, addUpload, completeUpload, removeActiveUpload, updateProgress]);
+  }, [queryClient, toast, uploadFileWithProgress, addUpload, completeUpload, removeActiveUpload, updateProgress, cancelUpload]);
 
   const uploadMutation = useMutation({
     mutationFn: async (files: File[]) => {
