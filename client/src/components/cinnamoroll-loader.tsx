@@ -31,7 +31,7 @@ export function CinnamorollLoader({
     return (
       <div className="flex flex-col items-center justify-center space-y-4 p-6">
         <div className={`${sizeClasses[size]} relative`}>
-          <svg className="w-full h-full animate-spin" viewBox="0 0 100 100">
+          <svg className="w-full h-full" viewBox="0 0 100 100">
             <circle
               cx="50"
               cy="50"
@@ -49,11 +49,12 @@ export function CinnamorollLoader({
               strokeWidth={strokeWidths[size]}
               fill="none"
               strokeLinecap="round"
-              strokeDasharray="188.4"
-              strokeDashoffset="47.1"
-              className="text-red-400"
+              strokeDasharray="62.8"
+              strokeDashoffset="251.2"
+              className="text-red-400 animate-spin"
               style={{
-                animation: 'spin 1s linear infinite'
+                transformOrigin: '50% 50%',
+                animationDuration: '1s'
               }}
             />
           </svg>
@@ -69,7 +70,7 @@ export function CinnamorollLoader({
     return (
       <div className="flex flex-col items-center justify-center space-y-4 p-6">
         <div className={`${sizeClasses[size]} relative`}>
-          <svg className="w-full h-full animate-spin" viewBox="0 0 100 100">
+          <svg className="w-full h-full" viewBox="0 0 100 100">
             <circle
               cx="50"
               cy="50"
@@ -87,11 +88,12 @@ export function CinnamorollLoader({
               strokeWidth={strokeWidths[size]}
               fill="none"
               strokeLinecap="round"
-              strokeDasharray="188.4"
-              strokeDashoffset="47.1"
-              className="text-yellow-400"
+              strokeDasharray="62.8"
+              strokeDashoffset="251.2"
+              className="text-yellow-400 animate-spin"
               style={{
-                animation: 'spin 0.8s linear infinite'
+                transformOrigin: '50% 50%',
+                animationDuration: '0.8s'
               }}
             />
           </svg>
@@ -107,7 +109,7 @@ export function CinnamorollLoader({
   return (
     <div className="flex flex-col items-center justify-center space-y-4 p-6">
       <div className={`${sizeClasses[size]} relative`}>
-        <svg className="w-full h-full animate-spin" viewBox="0 0 100 100">
+        <svg className="w-full h-full" viewBox="0 0 100 100">
           <circle
             cx="50"
             cy="50"
@@ -125,11 +127,12 @@ export function CinnamorollLoader({
             strokeWidth={strokeWidths[size]}
             fill="none"
             strokeLinecap="round"
-            strokeDasharray="188.4"
-            strokeDashoffset="47.1"
-            className="text-cinnamoroll-500 dark:text-kuromi-400"
+            strokeDasharray="62.8"
+            strokeDashoffset="251.2"
+            className="text-cinnamoroll-500 dark:text-kuromi-400 animate-spin"
             style={{
-              animation: 'spin 1.2s linear infinite'
+              transformOrigin: '50% 50%',
+              animationDuration: '1.2s'
             }}
           />
         </svg>
