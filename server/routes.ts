@@ -34,8 +34,17 @@ const storage_multer = multer.diskStorage({
 const upload = multer({ 
   storage: storage_multer,
   limits: { 
-    fileSize: 500 * 1024 * 1024, // 500MB limit for large videos
-    fieldSize: 10 * 1024 * 1024   // 10MB field size limit
+    fileSize: 1000 * 1024 * 1024, // 1GB limit for large videos
+    fieldSize: 25 * 1024 * 1024,  // 25MB field size limit
+    fields: 10,                   // Maximum number of fields
+    files: 20                     // Maximum number of files
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept all file types but log large files
+    if (file.size && file.size > 100 * 1024 * 1024) {
+      console.log(`Uploading large file: ${file.originalname} (${Math.round(file.size / 1024 / 1024)}MB)`);
+    }
+    cb(null, true);
   }
 });
 
@@ -252,8 +261,11 @@ export function registerRoutes(app: Express): Server {
   app.post("/api/files", requireAuth, upload.single('file'), async (req, res) => {
     try {
       if (!req.file) {
+        console.error('No file in upload request');
         return res.status(400).json({ message: "No file uploaded" });
       }
+
+      console.log(`Processing upload: ${req.file.originalname} (${Math.round(req.file.size / 1024 / 1024)}MB)`);
 
       const fileData = {
         name: req.file.filename,
@@ -265,9 +277,29 @@ export function registerRoutes(app: Express): Server {
       };
 
       const file = await storage.createFile(req.user!.id, fileData);
-      res.status(201).json(file);
+      
+      console.log(`Upload completed: ${req.file.originalname} -> ID ${file.id}`);
+      
+      // Ensure response is properly formatted
+      res.status(201).json({
+        id: file.id,
+        name: file.name,
+        originalName: file.originalName,
+        mimeType: file.mimeType,
+        size: file.size,
+        path: file.path,
+        folderId: file.folderId,
+        userId: file.userId,
+        isFavorite: file.isFavorite,
+        isDeleted: file.isDeleted,
+        uploadedAt: file.uploadedAt
+      });
     } catch (error) {
-      res.status(400).json({ message: "File upload failed" });
+      console.error('File upload error:', error);
+      res.status(500).json({ 
+        message: "File upload failed",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
     }
   });
 

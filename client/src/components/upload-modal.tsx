@@ -98,6 +98,9 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       // Track this upload
       setActiveUpload(file.name, xhr);
 
+      // Set timeout for large files (5 minutes)
+      xhr.timeout = 5 * 60 * 1000;
+
       // Track upload progress
       xhr.upload.addEventListener('progress', (event) => {
         if (event.lengthComputable) {
@@ -107,25 +110,41 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       });
 
       xhr.addEventListener('load', () => {
+        console.log(`Upload load event for ${file.name}:`, {
+          status: xhr.status,
+          responseText: xhr.responseText.substring(0, 200)
+        });
+
         // Remove from active uploads
         removeActiveUpload(file.name);
 
-        if (xhr.status === 200) {
-          updateProgress(file.name, 100);
-          resolve(JSON.parse(xhr.responseText));
+        if (xhr.status === 200 || xhr.status === 201) {
+          try {
+            updateProgress(file.name, 100);
+            const response = JSON.parse(xhr.responseText);
+            console.log(`Upload successful for ${file.name}:`, response);
+            resolve(response);
+          } catch (parseError) {
+            console.error('Failed to parse upload response:', parseError, xhr.responseText);
+            reject(new Error(`Invalid response for ${file.name}`));
+          }
         } else {
-          reject(new Error(`Failed to upload ${file.name}`));
+          console.error(`Upload failed for ${file.name}:`, xhr.status, xhr.responseText);
+          reject(new Error(`Upload failed with status ${xhr.status} for ${file.name}`));
         }
       });
 
       xhr.addEventListener('error', () => {
-        // Remove from active uploads
         removeActiveUpload(file.name);
-        reject(new Error(`Failed to upload ${file.name}`));
+        reject(new Error(`Network error uploading ${file.name}`));
+      });
+
+      xhr.addEventListener('timeout', () => {
+        removeActiveUpload(file.name);
+        reject(new Error(`Upload timeout for ${file.name}`));
       });
 
       xhr.addEventListener('abort', () => {
-        // Remove from active uploads
         removeActiveUpload(file.name);
         reject(new Error(`Upload cancelled for ${file.name}`));
       });
@@ -134,48 +153,62 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       xhr.withCredentials = true;
       xhr.send(formData);
     });
-  }, [folderId]);
+  }, [folderId, setActiveUpload, updateProgress, removeActiveUpload]);
 
   // Enhanced upload function that handles individual file completion
   const uploadFileIndividually = useCallback(async (file: File) => {
     try {
+      // Add to upload tracking first
       addUpload(file.name);
+      
+      // Start the upload
       const result = await uploadFileWithProgress(file);
       
-      // Mark this file as completed in global state
-      completeUpload(file.name);
-      
-      // Invalidate queries for immediate UI update
-      queryClient.invalidateQueries({ queryKey: ["/api/files"] });
-      
-      // Show individual success toast
-      toast({
-        title: "File Uploaded",
-        description: `${file.name} uploaded successfully!`,
-      });
+      // Only complete if upload was successful
+      if (result) {
+        completeUpload(file.name);
+        
+        // Invalidate queries for immediate UI update
+        queryClient.invalidateQueries({ queryKey: ["/api/files"] });
+        
+        // Show individual success toast
+        toast({
+          title: "File Uploaded",
+          description: `${file.name} uploaded successfully!`,
+        });
+      }
       
       return result;
     } catch (error) {
+      // Remove from upload tracking on error
+      removeActiveUpload(file.name);
+      
       // Handle individual file error
       toast({
         title: "Upload Failed",
         description: `Failed to upload ${file.name}`,
         variant: "destructive",
       });
+      console.error('Upload error for', file.name, error);
       throw error;
     }
-  }, [queryClient, toast, uploadFileWithProgress, addUpload, completeUpload]);
+  }, [queryClient, toast, uploadFileWithProgress, addUpload, completeUpload, removeActiveUpload]);
 
   const uploadMutation = useMutation({
     mutationFn: async (files: File[]) => {
-      // Start all uploads immediately, don't wait for all to complete
-      const uploadPromises = files.map(file => uploadFileIndividually(file));
+      // Start uploads and fire-and-forget (no waiting)
+      files.forEach(file => {
+        uploadFileIndividually(file).catch(error => {
+          console.error('Background upload failed:', file.name, error);
+        });
+      });
       
-      // Return immediately, uploads continue in background
-      return uploadPromises;
+      // Return immediately - uploads run in background
+      return files;
     },
     onSuccess: () => {
-      // Don't close modal immediately - let uploads complete in background
+      // Clear selected files and show toast
+      setSelectedFiles([]);
       toast({
         title: "Upload Started",
         description: "Files are uploading in the background",
@@ -183,7 +216,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
     },
     onError: (error) => {
       toast({
-        title: "Upload Error",
+        title: "Upload Error", 
         description: error.message || "Failed to start uploads",
         variant: "destructive",
       });
