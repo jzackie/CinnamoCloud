@@ -6,7 +6,7 @@ import { FileCard } from "@/components/file-card";
 import { FilePreview } from "@/components/file-preview";
 import { ProfileMenu } from "@/components/profile-menu";
 import { CinnamorollLoader, CinnamorollSkeleton } from "@/components/cinnamoroll-loader";
-import { Search, Star, Moon, Sun, ArrowLeft } from "lucide-react";
+import { Search, Star, Moon, Sun, ArrowLeft, AlertTriangle } from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
 import { useLocation } from "wouter";
 import { File } from "@shared/schema";
@@ -17,8 +17,10 @@ export default function FavoritesPage() {
   const [, setLocation] = useLocation();
   const { theme, toggleTheme } = useTheme();
 
-  const { data: favoriteFiles = [], isLoading } = useQuery<File[]>({
+  const { data: favoriteFiles = [], isLoading, error } = useQuery<File[]>({
     queryKey: ["/api/files/favorites"],
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   const filteredFiles = favoriteFiles.filter(file =>
@@ -103,13 +105,42 @@ export default function FavoritesPage() {
         </div>
 
         {/* Files Grid */}
-        {isLoading ? (
+        {error ? (
           <div className="flex flex-col items-center justify-center py-16">
-            <CinnamorollLoader 
-              size="lg" 
-              message="Loading your favorite files..." 
-              variant="pulse" 
-            />
+            <div className="p-6 bg-red-100 dark:bg-red-900/30 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+              <AlertTriangle className="w-12 h-12 text-red-500" />
+            </div>
+            <h3 className="font-nunito font-semibold text-xl text-gray-800 dark:text-gray-200 mb-2">
+              Failed to load favorites
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 text-center max-w-md">
+              We couldn't load your favorite files. Please try refreshing the page.
+            </p>
+            <Button 
+              onClick={() => window.location.reload()} 
+              className="mt-4 bg-cinnamoroll-500 hover:bg-cinnamoroll-600 dark:bg-kuromi-500 dark:hover:bg-kuromi-600"
+            >
+              Refresh Page
+            </Button>
+          </div>
+        ) : isLoading ? (
+          <div className="space-y-6">
+            <div className="flex flex-col items-center justify-center py-8">
+              <CinnamorollLoader 
+                size="md" 
+                message="Loading your favorite files..." 
+                variant="pulse" 
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-gray-200 dark:bg-gray-700 rounded-lg h-32 mb-2"></div>
+                  <div className="bg-gray-200 dark:bg-gray-700 rounded h-4 mb-1"></div>
+                  <div className="bg-gray-200 dark:bg-gray-700 rounded h-3 w-3/4"></div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : filteredFiles.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
