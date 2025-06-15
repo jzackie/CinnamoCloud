@@ -26,18 +26,13 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
   // Clean up when modal closes or component unmounts
   useEffect(() => {
     if (!open) {
-      // Cancel any active uploads
-      Object.values(activeUploads).forEach(xhr => {
-        if (xhr.readyState !== XMLHttpRequest.DONE) {
-          xhr.abort();
-        }
-      });
-      setActiveUploads({});
-      setUploadProgress({});
+      // Don't cancel uploads when modal closes - let them continue in background
+      // Only reset UI state
       setSelectedFiles([]);
       setDragActive(false);
+      setCompletedUploads([]);
     }
-  }, [open, activeUploads]);
+  }, [open]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -155,32 +150,59 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
     });
   }, [folderId]);
 
+  // Track completed uploads to show progress
+  const [completedUploads, setCompletedUploads] = useState<string[]>([]);
+
+  // Enhanced upload function that handles individual file completion
+  const uploadFileIndividually = useCallback(async (file: File) => {
+    try {
+      const result = await uploadFileWithProgress(file);
+      
+      // Mark this file as completed
+      setCompletedUploads(prev => [...prev, file.name]);
+      
+      // Invalidate queries for immediate UI update
+      queryClient.invalidateQueries({ queryKey: ["/api/files"] });
+      
+      // Show individual success toast
+      toast({
+        title: "File Uploaded",
+        description: `${file.name} uploaded successfully!`,
+      });
+      
+      return result;
+    } catch (error) {
+      // Handle individual file error
+      toast({
+        title: "Upload Failed",
+        description: `Failed to upload ${file.name}`,
+        variant: "destructive",
+      });
+      throw error;
+    }
+  }, [queryClient, toast, uploadFileWithProgress]);
+
   const uploadMutation = useMutation({
     mutationFn: async (files: File[]) => {
-      // Don't reset progress - keep existing progress for concurrent uploads
-      // Upload files concurrently now that we properly track each upload
-      const uploadPromises = files.map(file => uploadFileWithProgress(file));
-      return Promise.all(uploadPromises);
+      // Start all uploads immediately, don't wait for all to complete
+      const uploadPromises = files.map(file => uploadFileIndividually(file));
+      
+      // Return immediately, uploads continue in background
+      return uploadPromises;
     },
-    onSuccess: (results) => {
-      // Invalidate all file queries to ensure files appear in current folder
-      queryClient.invalidateQueries({ queryKey: ["/api/files"] });
+    onSuccess: () => {
+      // Don't close modal immediately - let uploads complete in background
       toast({
-        title: "Success",
-        description: `${results.length} file(s) uploaded successfully!`,
+        title: "Upload Started",
+        description: "Files are uploading in the background",
       });
-      setSelectedFiles([]);
-      setUploadProgress({});
-      onClose();
     },
     onError: (error) => {
       toast({
         title: "Upload Error",
-        description: error.message || "Failed to upload files",
+        description: error.message || "Failed to start uploads",
         variant: "destructive",
       });
-      // Clear failed uploads from progress
-      setUploadProgress({});
     },
   });
 
@@ -322,12 +344,19 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                         <div className="mt-1">
                           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                             <div 
-                              className="bg-gradient-to-r from-kawaii-pink to-kawaii-purple h-1.5 rounded-full transition-all duration-300"
+                              className={`h-1.5 rounded-full transition-all duration-300 ${
+                                completedUploads.includes(file.name) 
+                                  ? "bg-green-500" 
+                                  : "bg-gradient-to-r from-kawaii-pink to-kawaii-purple"
+                              }`}
                               style={{ width: `${uploadProgress[file.name]}%` }}
                             ></div>
                           </div>
                           <p className="text-xs text-gray-500 mt-1">
-                            {Math.round(uploadProgress[file.name])}% uploaded
+                            {completedUploads.includes(file.name) 
+                              ? "✓ Upload complete" 
+                              : `${Math.round(uploadProgress[file.name])}% uploaded`
+                            }
                           </p>
                         </div>
                       )}
@@ -346,6 +375,15 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                 ))}
               </div>
               <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2">
+                {Object.keys(activeUploads).length > 0 && (
+                  <Button
+                    onClick={onClose}
+                    variant="outline"
+                    className="w-full sm:w-auto"
+                  >
+                    Close & Continue in Background
+                  </Button>
+                )}
                 <Button
                   onClick={handleUpload}
                   disabled={uploadMutation.isPending}
@@ -354,13 +392,13 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
                   {uploadMutation.isPending ? (
                     <div className="flex items-center justify-center space-x-2">
                       <CinnamorollSpinner />
-                      <span className="hidden sm:inline">Uploading kawaii files...</span>
-                      <span className="sm:hidden">Uploading...</span>
+                      <span className="hidden sm:inline">Starting uploads...</span>
+                      <span className="sm:hidden">Starting...</span>
                     </div>
                   ) : (
                     <>
                       <Upload className="w-4 h-4 mr-2" />
-                      <span className="hidden sm:inline">Upload Files</span>
+                      <span className="hidden sm:inline">Start Upload</span>
                       <span className="sm:hidden">Upload</span>
                     </>
                   )}
