@@ -35,16 +35,33 @@ function Router() {
   );
 }
 
+function AppContent() {
+  const { uploads, cancelUpload, cancelAllUploads } = useUploadProgress();
+  
+  return (
+    <>
+      <Toaster />
+      <Router />
+      <BackgroundUploadProgress 
+        uploads={uploads}
+        onCancel={cancelUpload}
+        onCancelAll={cancelAllUploads}
+      />
+    </>
+  );
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
           <LanguageProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Router />
-            </TooltipProvider>
+            <UploadProgressProvider>
+              <TooltipProvider>
+                <AppContent />
+              </TooltipProvider>
+            </UploadProgressProvider>
           </LanguageProvider>
         </AuthProvider>
       </ThemeProvider>

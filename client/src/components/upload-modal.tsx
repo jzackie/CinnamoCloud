@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { CloudUpload, X, Upload } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useUploadProgress } from "@/hooks/use-upload-progress";
 import { CinnamorollLoader, CinnamorollSpinner } from "@/components/cinnamoroll-loader";
 import imageCompression from "browser-image-compression";
 
@@ -17,11 +18,18 @@ interface UploadModalProps {
 export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [uploadProgress, setUploadProgress] = useState<{[key: string]: number}>({});
-  const [activeUploads, setActiveUploads] = useState<{[key: string]: XMLHttpRequest}>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { 
+    addUpload, 
+    updateProgress, 
+    completeUpload, 
+    setActiveUpload, 
+    removeActiveUpload,
+    uploads,
+    activeUploads 
+  } = useUploadProgress();
 
   // Clean up when modal closes or component unmounts
   useEffect(() => {
@@ -30,14 +38,13 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       // Only reset UI state
       setSelectedFiles([]);
       setDragActive(false);
-      setCompletedUploads([]);
     }
   }, [open]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      Object.values(activeUploads).forEach(xhr => {
+      activeUploads.forEach(xhr => {
         if (xhr.readyState !== XMLHttpRequest.DONE) {
           xhr.abort();
         }
@@ -89,35 +96,22 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       }
 
       // Track this upload
-      setActiveUploads(prev => ({
-        ...prev,
-        [file.name]: xhr
-      }));
+      setActiveUpload(file.name, xhr);
 
       // Track upload progress
       xhr.upload.addEventListener('progress', (event) => {
         if (event.lengthComputable) {
           const percentComplete = (event.loaded / event.total) * 100;
-          setUploadProgress(prev => ({
-            ...prev,
-            [file.name]: percentComplete
-          }));
+          updateProgress(file.name, percentComplete);
         }
       });
 
       xhr.addEventListener('load', () => {
         // Remove from active uploads
-        setActiveUploads(prev => {
-          const newUploads = { ...prev };
-          delete newUploads[file.name];
-          return newUploads;
-        });
+        removeActiveUpload(file.name);
 
         if (xhr.status === 200) {
-          setUploadProgress(prev => ({
-            ...prev,
-            [file.name]: 100
-          }));
+          updateProgress(file.name, 100);
           resolve(JSON.parse(xhr.responseText));
         } else {
           reject(new Error(`Failed to upload ${file.name}`));
@@ -126,21 +120,13 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
 
       xhr.addEventListener('error', () => {
         // Remove from active uploads
-        setActiveUploads(prev => {
-          const newUploads = { ...prev };
-          delete newUploads[file.name];
-          return newUploads;
-        });
+        removeActiveUpload(file.name);
         reject(new Error(`Failed to upload ${file.name}`));
       });
 
       xhr.addEventListener('abort', () => {
         // Remove from active uploads
-        setActiveUploads(prev => {
-          const newUploads = { ...prev };
-          delete newUploads[file.name];
-          return newUploads;
-        });
+        removeActiveUpload(file.name);
         reject(new Error(`Upload cancelled for ${file.name}`));
       });
 
@@ -150,16 +136,14 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
     });
   }, [folderId]);
 
-  // Track completed uploads to show progress
-  const [completedUploads, setCompletedUploads] = useState<string[]>([]);
-
   // Enhanced upload function that handles individual file completion
   const uploadFileIndividually = useCallback(async (file: File) => {
     try {
+      addUpload(file.name);
       const result = await uploadFileWithProgress(file);
       
-      // Mark this file as completed
-      setCompletedUploads(prev => [...prev, file.name]);
+      // Mark this file as completed in global state
+      completeUpload(file.name);
       
       // Invalidate queries for immediate UI update
       queryClient.invalidateQueries({ queryKey: ["/api/files"] });
@@ -180,7 +164,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       });
       throw error;
     }
-  }, [queryClient, toast, uploadFileWithProgress]);
+  }, [queryClient, toast, uploadFileWithProgress, addUpload, completeUpload]);
 
   const uploadMutation = useMutation({
     mutationFn: async (files: File[]) => {
