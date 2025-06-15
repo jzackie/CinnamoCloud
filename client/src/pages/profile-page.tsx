@@ -103,7 +103,7 @@ export default function ProfilePage() {
       const formData = new FormData();
       formData.append('profilePicture', file);
       
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/profile/picture`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/profile/picture`, {
         method: 'POST',
         body: formData,
         credentials: 'include',
@@ -170,7 +170,7 @@ export default function ProfilePage() {
 
   const downloadResetKey = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/download-reset-key`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/download-reset-key`, {
         credentials: 'include',
       });
       

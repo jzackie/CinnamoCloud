@@ -41,7 +41,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     // Save language preference to user profile if user is logged in
     if (user) {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/profile`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/profile`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
