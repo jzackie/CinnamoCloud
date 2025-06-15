@@ -30,8 +30,8 @@ export function CinnamorollLoader({
   if (variant === "bounce") {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 p-6">
-        <div className={`${sizeClasses[size]} relative animate-bounce`}>
-          <svg className="w-full h-full" viewBox="0 0 100 100">
+        <div className={`${sizeClasses[size]} relative`}>
+          <svg className="w-full h-full animate-spin" viewBox="0 0 100 100">
             <circle
               cx="50"
               cy="50"
@@ -49,13 +49,16 @@ export function CinnamorollLoader({
               strokeWidth={strokeWidths[size]}
               fill="none"
               strokeLinecap="round"
-              strokeDasharray="251.2"
-              strokeDashoffset="125.6"
-              className="text-kawaii-pink animate-spin"
+              strokeDasharray="188.4"
+              strokeDashoffset="47.1"
+              className="text-red-400"
+              style={{
+                animation: 'spin 1s linear infinite'
+              }}
             />
           </svg>
         </div>
-        <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center animate-pulse`}>
+        <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center`}>
           {message}
         </p>
       </div>
@@ -65,14 +68,8 @@ export function CinnamorollLoader({
   if (variant === "pulse") {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 p-6">
-        <div className={`${sizeClasses[size]} relative animate-pulse`}>
-          <svg className="w-full h-full" viewBox="0 0 100 100">
-            <defs>
-              <linearGradient id="donutGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#FF69B4" />
-                <stop offset="100%" stopColor="#9370DB" />
-              </linearGradient>
-            </defs>
+        <div className={`${sizeClasses[size]} relative`}>
+          <svg className="w-full h-full animate-spin" viewBox="0 0 100 100">
             <circle
               cx="50"
               cy="50"
@@ -86,16 +83,20 @@ export function CinnamorollLoader({
               cx="50"
               cy="50"
               r="40"
-              stroke="url(#donutGradient)"
+              stroke="currentColor"
               strokeWidth={strokeWidths[size]}
               fill="none"
               strokeLinecap="round"
               strokeDasharray="188.4"
-              strokeDashoffset="62.8"
+              strokeDashoffset="47.1"
+              className="text-yellow-400"
+              style={{
+                animation: 'spin 0.8s linear infinite'
+              }}
             />
           </svg>
         </div>
-        <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center animate-pulse`}>
+        <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center`}>
           {message}
         </p>
       </div>
@@ -124,13 +125,16 @@ export function CinnamorollLoader({
             strokeWidth={strokeWidths[size]}
             fill="none"
             strokeLinecap="round"
-            strokeDasharray="251.2"
-            strokeDashoffset="62.8"
-            className="text-kawaii-pink"
+            strokeDasharray="188.4"
+            strokeDashoffset="47.1"
+            className="text-cinnamoroll-500 dark:text-kuromi-400"
+            style={{
+              animation: 'spin 1.2s linear infinite'
+            }}
           />
         </svg>
       </div>
-      <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center animate-pulse`}>
+      <p className={`${textSizeClasses[size]} font-nunito text-cinnamoroll-600 dark:text-kuromi-300 text-center`}>
         {message}
       </p>
     </div>
