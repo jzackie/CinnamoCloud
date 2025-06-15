@@ -86,16 +86,16 @@ export default function FavoritesPage() {
       {/* Main Content */}
       <main className="p-6 max-w-7xl mx-auto">
         {/* Page Header */}
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-2xl">
-            <Star className="w-8 h-8 text-yellow-500" />
+        <div className="flex items-center space-x-3 sm:space-x-4 mb-6 min-w-0">
+          <div className="p-2 sm:p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-2xl flex-shrink-0">
+            <Star className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-500" />
           </div>
-          <div>
-            <h2 className="font-nunito font-bold text-3xl text-cinnamoroll-700 dark:text-kuromi-300">
+          <div className="min-w-0 flex-1">
+            <h2 className="font-nunito font-bold text-2xl sm:text-3xl text-cinnamoroll-700 dark:text-kuromi-300 break-words">
               Favorite Files
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              {favoriteFiles.length} kawaii files you've starred ⭐
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 break-words">
+              {favoriteFiles.length} files you've starred ⭐
             </p>
           </div>
         </div>

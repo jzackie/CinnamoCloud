@@ -224,16 +224,16 @@ export default function TrashPage() {
       {/* Main Content */}
       <main className="p-6 max-w-7xl mx-auto">
         {/* Page Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-2xl">
-              <Trash2 className="w-8 h-8 text-red-500" />
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div className="flex items-center space-x-3 sm:space-x-4 min-w-0">
+            <div className="p-2 sm:p-3 bg-red-100 dark:bg-red-900/30 rounded-2xl flex-shrink-0">
+              <Trash2 className="w-6 h-6 sm:w-8 sm:h-8 text-red-500" />
             </div>
-            <div>
-              <h2 className="font-nunito font-bold text-3xl text-cinnamoroll-700 dark:text-kuromi-300">
+            <div className="min-w-0 flex-1">
+              <h2 className="font-nunito font-bold text-2xl sm:text-3xl text-cinnamoroll-700 dark:text-kuromi-300 break-words">
                 Trash
               </h2>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 break-words">
                 {deletedFiles.length} deleted files (can be restored)
               </p>
             </div>
@@ -248,10 +248,11 @@ export default function TrashPage() {
                 }
               }}
               disabled={permanentDeleteMutation.isPending}
-              className="bg-red-500 hover:bg-red-600 text-white"
+              className="bg-red-500 hover:bg-red-600 text-white w-full sm:w-auto flex-shrink-0"
             >
               <AlertTriangle className="w-4 h-4 mr-2" />
-              Empty Trash
+              <span className="hidden sm:inline">Empty Trash</span>
+              <span className="sm:hidden">Empty</span>
             </Button>
           )}
         </div>
