@@ -75,10 +75,11 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
     }
     return file;
   };
-
+  
   // Optimized upload with progress tracking for large files
   const uploadFileWithProgress = useCallback(async (file: File) => {
     const processedFile = await compressFile(file);
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -152,7 +153,8 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
         reject(new Error(`Upload cancelled for ${file.name}`));
       });
 
-      xhr.open('POST', '/api/files');
+
+      xhr.open('POST', `${API_BASE_URL}/api/files`);
       xhr.withCredentials = true;
       xhr.send(formData);
     });
