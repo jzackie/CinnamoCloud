@@ -157,33 +157,30 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
 
   const uploadMutation = useMutation({
     mutationFn: async (files: File[]) => {
-      // Reset progress
-      setUploadProgress({});
-      
-      // Upload files sequentially for better performance with large files
-      const results = [];
-      for (const file of files) {
-        const result = await uploadFileWithProgress(file);
-        results.push(result);
-      }
-      return results;
+      // Don't reset progress - keep existing progress for concurrent uploads
+      // Upload files concurrently now that we properly track each upload
+      const uploadPromises = files.map(file => uploadFileWithProgress(file));
+      return Promise.all(uploadPromises);
     },
-    onSuccess: () => {
+    onSuccess: (results) => {
       // Invalidate all file queries to ensure files appear in current folder
       queryClient.invalidateQueries({ queryKey: ["/api/files"] });
       toast({
         title: "Success",
-        description: `${selectedFiles.length} file(s) uploaded successfully! 📤✨`,
+        description: `${results.length} file(s) uploaded successfully!`,
       });
       setSelectedFiles([]);
+      setUploadProgress({});
       onClose();
     },
     onError: (error) => {
       toast({
-        title: "Error",
+        title: "Upload Error",
         description: error.message || "Failed to upload files",
         variant: "destructive",
       });
+      // Clear failed uploads from progress
+      setUploadProgress({});
     },
   });
 
@@ -288,9 +285,25 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
 
           {selectedFiles.length > 0 && (
             <div className="space-y-2">
-              <h5 className="font-nunito font-semibold text-sm text-gray-700 dark:text-gray-300">
-                Selected Files ({selectedFiles.length})
-              </h5>
+              <div className="flex items-center justify-between">
+                <h5 className="font-nunito font-semibold text-sm text-gray-700 dark:text-gray-300">
+                  Selected Files ({selectedFiles.length})
+                </h5>
+                {Object.keys(activeUploads).length > 0 && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      Object.values(activeUploads).forEach(xhr => xhr.abort());
+                      setActiveUploads({});
+                      setUploadProgress({});
+                    }}
+                    className="text-xs"
+                  >
+                    Cancel All
+                  </Button>
+                )}
+              </div>
               <div className="max-h-32 overflow-y-auto space-y-1">
                 {selectedFiles.map((file, index) => (
                   <div
