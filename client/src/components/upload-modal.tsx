@@ -42,16 +42,8 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
     }
   }, [open]);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      activeUploads.forEach(xhr => {
-        if (xhr.readyState !== XMLHttpRequest.DONE) {
-          xhr.abort();
-        }
-      });
-    };
-  }, [activeUploads]);
+  // Don't cleanup uploads on modal close - let them continue in background
+  // Only cleanup if explicitly requested by user or page unload
 
   // Compress images if they're too large, skip videos for faster upload
   const compressFile = async (file: File): Promise<File> => {
@@ -216,22 +208,25 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
 
   const uploadMutation = useMutation({
     mutationFn: async (files: File[]) => {
-      // Start uploads and fire-and-forget (no waiting)
-      files.forEach(file => {
-        uploadFileIndividually(file).catch(error => {
-          console.error('Background upload failed:', file.name, error);
-        });
+      console.log(`Starting batch upload of ${files.length} files`);
+      
+      // Start uploads individually with delay to prevent race conditions
+      files.forEach((file, index) => {
+        setTimeout(() => {
+          uploadFileIndividually(file).catch(error => {
+            console.error('Background upload failed:', file.name, error);
+          });
+        }, index * 100); // Stagger uploads by 100ms
       });
       
-      // Return immediately - uploads run in background
       return files;
     },
-    onSuccess: () => {
+    onSuccess: (files) => {
       // Clear selected files and show toast
       setSelectedFiles([]);
       toast({
         title: "Upload Started",
-        description: "Files are uploading in the background",
+        description: `${files.length} files are uploading in the background`,
       });
     },
     onError: (error) => {
