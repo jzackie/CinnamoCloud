@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Debug Test</title>
+</head>
+<body>
+    <h1>Upload Debug Test</h1>
+    <input type="file" id="fileInput" />
+    <button onclick="uploadFile()">Upload</button>
+    <div id="progress"></div>
+    <div id="status"></div>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const xhr = new XMLHttpRequest();
+            const formData = new FormData();
+            formData.append('file', file);
+
+            xhr.upload.addEventListener('progress', (event) => {
+                if (event.lengthComputable) {
+                    const percentComplete = (event.loaded / event.total) * 100;
+                    document.getElementById('progress').textContent = `Progress: ${Math.round(percentComplete)}%`;
+                }
+            });
+
+            xhr.addEventListener('load', () => {
+                console.log('Upload completed with status:', xhr.status);
+                console.log('Response:', xhr.responseText);
+                document.getElementById('status').textContent = `Status: ${xhr.status} - ${xhr.responseText}`;
+            });
+
+            xhr.addEventListener('error', () => {
+                console.error('Upload error');
+                document.getElementById('status').textContent = 'Upload error';
+            });
+
+            xhr.open('POST', '/api/files');
+            xhr.withCredentials = true;
+            xhr.send(formData);
+        }
+    </script>
+</body>
+</html>

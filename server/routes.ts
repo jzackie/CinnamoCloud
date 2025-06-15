@@ -292,7 +292,7 @@ export function registerRoutes(app: Express): Server {
         userId: file.userId,
         isFavorite: file.isFavorite,
         isDeleted: file.isDeleted,
-        uploadedAt: file.uploadedAt
+        createdAt: file.createdAt
       });
     } catch (error) {
       console.error('File upload error:', error);
