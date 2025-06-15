@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,9 +18,37 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState<{[key: string]: number}>({});
+  const [activeUploads, setActiveUploads] = useState<{[key: string]: XMLHttpRequest}>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Clean up when modal closes or component unmounts
+  useEffect(() => {
+    if (!open) {
+      // Cancel any active uploads
+      Object.values(activeUploads).forEach(xhr => {
+        if (xhr.readyState !== XMLHttpRequest.DONE) {
+          xhr.abort();
+        }
+      });
+      setActiveUploads({});
+      setUploadProgress({});
+      setSelectedFiles([]);
+      setDragActive(false);
+    }
+  }, [open, activeUploads]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(activeUploads).forEach(xhr => {
+        if (xhr.readyState !== XMLHttpRequest.DONE) {
+          xhr.abort();
+        }
+      });
+    };
+  }, [activeUploads]);
 
   // Compress images if they're too large, skip videos for faster upload
   const compressFile = async (file: File): Promise<File> => {
@@ -65,6 +93,12 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
         formData.append('folderId', folderId.toString());
       }
 
+      // Track this upload
+      setActiveUploads(prev => ({
+        ...prev,
+        [file.name]: xhr
+      }));
+
       // Track upload progress
       xhr.upload.addEventListener('progress', (event) => {
         if (event.lengthComputable) {
@@ -77,6 +111,13 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       });
 
       xhr.addEventListener('load', () => {
+        // Remove from active uploads
+        setActiveUploads(prev => {
+          const newUploads = { ...prev };
+          delete newUploads[file.name];
+          return newUploads;
+        });
+
         if (xhr.status === 200) {
           setUploadProgress(prev => ({
             ...prev,
@@ -89,7 +130,23 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
       });
 
       xhr.addEventListener('error', () => {
+        // Remove from active uploads
+        setActiveUploads(prev => {
+          const newUploads = { ...prev };
+          delete newUploads[file.name];
+          return newUploads;
+        });
         reject(new Error(`Failed to upload ${file.name}`));
+      });
+
+      xhr.addEventListener('abort', () => {
+        // Remove from active uploads
+        setActiveUploads(prev => {
+          const newUploads = { ...prev };
+          delete newUploads[file.name];
+          return newUploads;
+        });
+        reject(new Error(`Upload cancelled for ${file.name}`));
       });
 
       xhr.open('POST', '/api/files');
@@ -174,7 +231,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg w-[95vw] sm:w-full mx-4 max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-800/95 backdrop-blur-md">
+      <DialogContent className="max-w-lg w-[95vw] sm:w-full mx-2 sm:mx-4 max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-800/95 backdrop-blur-md p-4 sm:p-6">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="font-nunito font-bold text-lg">
@@ -193,7 +250,7 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
 
         <div className="space-y-4">
           <div
-            className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer ${
+            className={`border-2 border-dashed rounded-2xl p-4 sm:p-8 text-center transition-all cursor-pointer ${
               dragActive
                 ? "border-kawaii-pink bg-kawaii-pink/10"
                 : "border-cinnamoroll-300 dark:border-kuromi-600 hover:border-cinnamoroll-400 dark:hover:border-kuromi-500"
@@ -204,16 +261,16 @@ export function UploadModal({ open, onClose, folderId }: UploadModalProps) {
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
           >
-            <div className="cloud-shape w-16 h-10 gradient-cinnamoroll dark:gradient-kuromi mx-auto mb-4 animate-bounce-soft"></div>
-            <h4 className="font-nunito font-semibold text-lg text-gray-700 dark:text-gray-300 mb-2">
-              Drop your kawaii files here
+            <div className="cloud-shape w-12 h-8 sm:w-16 sm:h-10 gradient-cinnamoroll dark:gradient-kuromi mx-auto mb-3 sm:mb-4 animate-bounce-soft"></div>
+            <h4 className="font-nunito font-semibold text-base sm:text-lg text-gray-700 dark:text-gray-300 mb-2">
+              Drop your files here
             </h4>
-            <p className="text-gray-500 dark:text-gray-400 mb-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">
               or click to browse
             </p>
             <Button
               type="button"
-              className="gradient-cinnamoroll dark:gradient-kuromi font-nunito font-medium"
+              className="w-full sm:w-auto gradient-cinnamoroll dark:gradient-kuromi font-nunito font-medium text-sm sm:text-base"
             >
               <CloudUpload className="w-4 h-4 mr-2" />
               Choose Files
