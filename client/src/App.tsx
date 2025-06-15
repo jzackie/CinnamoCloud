@@ -9,7 +9,6 @@ import { LanguageProvider } from "@/lib/language-provider";
 import { UploadProgressProvider, useUploadProgress } from "@/hooks/use-upload-progress";
 import { ProtectedRoute } from "./lib/protected-route";
 import { BackgroundUploadProgress } from "@/components/background-upload-progress";
-import { WebSocketProvider } from "@/context/WebSocketProvider";
 import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
 import FolderPage from "@/pages/folder-page";
@@ -61,9 +60,7 @@ function App() {
           <LanguageProvider>
             <UploadProgressProvider>
               <TooltipProvider>
-                <WebSocketProvider>
-                  <AppContent />
-                </WebSocketProvider>
+                <AppContent />
               </TooltipProvider>
             </UploadProgressProvider>
           </LanguageProvider>
