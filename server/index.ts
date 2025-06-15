@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cors({
-  origin: "https://cinnamocloud.onrender.com",
+  origin: "https://cinnamocloud.netlify.app",
   credentials: true,
 }));
 
