@@ -67,24 +67,29 @@ export function ProfileMenu() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex items-center space-x-2 p-2 rounded-full bg-gradient-to-r from-cinnamoroll-300 to-kawaii-pink dark:from-kuromi-600 dark:to-kawaii-purple hover:shadow-lg transition-all"
+          className="flex items-center space-x-1 sm:space-x-2 p-1.5 sm:p-2 rounded-full bg-gradient-to-r from-cinnamoroll-300 to-kawaii-pink dark:from-kuromi-600 dark:to-kawaii-purple hover:shadow-lg transition-all min-w-0"
         >
-          <Avatar className="w-8 h-8">
+          <Avatar className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
             <AvatarImage src={user.profilePicture || undefined} alt={user.displayName} />
-            <AvatarFallback className="bg-white/50 text-cinnamoroll-600 dark:text-kuromi-400">
+            <AvatarFallback className="bg-white/50 text-cinnamoroll-600 dark:text-kuromi-400 text-xs sm:text-sm">
               {user.displayName.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <span className="font-nunito font-medium text-white hidden sm:block">
+          <span className="font-nunito font-medium text-white hidden sm:block truncate max-w-24 lg:max-w-32">
             {user.displayName}
           </span>
-          <ChevronDown className="w-4 h-4 text-white" />
+          <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-white flex-shrink-0" />
         </Button>
       </DropdownMenuTrigger>
       
       <DropdownMenuContent 
         className="w-56 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-cinnamoroll-200 dark:border-kuromi-700"
         align="end"
+        side="bottom"
+        sideOffset={8}
+        alignOffset={-8}
+        avoidCollisions={true}
+        collisionPadding={16}
       >
         <DropdownMenuLabel className="gradient-cinnamoroll dark:gradient-kuromi p-4 rounded-t-lg">
           <div className="flex items-center space-x-3">

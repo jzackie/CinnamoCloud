@@ -168,19 +168,19 @@ export default function TrashPage() {
       {/* Navigation Header */}
       <nav className="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-cinnamoroll-200 dark:border-kuromi-700 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-16 min-w-0">
             {/* Logo & Brand */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-shrink-0">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setLocation('/')}
-                className="p-2 rounded-full hover:bg-cinnamoroll-100 dark:hover:bg-kuromi-800 mr-2"
+                className="p-2 rounded-full hover:bg-cinnamoroll-100 dark:hover:bg-kuromi-800"
               >
                 <ArrowLeft className="w-4 h-4 text-cinnamoroll-600 dark:text-kuromi-400" />
               </Button>
-              <div className="cloud-shape w-10 h-6 gradient-cinnamoroll dark:gradient-kuromi animate-float"></div>
-              <h1 className="font-nunito font-bold text-xl text-cinnamoroll-600 dark:text-kuromi-400">
+              <div className="cloud-shape w-8 h-5 sm:w-10 sm:h-6 gradient-cinnamoroll dark:gradient-kuromi animate-float flex-shrink-0"></div>
+              <h1 className="font-nunito font-bold text-lg sm:text-xl text-cinnamoroll-600 dark:text-kuromi-400 hidden sm:block">
                 CinnamoCloud
               </h1>
             </div>
@@ -200,7 +200,7 @@ export default function TrashPage() {
             </div>
 
             {/* Header Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
               {/* Theme Toggle */}
               <Button
                 variant="ghost"
@@ -215,7 +215,9 @@ export default function TrashPage() {
                 )}
               </Button>
               
-              <ProfileMenu />
+              <div className="relative">
+                <ProfileMenu />
+              </div>
             </div>
           </div>
         </div>
