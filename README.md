@@ -95,7 +95,6 @@ CinnamoCloud is a modern web-based file management system with a cute themed int
 ### Production
 - Frontend built by Vite, served as static files  
 - Backend bundled with esbuild for Node.js  
-- Autoscale deployment (configured for Replit)  
 - Database migrations via Drizzle Kit  
 
 ### Environment Variables
